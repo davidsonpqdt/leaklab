@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session sessioncode="8582333836">
+<general>
+<client_version>25.9.1.9</client_version>
+<mode>real</mode>
+<gametype>Holdem NL</gametype>
+<tablename>€11,000 GTD MYSTERY, 1155587216</tablename>
+<tournamentcode>1155464879</tournamentcode>
+<tournamentname>€11,000 GTD MYSTERY</tournamentname>
+<buyin>€4.55 + €4.55 + €0.90</buyin>
+<totalbuyin>€10</totalbuyin>
+<tournamentcurrency>EUR</tournamentcurrency>
+<currency>EUR</currency>
+<nickname>Noshovepls</nickname>
+<gamecount>12</gamecount>
+<startdate>03-01-2026 11:30:01</startdate>
+<place>1283</place>
+<win>€0</win>
+<tablesize>7</tablesize>
+</general>
+<game gamecode="12080422764"><general>
+<startdate>03-01-2026 13:20:42</startdate>
+<round>1</round>
+<failsafecounter/>
+<players><player seat="3" name="Vkusnyaw" chips="250,898" dealer="0" win="0" bet="5,050" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582290193"/>
+<player seat="4" name="ejihiera1" chips="186,260" dealer="0" win="0" bet="250" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317855"/>
+<player seat="6" name="Atlas881" chips="104,330" dealer="0" win="50,850" bet="22,000" muck="0" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317874"/>
+<player seat="8" name="benedictarn" chips="323,820" dealer="0" win="0" bet="250" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317887"/>
+<player seat="9" name="Noshovepls" chips="100,000" dealer="0" win="0" bet="250" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582333836"/>
+<player seat="10" name="playershort815" chips="348,749" dealer="1" win="0" bet="22,000" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582297717"/>
+<player seat="1" name="Nicola17" chips="144,262" dealer="0" win="0" bet="1,050" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582304959"/>
+</players>
+</general>
+<round no="0"><action no="1" player="Nicola17" type="15" discard="1" dealt="1" sum="250"/>
+<action no="2" player="Vkusnyaw" type="15" discard="1" dealt="1" sum="250"/>
+<action no="3" player="ejihiera1" type="15" discard="1" dealt="1" sum="250"/>
+<action no="4" player="Atlas881" type="15" discard="1" dealt="1" sum="250"/>
+<action no="5" player="benedictarn" type="15" discard="1" dealt="1" sum="250"/>
+<action no="6" player="Noshovepls" type="15" sum="250"/>
+<action no="7" player="playershort815" type="15" discard="1" dealt="1" sum="250"/>
+<action no="8" player="Nicola17" type="1" discard="1" dealt="1" sum="800"/>
+<action no="9" player="Vkusnyaw" type="2" discard="1" dealt="1" sum="1,600"/>
+</round>
+<round no="1"><cards type="Pocket" player="Nicola17">X X</cards>
+<cards type="Pocket" player="Vkusnyaw">X X</cards>
+<cards type="Pocket" player="benedictarn">X X</cards>
+<cards type="Pocket" player="playershort815">CK C6</cards>
+<cards type="Pocket" player="ejihiera1">X X</cards>
+<cards type="Pocket" player="Atlas881">D7 D4</cards>
+<cards type="Pocket" player="Noshovepls">D3 HQ</cards>
+<action no="10" player="ejihiera1" type="0" discard="1" dealt="1" sum="0"/>
+<action no="11" player="Atlas881" type="3" discard="1" dealt="1" sum="1,600"/>
+<action no="12" player="benedictarn" type="0" discard="1" dealt="1" sum="0"/>
+<action no="13" player="Noshovepls" type="0" sum="0"/>
+<action no="14" player="playershort815" type="3" discard="1" dealt="1" sum="1,600"/>
+<action no="15" player="Nicola17" type="0" discard="1" dealt="1" sum="0"/>
+<action no="16" player="Vkusnyaw" type="4" discard="1" dealt="1" sum="0"/>
+</round>
+<round no="2"><cards type="Flop">DK DQ H10</cards>
+<action no="17" player="Vkusnyaw" type="4" discard="1" dealt="1" sum="0"/>
+<action no="18" player="Atlas881" type="4" discard="1" dealt="1" sum="0"/>
+<action no="19" player="playershort815" type="5" discard="1" dealt="1" sum="1,600"/>
+<action no="20" player="Vkusnyaw" type="3" discard="1" dealt="1" sum="1,600"/>
+<action no="21" player="Atlas881" type="3" discard="1" dealt="1" sum="1,600"/>
+</round>
+<round no="3"><cards type="Turn">C8</cards>
+<action no="22" player="Vkusnyaw" type="4" discard="1" dealt="1" sum="0"/>
+<action no="23" player="Atlas881" type="4" discard="1" dealt="1" sum="0"/>
+<action no="24" player="playershort815" type="5" discard="1" dealt="1" sum="1,600"/>
+<action no="25" player="Vkusnyaw" type="3" discard="1" dealt="1" sum="1,600"/>
+<action no="26" player="Atlas881" type="3" discard="1" dealt="1" sum="1,600"/>
+</round>
+<round no="4"><cards type="River">D6</cards>
+<action no="27" player="Vkusnyaw" type="4" discard="1" dealt="1" sum="0"/>
+<action no="28" player="Atlas881" type="5" discard="1" dealt="1" sum="16,950"/>
+<action no="29" player="playershort815" type="3" discard="1" dealt="1" sum="16,950"/>
+<action no="30" player="Vkusnyaw" type="0" discard="1" dealt="1" sum="0"/>
+</round>
+</game>
+<game gamecode="12080423056"><general>
+<startdate>03-01-2026 13:22:38</startdate>
+<round>1</round>
+<failsafecounter/>
+<players><player seat="4" name="ejihiera1" chips="186,010" dealer="0" win="0" bet="4,775" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317855"/>
+<player seat="6" name="Atlas881" chips="133,180" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317874"/>
+<player seat="8" name="benedictarn" chips="323,570" dealer="0" win="0" bet="14,737" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317887"/>
+<player seat="9" name="Noshovepls" chips="99,750" dealer="0" win="39,849" bet="27,887" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582333836"/>
+<player seat="10" name="playershort815" chips="326,749" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582297717"/>
+<player seat="1" name="Nicola17" chips="143,212" dealer="1" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582304959"/>
+<player seat="3" name="Vkusnyaw" chips="245,848" dealer="0" win="0" bet="4,775" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582290193"/>
+</players>
+</general>
+<round no="0"><action no="1" player="Vkusnyaw" type="15" discard="1" dealt="1" sum="275"/>
+<action no="2" player="ejihiera1" type="15" discard="1" dealt="1" sum="275"/>
+<action no="3" player="Atlas881" type="15" discard="1" dealt="1" sum="275"/>
+<action no="4" player="benedictarn" type="15" discard="1" dealt="1" sum="275"/>
+<action no="5" player="Noshovepls" type="15" sum="275"/>
+<action no="6" player="playershort815" type="15" discard="1" dealt="1" sum="275"/>
+<action no="7" player="Nicola17" type="15" discard="1" dealt="1" sum="275"/>
+<action no="8" player="Vkusnyaw" type="1" discard="1" dealt="1" sum="900"/>
+<action no="9" player="ejihiera1" type="2" discard="1" dealt="1" sum="1,800"/>
+</round>
+<round no="1"><cards type="Pocket" player="Atlas881">X X</cards>
+<cards type="Pocket" player="Vkusnyaw">X X</cards>
+<cards type="Pocket" player="Noshovepls">SA HJ</cards>
+<cards type="Pocket" player="benedictarn">X X</cards>
+<cards type="Pocket" player="ejihiera1">X X</cards>
+<cards type="Pocket" player="playershort815">X X</cards>
+<cards type="Pocket" player="Nicola17">X X</cards>
+<action no="10" player="Atlas881" type="0" discard="1" dealt="1" sum="0"/>
+<action no="11" player="benedictarn" type="23" discard="1" dealt="1" sum="4,500"/>
+<action no="12" player="Noshovepls" type="3" sum="4,500"/>
+<action no="13" player="playershort815" type="0" discard="1" dealt="1" sum="0"/>
+<action no="14" player="Nicola17" type="0" discard="1" dealt="1" sum="0"/>
+<action no="15" player="Vkusnyaw" type="3" discard="1" dealt="1" sum="3,600"/>
+<action no="16" player="ejihiera1" type="3" discard="1" dealt="1" sum="2,700"/>
+</round>
+<round no="2"><cards type="Flop">S5 D2 SJ</cards>
+<action no="17" player="Vkusnyaw" type="4" discard="1" dealt="1" sum="0"/>
+<action no="18" player="ejihiera1" type="4" discard="1" dealt="1" sum="0"/>
+<action no="19" player="benedictarn" type="5" discard="1" dealt="1" sum="9,962"/>
+<action no="20" player="Noshovepls" type="23" sum="23,112"/>
+<action no="21" player="Vkusnyaw" type="0" discard="1" dealt="1" sum="0"/>
+<action no="22" player="ejihiera1" type="0" discard="1" dealt="1" sum="0"/>
+<action no="23" player="benedictarn" type="0" discard="1" dealt="1" sum="0"/>
+</round>
+</game>
+<game gamecode="12080423236"><general>
+<startdate>03-01-2026 13:23:42</startdate>
+<round>1</round>
+<failsafecounter/>
+<players><player seat="6" name="Atlas881" chips="132,905" dealer="0" win="0" bet="2,075" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317874"/>
+<player seat="8" name="benedictarn" chips="308,833" dealer="0" win="56,111" bet="26,468" muck="0" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317887"/>
+<player seat="9" name="Noshovepls" chips="124,862" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582333836"/>
+<player seat="10" name="playershort815" chips="326,474" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582297717"/>
+<player seat="1" name="Nicola17" chips="142,937" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582304959"/>
+<player seat="3" name="Vkusnyaw" chips="241,073" dealer="1" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582290193"/>
+<player seat="4" name="ejihiera1" chips="181,235" dealer="0" win="0" bet="26,468" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317855"/>
+</players>
+</general>
+<round no="0"><action no="1" player="ejihiera1" type="15" discard="1" dealt="1" sum="275"/>
+<action no="2" player="Atlas881" type="15" discard="1" dealt="1" sum="275"/>
+<action no="3" player="benedictarn" type="15" discard="1" dealt="1" sum="275"/>
+<action no="4" player="Noshovepls" type="15" sum="275"/>
+<action no="5" player="playershort815" type="15" discard="1" dealt="1" sum="275"/>
+<action no="6" player="Nicola17" type="15" discard="1" dealt="1" sum="275"/>
+<action no="7" player="Vkusnyaw" type="15" discard="1" dealt="1" sum="275"/>
+<action no="8" player="ejihiera1" type="1" discard="1" dealt="1" sum="900"/>
+<action no="9" player="Atlas881" type="2" discard="1" dealt="1" sum="1,800"/>
+</round>
+<round no="1"><cards type="Pocket" player="ejihiera1">CA C6</cards>
+<cards type="Pocket" player="Nicola17">X X</cards>
+<cards type="Pocket" player="Vkusnyaw">X X</cards>
+<cards type="Pocket" player="benedictarn">C9 D9</cards>
+<cards type="Pocket" player="Atlas881">X X</cards>
+<cards type="Pocket" player="playershort815">X X</cards>
+<cards type="Pocket" player="Noshovepls">S5 HJ</cards>
+<action no="10" player="benedictarn" type="23" discard="1" dealt="1" sum="4,500"/>
+<action no="11" player="Noshovepls" type="0" sum="0"/>
+<action no="12" player="playershort815" type="0" discard="1" dealt="1" sum="0"/>
+<action no="13" player="Nicola17" type="0" discard="1" dealt="1" sum="0"/>
+<action no="14" player="Vkusnyaw" type="0" discard="1" dealt="1" sum="0"/>
+<action no="15" player="ejihiera1" type="3" discard="1" dealt="1" sum="3,600"/>
+<action no="16" player="Atlas881" type="0" discard="1" dealt="1" sum="0"/>
+</round>
+<round no="2"><cards type="Flop">H6 D3 S2</cards>
+<action no="17" player="ejihiera1" type="5" discard="1" dealt="1" sum="5,400"/>
+<action no="18" player="benedictarn" type="23" discard="1" dealt="1" sum="21,693"/>
+<action no="19" player="ejihiera1" type="3" discard="1" dealt="1" sum="16,293"/>
+</round>
+<round no="3"><cards type="Turn">S10</cards>
+<action no="20" player="ejihiera1" type="4" discard="1" dealt="1" sum="0"/>
+<action no="21" player="benedictarn" type="4" discard="1" dealt="1" sum="0"/>
+</round>
+<round no="4"><cards type="River">HK</cards>
+<action no="22" player="ejihiera1" type="4" discard="1" dealt="1" sum="0"/>
+<action no="23" player="benedictarn" type="4" discard="1" dealt="1" sum="0"/>
+</round>
+</game>
+<game gamecode="12080441854"><general>
+<startdate>03-01-2026 13:25:03</startdate>
+<round>1</round>
+<failsafecounter/>
+<players><player seat="8" name="benedictarn" chips="338,476" dealer="0" win="0" bet="23,375" muck="0" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317887"/>
+<player seat="9" name="Noshovepls" chips="124,587" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582333836"/>
+<player seat="10" name="playershort815" chips="326,199" dealer="0" win="48,750" bet="23,375" muck="0" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582297717"/>
+<player seat="1" name="Nicola17" chips="142,662" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582304959"/>
+<player seat="3" name="Vkusnyaw" chips="240,798" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582290193"/>
+<player seat="6" name="Atlas881" chips="130,830" dealer="0" win="0" bet="1,175" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317874"/>
+</players>
+</general>
+<round no="0"><action no="1" player="Atlas881" type="15" discard="1" dealt="1" sum="275"/>
+<action no="2" player="benedictarn" type="15" discard="1" dealt="1" sum="275"/>
+<action no="3" player="Noshovepls" type="15" sum="275"/>
+<action no="4" player="playershort815" type="15" discard="1" dealt="1" sum="275"/>
+<action no="5" player="Nicola17" type="15" discard="1" dealt="1" sum="275"/>
+<action no="6" player="Vkusnyaw" type="15" discard="1" dealt="1" sum="275"/>
+<action no="7" player="Atlas881" type="1" discard="1" dealt="1" sum="900"/>
+<action no="8" player="benedictarn" type="2" discard="1" dealt="1" sum="1,800"/>
+</round>
+<round no="1"><cards type="Pocket" player="benedictarn">D3 H9</cards>
+<cards type="Pocket" player="Vkusnyaw">X X</cards>
+<cards type="Pocket" player="Atlas881">X X</cards>
+<cards type="Pocket" player="Noshovepls">H2 H7</cards>
+<cards type="Pocket" player="Nicola17">X X</cards>
+<cards type="Pocket" player="playershort815">HK DQ</cards>
+<action no="9" player="Noshovepls" type="0" sum="0"/>
+<action no="10" player="playershort815" type="23" discard="1" dealt="1" sum="3,600"/>
+<action no="11" player="Nicola17" type="0" discard="1" dealt="1" sum="0"/>
+<action no="12" player="Vkusnyaw" type="0" discard="1" dealt="1" sum="0"/>
+<action no="13" player="Atlas881" type="0" discard="1" dealt="1" sum="0"/>
+<action no="14" player="benedictarn" type="3" discard="1" dealt="1" sum="1,800"/>
+</round>
+<round no="2"><cards type="Flop">D9 CK C10</cards>
+<action no="15" player="benedictarn" type="4" discard="1" dealt="1" sum="0"/>
+<action no="16" player="playershort815" type="5" discard="1" dealt="1" sum="4,875"/>
+<action no="17" player="benedictarn" type="3" discard="1" dealt="1" sum="4,875"/>
+</round>
+<round no="3"><cards type="Turn">HA</cards>
+<action no="18" player="benedictarn" type="4" discard="1" dealt="1" sum="0"/>
+<action no="19" player="playershort815" type="4" discard="1" dealt="1" sum="0"/>
+</round>
+<round no="4"><cards type="River">H4</cards>
+<action no="20" player="benedictarn" type="5" discard="1" dealt="1" sum="14,625"/>
+<action no="21" player="playershort815" type="3" discard="1" dealt="1" sum="14,625"/>
+</round>
+</game>
+<game gamecode="12080441961"><general>
+<startdate>03-01-2026 13:25:43</startdate>
+<round>1</round>
+<failsafecounter/>
+<players><player seat="9" name="Noshovepls" chips="124,312" dealer="0" win="0" bet="2,075" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582333836"/>
+<player seat="10" name="playershort815" chips="351,574" dealer="0" win="0" bet="2,075" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582297717"/>
+<player seat="1" name="Nicola17" chips="142,387" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582304959"/>
+<player seat="3" name="Vkusnyaw" chips="240,523" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582290193"/>
+<player seat="4" name="CJIageHbKuu" chips="87,379" dealer="0" win="0" bet="6,575" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582261120"/>
+<player seat="6" name="Atlas881" chips="129,655" dealer="1" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317874"/>
+<player seat="8" name="benedictarn" chips="315,101" dealer="0" win="18,125" bet="27,275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317887"/>
+</players>
+</general>
+<round no="0"><action no="1" player="benedictarn" type="15" discard="1" dealt="1" sum="275"/>
+<action no="2" player="Noshovepls" type="15" sum="275"/>
+<action no="3" player="playershort815" type="15" discard="1" dealt="1" sum="275"/>
+<action no="4" player="Nicola17" type="15" discard="1" dealt="1" sum="275"/>
+<action no="5" player="Vkusnyaw" type="15" discard="1" dealt="1" sum="275"/>
+<action no="6" player="CJIageHbKuu" type="15" discard="1" dealt="1" sum="275"/>
+<action no="7" player="Atlas881" type="15" discard="1" dealt="1" sum="275"/>
+<action no="8" player="benedictarn" type="1" discard="1" dealt="1" sum="900"/>
+<action no="9" player="Noshovepls" type="2" sum="1,800"/>
+</round>
+<round no="1"><cards type="Pocket" player="Vkusnyaw">X X</cards>
+<cards type="Pocket" player="Nicola17">X X</cards>
+<cards type="Pocket" player="benedictarn">X X</cards>
+<cards type="Pocket" player="Noshovepls">S7 C5</cards>
+<cards type="Pocket" player="playershort815">X X</cards>
+<cards type="Pocket" player="CJIageHbKuu">X X</cards>
+<cards type="Pocket" player="Atlas881">X X</cards>
+<action no="10" player="playershort815" type="3" discard="1" dealt="1" sum="1,800"/>
+<action no="11" player="Nicola17" type="0" discard="1" dealt="1" sum="0"/>
+<action no="12" player="Vkusnyaw" type="0" discard="1" dealt="1" sum="0"/>
+<action no="13" player="CJIageHbKuu" type="23" discard="1" dealt="1" sum="6,300"/>
+<action no="14" player="Atlas881" type="0" discard="1" dealt="1" sum="0"/>
+<action no="15" player="benedictarn" type="23" discard="1" dealt="1" sum="27,000"/>
+<action no="16" player="Noshovepls" type="0" sum="0"/>
+<action no="17" player="playershort815" type="0" discard="1" dealt="1" sum="0"/>
+<action no="18" player="CJIageHbKuu" type="0" discard="1" dealt="1" sum="0"/>
+</round>
+</game>
+<game gamecode="12080442059"><general>
+<startdate>03-01-2026 13:26:19</startdate>
+<round>1</round>
+<failsafecounter/>
+<players><player seat="10" name="playershort815" chips="349,499" dealer="0" win="0" bet="2,075" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582297717"/>
+<player seat="1" name="Nicola17" chips="142,112" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582304959"/>
+<player seat="3" name="Vkusnyaw" chips="240,248" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582290193"/>
+<player seat="4" name="CJIageHbKuu" chips="80,804" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582261120"/>
+<player seat="6" name="Atlas881" chips="129,380" dealer="0" win="0" bet="2,075" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317874"/>
+<player seat="8" name="benedictarn" chips="326,651" dealer="1" win="8,225" bet="8,243" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317887"/>
+<player seat="9" name="Noshovepls" chips="122,237" dealer="0" win="0" bet="1,175" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582333836"/>
+</players>
+</general>
+<round no="0"><action no="1" player="Noshovepls" type="15" sum="275"/>
+<action no="2" player="playershort815" type="15" discard="1" dealt="1" sum="275"/>
+<action no="3" player="Nicola17" type="15" discard="1" dealt="1" sum="275"/>
+<action no="4" player="Vkusnyaw" type="15" discard="1" dealt="1" sum="275"/>
+<action no="5" player="CJIageHbKuu" type="15" discard="1" dealt="1" sum="275"/>
+<action no="6" player="Atlas881" type="15" discard="1" dealt="1" sum="275"/>
+<action no="7" player="benedictarn" type="15" discard="1" dealt="1" sum="275"/>
+<action no="8" player="Noshovepls" type="1" sum="900"/>
+<action no="9" player="playershort815" type="2" discard="1" dealt="1" sum="1,800"/>
+</round>
+<round no="1"><cards type="Pocket" player="Nicola17">X X</cards>
+<cards type="Pocket" player="Vkusnyaw">X X</cards>
+<cards type="Pocket" player="benedictarn">X X</cards>
+<cards type="Pocket" player="playershort815">X X</cards>
+<cards type="Pocket" player="Atlas881">X X</cards>
+<cards type="Pocket" player="CJIageHbKuu">X X</cards>
+<cards type="Pocket" player="Noshovepls">C5 S9</cards>
+<action no="10" player="Nicola17" type="0" discard="1" dealt="1" sum="0"/>
+<action no="11" player="Vkusnyaw" type="0" discard="1" dealt="1" sum="0"/>
+<action no="12" player="CJIageHbKuu" type="0" discard="1" dealt="1" sum="0"/>
+<action no="13" player="Atlas881" type="3" discard="1" dealt="1" sum="1,800"/>
+<action no="14" player="benedictarn" type="3" discard="1" dealt="1" sum="1,800"/>
+<action no="15" player="Noshovepls" type="0" sum="0"/>
+<action no="16" player="playershort815" type="4" discard="1" dealt="1" sum="0"/>
+</round>
+<round no="2"><cards type="Flop">C3 H4 SQ</cards>
+<action no="17" player="playershort815" type="4" discard="1" dealt="1" sum="0"/>
+<action no="18" player="Atlas881" type="4" discard="1" dealt="1" sum="0"/>
+<action no="19" player="benedictarn" type="5" discard="1" dealt="1" sum="6,168"/>
+<action no="20" player="playershort815" type="0" discard="1" dealt="1" sum="0"/>
+<action no="21" player="Atlas881" type="0" discard="1" dealt="1" sum="0"/>
+</round>
+</game>
+<game gamecode="12080442220"><general>
+<startdate>03-01-2026 13:27:20</startdate>
+<round>1</round>
+<failsafecounter/>
+<players><player seat="1" name="Nicola17" chips="141,837" dealer="0" win="31,811" bet="10,237" muck="0" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582304959"/>
+<player seat="3" name="Vkusnyaw" chips="239,973" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582290193"/>
+<player seat="4" name="CJIageHbKuu" chips="80,529" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582261120"/>
+<player seat="6" name="Atlas881" chips="127,305" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317874"/>
+<player seat="8" name="benedictarn" chips="332,801" dealer="0" win="0" bet="10,237" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317887"/>
+<player seat="9" name="Noshovepls" chips="121,062" dealer="1" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582333836"/>
+<player seat="10" name="playershort815" chips="347,424" dealer="0" win="0" bet="10,237" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582297717"/>
+</players>
+</general>
+<round no="0"><action no="1" player="playershort815" type="15" discard="1" dealt="1" sum="275"/>
+<action no="2" player="Nicola17" type="15" discard="1" dealt="1" sum="275"/>
+<action no="3" player="Vkusnyaw" type="15" discard="1" dealt="1" sum="275"/>
+<action no="4" player="CJIageHbKuu" type="15" discard="1" dealt="1" sum="275"/>
+<action no="5" player="Atlas881" type="15" discard="1" dealt="1" sum="275"/>
+<action no="6" player="benedictarn" type="15" discard="1" dealt="1" sum="275"/>
+<action no="7" player="Noshovepls" type="15" sum="275"/>
+<action no="8" player="playershort815" type="1" discard="1" dealt="1" sum="900"/>
+<action no="9" player="Nicola17" type="2" discard="1" dealt="1" sum="1,800"/>
+</round>
+<round no="1"><cards type="Pocket" player="Nicola17">SQ D3</cards>
+<cards type="Pocket" player="playershort815">H2 HJ</cards>
+<cards type="Pocket" player="Noshovepls">S8 CA</cards>
+<cards type="Pocket" player="Vkusnyaw">X X</cards>
+<cards type="Pocket" player="CJIageHbKuu">X X</cards>
+<cards type="Pocket" player="benedictarn">H10 H3</cards>
+<cards type="Pocket" player="Atlas881">X X</cards>
+<action no="10" player="Vkusnyaw" type="0" discard="1" dealt="1" sum="0"/>
+<action no="11" player="CJIageHbKuu" type="0" discard="1" dealt="1" sum="0"/>
+<action no="12" player="Atlas881" type="0" discard="1" dealt="1" sum="0"/>
+<action no="13" player="benedictarn" type="23" discard="1" dealt="1" sum="3,600"/>
+<action no="14" player="Noshovepls" type="0" sum="0"/>
+<action no="15" player="playershort815" type="3" discard="1" dealt="1" sum="2,700"/>
+<action no="16" player="Nicola17" type="3" discard="1" dealt="1" sum="1,800"/>
+</round>
+<round no="2"><cards type="Flop">D2 C3 D8</cards>
+<action no="17" player="playershort815" type="4" discard="1" dealt="1" sum="0"/>
+<action no="18" player="Nicola17" type="4" discard="1" dealt="1" sum="0"/>
+<action no="19" player="benedictarn" type="5" discard="1" dealt="1" sum="6,362"/>
+<action no="20" player="playershort815" type="3" discard="1" dealt="1" sum="6,362"/>
+<action no="21" player="Nicola17" type="3" discard="1" dealt="1" sum="6,362"/>
+</round>
+<round no="3"><cards type="Turn">S9</cards>
+<action no="22" player="playershort815" type="4" discard="1" dealt="1" sum="0"/>
+<action no="23" player="Nicola17" type="4" discard="1" dealt="1" sum="0"/>
+<action no="24" player="benedictarn" type="4" discard="1" dealt="1" sum="0"/>
+</round>
+<round no="4"><cards type="River">DA</cards>
+<action no="25" player="playershort815" type="4" discard="1" dealt="1" sum="0"/>
+<action no="26" player="Nicola17" type="4" discard="1" dealt="1" sum="0"/>
+<action no="27" player="benedictarn" type="4" discard="1" dealt="1" sum="0"/>
+</round>
+</game>
+<game gamecode="12080442393"><general>
+<startdate>03-01-2026 13:28:17</startdate>
+<round>1</round>
+<failsafecounter/>
+<players><player seat="4" name="CJIageHbKuu" chips="80,254" dealer="0" win="0" bet="2,075" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582261120"/>
+<player seat="6" name="Atlas881" chips="127,030" dealer="0" win="0" bet="5,675" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317874"/>
+<player seat="8" name="benedictarn" chips="322,564" dealer="0" win="20,550" bet="15,950" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317887"/>
+<player seat="9" name="Noshovepls" chips="120,787" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582333836"/>
+<player seat="10" name="playershort815" chips="337,187" dealer="1" win="0" bet="5,675" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582297717"/>
+<player seat="1" name="Nicola17" chips="163,411" dealer="0" win="0" bet="1,175" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582304959"/>
+</players>
+</general>
+<round no="0"><action no="1" player="Nicola17" type="15" discard="1" dealt="1" sum="275"/>
+<action no="2" player="CJIageHbKuu" type="15" discard="1" dealt="1" sum="275"/>
+<action no="3" player="Atlas881" type="15" discard="1" dealt="1" sum="275"/>
+<action no="4" player="benedictarn" type="15" discard="1" dealt="1" sum="275"/>
+<action no="5" player="Noshovepls" type="15" sum="275"/>
+<action no="6" player="playershort815" type="15" discard="1" dealt="1" sum="275"/>
+<action no="7" player="Nicola17" type="1" discard="1" dealt="1" sum="900"/>
+<action no="8" player="CJIageHbKuu" type="2" discard="1" dealt="1" sum="1,800"/>
+</round>
+<round no="1"><cards type="Pocket" player="CJIageHbKuu">X X</cards>
+<cards type="Pocket" player="Atlas881">X X</cards>
+<cards type="Pocket" player="Noshovepls">CK C4</cards>
+<cards type="Pocket" player="playershort815">X X</cards>
+<cards type="Pocket" player="Nicola17">X X</cards>
+<cards type="Pocket" player="benedictarn">X X</cards>
+<action no="9" player="Atlas881" type="3" discard="1" dealt="1" sum="1,800"/>
+<action no="10" player="benedictarn" type="23" discard="1" dealt="1" sum="5,400"/>
+<action no="11" player="Noshovepls" type="0" sum="0"/>
+<action no="12" player="playershort815" type="3" discard="1" dealt="1" sum="5,400"/>
+<action no="13" player="Nicola17" type="0" discard="1" dealt="1" sum="0"/>
+<action no="14" player="CJIageHbKuu" type="0" discard="1" dealt="1" sum="0"/>
+<action no="15" player="Atlas881" type="3" discard="1" dealt="1" sum="3,600"/>
+</round>
+<round no="2"><cards type="Flop">D4 D2 S4</cards>
+<action no="16" player="Atlas881" type="4" discard="1" dealt="1" sum="0"/>
+<action no="17" player="benedictarn" type="5" discard="1" dealt="1" sum="10,275"/>
+<action no="18" player="playershort815" type="0" discard="1" dealt="1" sum="0"/>
+<action no="19" player="Atlas881" type="0" discard="1" dealt="1" sum="0"/>
+</round>
+</game>
+<game gamecode="12080442536"><general>
+<startdate>03-01-2026 13:29:10</startdate>
+<round>1</round>
+<failsafecounter/>
+<players><player seat="6" name="Atlas881" chips="121,355" dealer="0" win="0" bet="2,075" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317874"/>
+<player seat="8" name="benedictarn" chips="337,439" dealer="0" win="28,500" bet="11,000" muck="0" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317887"/>
+<player seat="9" name="Noshovepls" chips="120,512" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582333836"/>
+<player seat="10" name="playershort815" chips="331,512" dealer="0" win="0" bet="11,000" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582297717"/>
+<player seat="1" name="Nicola17" chips="162,236" dealer="1" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582304959"/>
+<player seat="4" name="CJIageHbKuu" chips="78,179" dealer="0" win="0" bet="3,875" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582261120"/>
+</players>
+</general>
+<round no="0"><action no="1" player="CJIageHbKuu" type="15" discard="1" dealt="1" sum="275"/>
+<action no="2" player="Atlas881" type="15" discard="1" dealt="1" sum="275"/>
+<action no="3" player="benedictarn" type="15" discard="1" dealt="1" sum="275"/>
+<action no="4" player="Noshovepls" type="15" sum="275"/>
+<action no="5" player="playershort815" type="15" discard="1" dealt="1" sum="275"/>
+<action no="6" player="Nicola17" type="15" discard="1" dealt="1" sum="275"/>
+<action no="7" player="CJIageHbKuu" type="1" discard="1" dealt="1" sum="900"/>
+<action no="8" player="Atlas881" type="2" discard="1" dealt="1" sum="1,800"/>
+</round>
+<round no="1"><cards type="Pocket" player="Atlas881">X X</cards>
+<cards type="Pocket" player="benedictarn">D10 SQ</cards>
+<cards type="Pocket" player="playershort815">C10 SJ</cards>
+<cards type="Pocket" player="Noshovepls">D4 CQ</cards>
+<cards type="Pocket" player="CJIageHbKuu">X X</cards>
+<cards type="Pocket" player="Nicola17">X X</cards>
+<action no="9" player="benedictarn" type="23" discard="1" dealt="1" sum="3,600"/>
+<action no="10" player="Noshovepls" type="0" sum="0"/>
+<action no="11" player="playershort815" type="3" discard="1" dealt="1" sum="3,600"/>
+<action no="12" player="Nicola17" type="0" discard="1" dealt="1" sum="0"/>
+<action no="13" player="CJIageHbKuu" type="3" discard="1" dealt="1" sum="2,700"/>
+<action no="14" player="Atlas881" type="0" discard="1" dealt="1" sum="0"/>
+</round>
+<round no="2"><cards type="Flop">S8 SA D3</cards>
+<action no="15" player="CJIageHbKuu" type="4" discard="1" dealt="1" sum="0"/>
+<action no="16" player="benedictarn" type="4" discard="1" dealt="1" sum="0"/>
+<action no="17" player="playershort815" type="4" discard="1" dealt="1" sum="0"/>
+</round>
+<round no="3"><cards type="Turn">HQ</cards>
+<action no="18" player="CJIageHbKuu" type="4" discard="1" dealt="1" sum="0"/>
+<action no="19" player="benedictarn" type="5" discard="1" dealt="1" sum="7,125"/>
+<action no="20" player="playershort815" type="3" discard="1" dealt="1" sum="7,125"/>
+<action no="21" player="CJIageHbKuu" type="0" discard="1" dealt="1" sum="0"/>
+</round>
+<round no="4"><cards type="River">HA</cards>
+<action no="22" player="benedictarn" type="4" discard="1" dealt="1" sum="0"/>
+<action no="23" player="playershort815" type="4" discard="1" dealt="1" sum="0"/>
+</round>
+</game>
+<game gamecode="12080442731"><general>
+<startdate>03-01-2026 13:30:22</startdate>
+<round>1</round>
+<failsafecounter/>
+<players><player seat="8" name="benedictarn" chips="354,939" dealer="0" win="0" bet="3,875" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317887"/>
+<player seat="9" name="Noshovepls" chips="120,237" dealer="0" win="22,625" bet="24,215" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582333836"/>
+<player seat="10" name="playershort815" chips="320,512" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582297717"/>
+<player seat="1" name="Nicola17" chips="161,961" dealer="0" win="0" bet="8,375" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582304959"/>
+<player seat="3" name="T0mS" chips="100,000" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" reg_code="8582340176"/>
+<player seat="4" name="CJIageHbKuu" chips="74,304" dealer="1" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582261120"/>
+<player seat="6" name="Atlas881" chips="119,280" dealer="0" win="0" bet="1,175" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317874"/>
+</players>
+</general>
+<round no="0"><action no="1" player="Atlas881" type="15" discard="1" dealt="1" sum="275"/>
+<action no="2" player="benedictarn" type="15" discard="1" dealt="1" sum="275"/>
+<action no="3" player="Noshovepls" type="15" sum="275"/>
+<action no="4" player="playershort815" type="15" discard="1" dealt="1" sum="275"/>
+<action no="5" player="Nicola17" type="15" discard="1" dealt="1" sum="275"/>
+<action no="6" player="T0mS" type="15" discard="1" dealt="1" sum="275"/>
+<action no="7" player="CJIageHbKuu" type="15" discard="1" dealt="1" sum="275"/>
+<action no="8" player="Atlas881" type="1" discard="1" dealt="1" sum="900"/>
+<action no="9" player="benedictarn" type="2" discard="1" dealt="1" sum="1,800"/>
+</round>
+<round no="1"><cards type="Pocket" player="benedictarn">X X</cards>
+<cards type="Pocket" player="Noshovepls">HA HQ</cards>
+<cards type="Pocket" player="playershort815">X X</cards>
+<cards type="Pocket" player="CJIageHbKuu">X X</cards>
+<cards type="Pocket" player="T0mS">X X</cards>
+<cards type="Pocket" player="Atlas881">X X</cards>
+<cards type="Pocket" player="Nicola17">X X</cards>
+<action no="10" player="Noshovepls" type="23" sum="3,600"/>
+<action no="11" player="playershort815" type="0" discard="1" dealt="1" sum="0"/>
+<action no="12" player="Nicola17" type="3" discard="1" dealt="1" sum="3,600"/>
+<action no="13" player="T0mS" type="0" discard="1" dealt="1" sum="0"/>
+<action no="14" player="CJIageHbKuu" type="0" discard="1" dealt="1" sum="0"/>
+<action no="15" player="Atlas881" type="0" discard="1" dealt="1" sum="0"/>
+<action no="16" player="benedictarn" type="3" discard="1" dealt="1" sum="1,800"/>
+</round>
+<round no="2"><cards type="Flop">S4 H4 S6</cards>
+<action no="17" player="benedictarn" type="4" discard="1" dealt="1" sum="0"/>
+<action no="18" player="Noshovepls" type="5" sum="4,500"/>
+<action no="19" player="Nicola17" type="3" discard="1" dealt="1" sum="4,500"/>
+<action no="20" player="benedictarn" type="0" discard="1" dealt="1" sum="0"/>
+</round>
+<round no="3"><cards type="Turn">DA</cards>
+<action no="21" player="Noshovepls" type="5" sum="15,840"/>
+<action no="22" player="Nicola17" type="0" discard="1" dealt="1" sum="0"/>
+</round>
+</game>
+<game gamecode="12080442845"><general>
+<startdate>03-01-2026 13:31:05</startdate>
+<round>1</round>
+<failsafecounter/>
+<players><player seat="9" name="Noshovepls" chips="134,487" dealer="0" win="0" bet="2,075" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582333836"/>
+<player seat="10" name="playershort815" chips="320,237" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582297717"/>
+<player seat="1" name="Nicola17" chips="153,586" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582304959"/>
+<player seat="3" name="T0mS" chips="99,725" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582340176"/>
+<player seat="4" name="CJIageHbKuu" chips="74,029" dealer="0" win="6,425" bet="3,875" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582261120"/>
+<player seat="6" name="Atlas881" chips="118,105" dealer="1" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317874"/>
+<player seat="8" name="benedictarn" chips="351,064" dealer="0" win="0" bet="1,175" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317887"/>
+</players>
+</general>
+<round no="0"><action no="1" player="benedictarn" type="15" discard="1" dealt="1" sum="275"/>
+<action no="2" player="Noshovepls" type="15" sum="275"/>
+<action no="3" player="playershort815" type="15" discard="1" dealt="1" sum="275"/>
+<action no="4" player="Nicola17" type="15" discard="1" dealt="1" sum="275"/>
+<action no="5" player="T0mS" type="15" discard="1" dealt="1" sum="275"/>
+<action no="6" player="CJIageHbKuu" type="15" discard="1" dealt="1" sum="275"/>
+<action no="7" player="Atlas881" type="15" discard="1" dealt="1" sum="275"/>
+<action no="8" player="benedictarn" type="1" discard="1" dealt="1" sum="900"/>
+<action no="9" player="Noshovepls" type="2" sum="1,800"/>
+</round>
+<round no="1"><cards type="Pocket" player="T0mS">X X</cards>
+<cards type="Pocket" player="playershort815">X X</cards>
+<cards type="Pocket" player="Noshovepls">CQ D3</cards>
+<cards type="Pocket" player="benedictarn">X X</cards>
+<cards type="Pocket" player="Atlas881">X X</cards>
+<cards type="Pocket" player="Nicola17">X X</cards>
+<cards type="Pocket" player="CJIageHbKuu">X X</cards>
+<action no="10" player="playershort815" type="0" discard="1" dealt="1" sum="0"/>
+<action no="11" player="Nicola17" type="0" discard="1" dealt="1" sum="0"/>
+<action no="12" player="T0mS" type="0" discard="1" dealt="1" sum="0"/>
+<action no="13" player="CJIageHbKuu" type="23" discard="1" dealt="1" sum="3,600"/>
+<action no="14" player="Atlas881" type="0" discard="1" dealt="1" sum="0"/>
+<action no="15" player="benedictarn" type="0" discard="1" dealt="1" sum="0"/>
+<action no="16" player="Noshovepls" type="0" sum="0"/>
+</round>
+</game>
+<game gamecode="12080442935"><general>
+<startdate>03-01-2026 13:31:35</startdate>
+<round>1</round>
+<failsafecounter/>
+<players><player seat="10" name="playershort815" chips="319,962" dealer="0" win="0" bet="2,075" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582297717"/>
+<player seat="1" name="Nicola17" chips="153,311" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582304959"/>
+<player seat="3" name="T0mS" chips="99,450" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582340176"/>
+<player seat="4" name="CJIageHbKuu" chips="78,379" dealer="0" win="0" bet="275" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582261120"/>
+<player seat="6" name="Atlas881" chips="117,830" dealer="0" win="0" bet="2,075" muck="1" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317874"/>
+<player seat="8" name="benedictarn" chips="349,889" dealer="1" win="269,799" bet="132,412" muck="0" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582317887"/>
+<player seat="9" name="Noshovepls" chips="132,412" dealer="0" win="0" bet="132,412" muck="0" rebuy="0" addon="0" merge="0" rebuychips="0" reg_code="8582333836"/>
+</players>
+</general>
+<round no="0"><action no="1" player="Noshovepls" type="15" sum="275"/>
+<action no="2" player="playershort815" type="15" discard="1" dealt="1" sum="275"/>
+<action no="3" player="Nicola17" type="15" discard="1" dealt="1" sum="275"/>
+<action no="4" player="T0mS" type="15" discard="1" dealt="1" sum="275"/>
+<action no="5" player="CJIageHbKuu" type="15" discard="1" dealt="1" sum="275"/>
+<action no="6" player="Atlas881" type="15" discard="1" dealt="1" sum="275"/>
+<action no="7" player="benedictarn" type="15" discard="1" dealt="1" sum="275"/>
+<action no="8" player="Noshovepls" type="1" sum="900"/>
+<action no="9" player="playershort815" type="2" discard="1" dealt="1" sum="1,800"/>
+</round>
+<round no="1"><cards type="Pocket" player="CJIageHbKuu">X X</cards>
+<cards type="Pocket" player="playershort815">X X</cards>
+<cards type="Pocket" player="T0mS">X X</cards>
+<cards type="Pocket" player="Atlas881">X X</cards>
+<cards type="Pocket" player="Noshovepls">HA SA</cards>
+<cards type="Pocket" player="Nicola17">X X</cards>
+<cards type="Pocket" player="benedictarn">CK CQ</cards>
+<action no="10" player="Nicola17" type="0" discard="1" dealt="1" sum="0"/>
+<action no="11" player="T0mS" type="0" discard="1" dealt="1" sum="0"/>
+<action no="12" player="CJIageHbKuu" type="0" discard="1" dealt="1" sum="0"/>
+<action no="13" player="Atlas881" type="3" discard="1" dealt="1" sum="1,800"/>
+<action no="14" player="benedictarn" type="23" discard="1" dealt="1" sum="7,200"/>
+<action no="15" player="Noshovepls" type="23" sum="30,600"/>
+<action no="16" player="playershort815" type="0" discard="1" dealt="1" sum="0"/>
+<action no="17" player="Atlas881" type="0" discard="1" dealt="1" sum="0"/>
+<action no="18" player="benedictarn" type="3" discard="1" dealt="1" sum="23,400"/>
+</round>
+<round no="2"><cards type="Flop">H6 C8 SQ</cards>
+<action no="19" player="Noshovepls" type="5" sum="22,014"/>
+<action no="20" player="benedictarn" type="23" discard="1" dealt="1" sum="99,575"/>
+<action no="21" player="Noshovepls" type="7" sum="79,523"/>
+<action no="22" player="benedictarn" type="3" discard="1" dealt="1" sum="1,962"/>
+</round>
+<round no="3"><cards type="Turn">D2</cards>
+</round>
+<round no="4"><cards type="River">HQ</cards>
+</round>
+</game>
+</session>

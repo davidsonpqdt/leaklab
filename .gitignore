@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+# Don't commit large hand history datasets
+classified/
+data/hands_*.json
+data/raw/
+# User's personal hand histories - never commit
+data/maos_*/
+data/temp_*/
+outputs/hands*.json
+outputs/*.html
+# Editor / OS
+.vscode/
+*.swp
+*.bak
+node_modules/

@@ -1,0 +1,726 @@
+{
+  "id": "3bet_UTG_vs_BTN_greenline_100bb_6max",
+  "format": "6max_cash",
+  "stack_bb": 100,
+  "icm": "chipev",
+  "scenario": "3bet",
+  "hero_pos": "UTG",
+  "vs": "BTN",
+  "source": "GreenCharts2024_01.pdf (Greenline Poker) via github.com/AHTOOOXA/poker-charts",
+  "license": "MIT (AHTOOOXA/poker-charts)",
+  "sizing_note": "UTG 3bb / MP 3bb / CO 2.5bb / BTN 2.5bb / SB 3bb (cash 100bb 6-max)",
+  "actions": [
+    "call",
+    "allin",
+    "raise_2x",
+    "fold"
+  ],
+  "extracted_pct": 3.32,
+  "hands": {
+    "22": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "33": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "44": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "55": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "66": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "77": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "88": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "99": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "AA": {
+      "raise_2x": 0,
+      "allin": 100,
+      "fold": 0
+    },
+    "AKs": {
+      "raise_2x": 0,
+      "allin": 100,
+      "fold": 0
+    },
+    "AQs": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "AJs": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "ATs": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "A9s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "A8s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "A7s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "A6s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "A5s": {
+      "raise_2x": 50,
+      "call": 0,
+      "allin": 0,
+      "fold": 50
+    },
+    "A4s": {
+      "raise_2x": 50,
+      "call": 0,
+      "allin": 0,
+      "fold": 50
+    },
+    "A3s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "A2s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "AKo": {
+      "raise_2x": 0,
+      "allin": 100,
+      "fold": 0
+    },
+    "KK": {
+      "raise_2x": 0,
+      "allin": 100,
+      "fold": 0
+    },
+    "KQs": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "KJs": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "KTs": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "K9s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K8s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K7s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K6s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K5s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K4s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K3s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K2s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "AQo": {
+      "raise_2x": 50,
+      "call": 0,
+      "allin": 0,
+      "fold": 50
+    },
+    "KQo": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "QQ": {
+      "raise_2x": 0,
+      "allin": 100,
+      "fold": 0
+    },
+    "QJs": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "QTs": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "Q9s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q8s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q7s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q6s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q5s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q4s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q3s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q2s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "AJo": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "KJo": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "QJo": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "JJ": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "JTs": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "J9s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J8s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J7s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J6s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J5s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J4s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J3s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J2s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "ATo": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "KTo": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "QTo": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "JTo": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "TT": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "T9s": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "T8s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T7s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T6s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T5s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T4s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T3s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T2s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "A9o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K9o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q9o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J9o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T9o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "98s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "97s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "96s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "95s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "94s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "93s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "92s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "A8o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K8o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q8o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J8o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T8o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "98o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "87s": {
+      "raise_2x": 0,
+      "call": 100,
+      "fold": 0
+    },
+    "86s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "85s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "84s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "83s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "82s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "A7o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K7o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q7o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J7o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T7o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "97o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "87o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "76s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "75s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "74s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "73s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "72s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "A6o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K6o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q6o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J6o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T6o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "96o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "86o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "76o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "65s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "64s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "63s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "62s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "A5o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K5o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q5o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J5o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T5o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "95o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "85o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "75o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "65o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "54s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "53s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "52s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "A4o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K4o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q4o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J4o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T4o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "94o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "84o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "74o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "64o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "54o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "43s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "42s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "A3o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K3o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q3o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J3o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T3o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "93o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "83o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "73o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "63o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "53o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "43o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "32s": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "A2o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "K2o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "Q2o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "J2o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "T2o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "92o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "82o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "72o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "62o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "52o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "42o": {
+      "raise_2x": 0,
+      "fold": 100
+    },
+    "32o": {
+      "raise_2x": 0,
+      "fold": 100
+    }
+  }
+}
