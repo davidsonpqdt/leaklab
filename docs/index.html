@@ -83,6 +83,30 @@
   .filters-side { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; max-height: calc(100vh - 140px); overflow-y: auto; }
   .filters-side h3 { color: var(--fg-link); font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; margin: 12px 0 8px 0; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
   .filters-side h3:first-child { margin-top: 0; }
+  /* [VISUAL v2 onda 3] Filter search input dentro da sidebar */
+  .f-search { position: sticky; top: 0; z-index: 5; background: var(--bg-card); padding: 4px 0 10px 0; margin: 0 0 8px; border-bottom: 1px solid var(--border); display: flex; gap: 4px; }
+  .f-search input { flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--fg); padding: 7px 10px; border-radius: 8px; font-size: 12px; }
+  .f-search input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(45,212,191,0.15); }
+  .filters-side h3.f-collapsed-title { cursor: pointer; user-select: none; }
+  .filters-side h3.f-collapsed-title::before { content: "▾"; display:inline-block; margin-right: 6px; transition: transform var(--t-fast) var(--ease-out); }
+  .filters-side .f-section.collapsed h3.f-collapsed-title::before { transform: rotate(-90deg); }
+  .filters-side .f-section.collapsed > *:not(h3) { display: none; }
+  .filters-side .f-section { margin-bottom: 4px; }
+  .filters-side .f-section.f-hidden { display: none; }
+  .pills button.f-dim { opacity: 0.25; }
+  /* [VISUAL v2 onda 3] Chips de filtros aplicados no topo */
+  .active-chips { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: linear-gradient(180deg, rgba(45,212,191,0.06), transparent); border: 1px solid #1f3a36; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; }
+  .active-chips.empty { display: none; }
+  .chips-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--fg-link); font-weight: 600; }
+  .chips-list { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; background: var(--bg-3); border: 1px solid var(--border); color: var(--fg); padding: 4px 4px 4px 10px; border-radius: 14px; font-size: 12px; animation: chipIn .18s ease-out; }
+  .chip-key { color: var(--fg-dim); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .chip-val { color: var(--accent); font-weight: 600; }
+  .chip-x { background: transparent; border: none; color: var(--fg-dim); cursor: pointer; width: 20px; height: 20px; border-radius: 50%; font-size: 14px; line-height: 1; padding: 0; }
+  .chip-x:hover { background: var(--bad); color: #fff; }
+  .chips-clear { background: transparent; border: 1px solid var(--border); color: var(--fg-dim); font-size: 11px; padding: 4px 10px; border-radius: 12px; cursor: pointer; }
+  .chips-clear:hover { color: var(--bad); border-color: var(--bad); }
+  @keyframes chipIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
   .filters-side .field { margin-bottom: 10px; }
   .filters-side .field label { display: block; color: var(--fg-dim); font-size: 11px; margin-bottom: 4px; }
   .filters-side select, .filters-side input { background: var(--bg); border: 1px solid var(--border); color: var(--fg); padding: 6px 10px; border-radius: 5px; font-size: 12px; width: 100%; }
@@ -601,6 +625,45 @@
   .hands-table td.bb-cell.gain { color: var(--good); }
   .hands-table td.bb-cell.loss { color: var(--bad); }
 
+  /* ===== [VISUAL v2 onda 4] HUD redesign — hero cards + gauges + collapsable ===== */
+  .hud-hero { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 16px; }
+  .hud-hero-card {
+    background: linear-gradient(160deg, var(--bg-card), #15151c);
+    border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    border-radius: 10px; padding: 12px 14px; cursor: pointer;
+    transition: transform var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out), box-shadow var(--t-fast) var(--ease-out);
+  }
+  .hud-hero-card:hover { transform: translateY(-2px); border-left-color: var(--accent-2); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .hud-hero-card .label { font-size: 10px; color: var(--fg-dim); text-transform: uppercase; letter-spacing: 0.6px; }
+  .hud-hero-card .big { font-size: 26px; font-weight: 700; margin: 4px 0 2px 0; font-variant-numeric: tabular-nums; }
+  .hud-hero-card .big.good { color: var(--good); }
+  .hud-hero-card .big.warn { color: var(--warn); }
+  .hud-hero-card .big.bad { color: var(--bad); }
+  .hud-hero-card .big.dim { color: var(--fg-dim); }
+  .hud-hero-card .delta { font-size: 11px; color: var(--fg-dim); }
+  .hud-hero-card .delta .up { color: var(--bad); }
+  .hud-hero-card .delta .down { color: var(--good); }
+  @media (max-width: 1100px) { .hud-hero { grid-template-columns: repeat(3,1fr); } }
+  @media (max-width: 600px)  { .hud-hero { grid-template-columns: repeat(2,1fr); } }
+  /* Gauge bar inline */
+  .hud-gauge { position: relative; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--bad) 0%, var(--bad) 18%, var(--warn) 18%, var(--warn) 40%, var(--good) 40%, var(--good) 60%, var(--warn) 60%, var(--warn) 82%, var(--bad) 82%, var(--bad) 100%); opacity: 0.55; min-width: 60px; }
+  .hud-gauge .marker { position: absolute; top: -3px; width: 3px; height: 12px; background: var(--fg); border-radius: 1px; box-shadow: 0 0 4px rgba(0,0,0,0.6); transform: translateX(-50%); }
+  .hud-gauge .marker.dim { background: var(--fg-dim); }
+  .hud-gauge .ideal-tick { position: absolute; top: -1px; height: 8px; width: 1px; background: rgba(255,255,255,0.35); transform: translateX(-50%); }
+  /* Sections collapsable + leak count badge */
+  .hud-card.collapsible > h4 { cursor: pointer; user-select: none; display: flex; align-items: center; gap: 8px; }
+  .hud-card.collapsible > h4::before { content: "▾"; font-size: 9px; color: var(--fg-dim); transition: transform var(--t-fast) var(--ease-out); }
+  .hud-card.collapsible.collapsed > h4::before { transform: rotate(-90deg); }
+  .hud-card.collapsible.collapsed > .hud-stat { display: none; }
+  .hud-card .leak-count { background: rgba(237,106,106,0.15); color: var(--bad); padding: 1px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-left: auto; }
+  .hud-card .leak-count.warn { background: rgba(245,193,74,0.15); color: var(--warn); }
+  .hud-card .leak-count.good { background: rgba(93,214,132,0.15); color: var(--good); }
+  /* Search + leaks-only toggle */
+  .hud-search { background: var(--bg); border: 1px solid var(--border); color: var(--fg); padding: 6px 10px 6px 30px; border-radius: 6px; font-size: 12px; width: 200px; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.35-4.35'/></svg>"); background-repeat: no-repeat; background-position: 9px center; }
+  .hud-search:focus { border-color: var(--accent); outline: none; }
+  .hud-stat.hidden, .hud-card.empty-hud { display: none; }
+  .hud-leaks-only-on { background: rgba(237,106,106,0.18) !important; border-color: var(--bad) !important; color: var(--bad) !important; }
+
   /* ===== A11y: Respeita prefers-reduced-motion ===== */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -816,6 +879,11 @@
       <aside class="filters-side" id="filters-side"></aside>
       <div class="filters-content">
         <div id="stat-banner" style="display:none"></div>
+        <div class="active-chips empty" id="active-chips">
+          <span class="chips-label">Filtros ativos:</span>
+          <div class="chips-list" id="chips-list"></div>
+          <button class="chips-clear" id="chips-clear">Limpar tudo</button>
+        </div>
         <div class="summary-row" id="summary-row"></div>
         <div id="filters-main">
           <div style="display:flex; gap:8px; margin-bottom:10px;">
@@ -1500,6 +1568,72 @@ function applyFilters() {
   renderMatrix();
   renderHandsList();
   updateFilterIndicator();
+  renderActiveChips();  // [VISUAL v2 onda 3] chips de filtros ativos
+}
+
+// [VISUAL v2 onda 3] Renderiza chips dos filtros ativos no topo da aba Filtros
+function renderActiveChips() {
+  const wrap = document.getElementById("active-chips");
+  const list = document.getElementById("chips-list");
+  if (!wrap || !list) return;
+  const items = [];
+  // Sets multi-valor
+  const setLabels = {
+    positions: "Pos", villain_positions: "Vilão", faced: "Faced", actions: "Ação",
+    datasets: "Tipo", heros: "Hero", flop_seq: "Flop", turn_seq: "Turn", river_seq: "River",
+    hs_flop: "Hand Strength", board_flop: "Board", allin_street: "All-in",
+    flop_villain_pos: "Flop villain", threebettor_pos: "3bettor", hero_4bet_response: "Resp 3bet"
+  };
+  for (const [k, label] of Object.entries(setLabels)) {
+    if (F[k] && F[k].size > 0) {
+      const vals = [...F[k]].join(", ");
+      items.push({ label, val: vals, clear: () => { F[k].clear(); _syncPillsFor(k); applyFilters(); } });
+    }
+  }
+  // Hands selected (pills da matriz)
+  if (F.hands_selected && F.hands_selected.size > 0) {
+    items.push({ label: "Mãos", val: [...F.hands_selected].slice(0, 6).join(", ") + (F.hands_selected.size > 6 ? "…" : ""), clear: () => { F.hands_selected.clear(); applyFilters(); } });
+  }
+  // Modificadores boolean
+  const boolMap = { is_pfa: "PFA", is_squeeze: "Squeeze", is_bvb: "BvB", saw_flop: "Viu flop", saw_turn: "Viu turn", saw_river: "Viu river", went_to_sd: "Foi a SD", faced_3bet_after_open: "Faced 3bet (open)" };
+  for (const [k, label] of Object.entries(boolMap)) {
+    if (F[k] === true) items.push({ label, val: "sim", clear: () => { F[k] = null; applyFilters(); } });
+  }
+  if (F.pos_relative) items.push({ label: "Posição", val: F.pos_relative.toUpperCase(), clear: () => { F.pos_relative = null; applyFilters(); } });
+  // Numéricos
+  if (F.min_bb != null) items.push({ label: "Stack ≥", val: F.min_bb + "bb", clear: () => { F.min_bb = null; const el = document.getElementById("f-min-bb"); if (el) el.value = ""; applyFilters(); } });
+  if (F.max_bb != null) items.push({ label: "Stack ≤", val: F.max_bb + "bb", clear: () => { F.max_bb = null; const el = document.getElementById("f-max-bb"); if (el) el.value = ""; applyFilters(); } });
+  if (F.result_min != null) items.push({ label: "Result ≥", val: F.result_min + "bb", clear: () => { F.result_min = null; const el = document.getElementById("f-result-min"); if (el) el.value = ""; applyFilters(); } });
+  if (F.result_max != null) items.push({ label: "Result ≤", val: F.result_max + "bb", clear: () => { F.result_max = null; const el = document.getElementById("f-result-max"); if (el) el.value = ""; applyFilters(); } });
+  if (F.n_to_flop_min != null) items.push({ label: "Plrs flop ≥", val: F.n_to_flop_min, clear: () => { F.n_to_flop_min = null; const el = document.getElementById("f-ntf-min"); if (el) el.value = ""; applyFilters(); } });
+  if (F.n_to_flop_max != null) items.push({ label: "Plrs flop ≤", val: F.n_to_flop_max, clear: () => { F.n_to_flop_max = null; const el = document.getElementById("f-ntf-max"); if (el) el.value = ""; applyFilters(); } });
+  if (F.date_from) items.push({ label: "Data de", val: F.date_from, clear: () => { F.date_from = null; const el = document.getElementById("f-date-from"); if (el) el.value = ""; applyFilters(); } });
+  if (F.date_to) items.push({ label: "Data até", val: F.date_to, clear: () => { F.date_to = null; const el = document.getElementById("f-date-to"); if (el) el.value = ""; applyFilters(); } });
+
+  if (items.length === 0) {
+    wrap.classList.add("empty");
+    list.innerHTML = "";
+    return;
+  }
+  wrap.classList.remove("empty");
+  list.innerHTML = items.map((c, i) =>
+    `<span class="chip"><span class="chip-key">${c.label}</span><span class="chip-val">${escHtml(String(c.val))}</span><button class="chip-x" data-i="${i}" aria-label="Remover">×</button></span>`
+  ).join("");
+  // Bind X handlers
+  list.querySelectorAll(".chip-x").forEach((btn, idx) => {
+    btn.addEventListener("click", (e) => { e.stopPropagation(); items[idx].clear(); });
+  });
+}
+
+// Sincroniza visual de pills quando filtro é removido programaticamente
+function _syncPillsFor(key) {
+  const idMap = { positions: "f-pos", villain_positions: "f-vpos", faced: "f-faced",
+    actions: "f-action", datasets: "f-dataset", heros: "f-hero",
+    flop_seq: "f-flopseq", turn_seq: "f-turnseq", river_seq: "f-riverseq",
+    hs_flop: "f-hs", board_flop: "f-board", allin_street: "f-allin" };
+  const id = idMap[key];
+  if (!id) return;
+  document.querySelectorAll("#" + id + " button.on").forEach(b => b.classList.remove("on"));
 }
 
 function activeFilterCount() {
@@ -6479,35 +6613,93 @@ function renderHud() {
   bindHudToolbar();
   syncHudToolbarFromF();
   const hudHands = hudFilteredHands();
-  // Salva no estado pra updateHudSummary usar
   window.__HUD_HANDS_COUNT__ = hudHands.length;
   updateHudSummary();
   const stats = computeStats(hudHands);
   const sections = BENCHMARKS.sections;
-  let html = "";
+  // [VISUAL v2 onda 4] Hero cards das 6 stats principais no topo
+  const HERO_STATS = ["vpip","pfr","3bet_tot","cbet_ip_vs_bb","wtsd","af"];
+  const findBench = (k) => {
+    for (const sec of Object.values(sections)) if (sec.stats[k]) return sec.stats[k];
+    return null;
+  };
+  let heroHtml = '<div class="hud-hero">';
+  for (const k of HERO_STATS) {
+    const b = findBench(k); if (!b) continue;
+    const s = stats[k] || { value: null, n: 0 };
+    const cls = colorClass(s.value, b, s.n);
+    const valStr = s.value === null ? "—" : `${s.value.toFixed(1)}${b.unit||""}`;
+    const delta = s.value === null ? "" :
+      `<span class="${s.value > b.ideal ? 'up' : 'down'}">${s.value > b.ideal ? '▲' : '▼'} ${Math.abs(s.value - b.ideal).toFixed(1)}</span> do ideal`;
+    heroHtml += `<div class="hud-hero-card" data-stat="${k}" title="${(STAT_TOOLTIPS[k]||b.label)}">
+      <div class="label">${b.label}</div>
+      <div class="big ${cls}">${valStr}</div>
+      <div class="delta">${delta} · n=${s.n||0}</div>
+    </div>`;
+  }
+  heroHtml += '</div>';
+
+  // [VISUAL v2 onda 4] Sections collapsable com leak count badge
+  let html = heroHtml;
+  const DEFAULT_OPEN = new Set(["geral", "preflop_rfi"]);
   for (const [secKey, sec] of Object.entries(sections)) {
     let rows = "";
+    let leakN = 0, warnN = 0, goodN = 0;
     for (const [statKey, bench] of Object.entries(sec.stats)) {
       const stat = stats[statKey] || { value: null, n: 0 };
       const v = stat.value;
       const cls = colorClass(v, bench, stat.n);
+      if (stat.n >= 30) {
+        if (cls === "bad") leakN++;
+        else if (cls === "warn") warnN++;
+        else if (cls === "good") goodN++;
+      }
       const valStr = v === null ? "—" : `${v.toFixed(1)}${bench.unit || ""}`;
       const idealStr = `${bench.min}/${bench.ideal}/${bench.max}`;
-      // [FIX 2026-04-25]: tooltip em PT-BR pra cada stat (junta STAT_TOOLTIPS + benchmark info)
       const tt = (typeof STAT_TOOLTIPS !== "undefined" && STAT_TOOLTIPS[statKey])
         ? STAT_TOOLTIPS[statKey] + ` · Ideal ${bench.min}-${bench.ideal}-${bench.max}${bench.unit||""}`
         : `${bench.label}: ${idealStr}${bench.unit||""}`;
       const nLabel = stat.n < 30 ? `n=${stat.n||0} (amostra baixa)` : `n=${stat.n || 0}`;
+      // Gauge inline mostra posição "você" entre [min*0.6, max*1.4]
+      const lo = bench.min * 0.6, hi = bench.max * 1.4;
+      const pct = v === null ? null : Math.max(0, Math.min(100, ((v - lo) / (hi - lo)) * 100));
+      const idealPct = ((bench.ideal - lo) / (hi - lo)) * 100;
+      const gaugeHtml = pct === null ? '<span class="ideal">'+idealStr+'</span>' :
+        `<span class="hud-gauge" title="min ${bench.min} · ideal ${bench.ideal} · max ${bench.max}">
+          <span class="ideal-tick" style="left:${idealPct}%"></span>
+          <span class="marker ${stat.n < 30 ? 'dim' : ''}" style="left:${pct}%"></span>
+        </span>`;
       rows += `<div class="hud-stat" data-stat="${statKey}" title="${tt}">
         <span class="name">${bench.label}</span>
         <span class="val ${cls}">${valStr}</span>
-        <span class="ideal">${idealStr}</span>
+        ${gaugeHtml}
         <span class="ss" title="${nLabel}">n=${stat.n || 0}</span>
       </div>`;
     }
-    html += `<div class="hud-card"><h4>${sec.title}</h4>${rows}</div>`;
+    // Badge: prioriza leak (vermelho) > warn (amarelo) > good (verde)
+    let badge = "";
+    if (leakN > 0) badge = `<span class="leak-count">${leakN} leak${leakN>1?'s':''}</span>`;
+    else if (warnN > 0) badge = `<span class="leak-count warn">${warnN} atenção</span>`;
+    else if (goodN > 0) badge = `<span class="leak-count good">✓ OK</span>`;
+    const collapsedClass = DEFAULT_OPEN.has(secKey) ? "" : " collapsed";
+    html += `<div class="hud-card collapsible${collapsedClass}" data-section="${secKey}">
+      <h4>${sec.title}${badge}</h4>${rows}
+    </div>`;
   }
   document.getElementById("hud-grid").innerHTML = html;
+  // Bind collapsable sections
+  document.querySelectorAll(".hud-card.collapsible > h4").forEach(h => {
+    h.addEventListener("click", () => h.parentElement.classList.toggle("collapsed"));
+  });
+  // Bind hero card clicks (mesmo handler do hud-stat)
+  document.querySelectorAll(".hud-hero-card").forEach(el => {
+    el.addEventListener("click", () => {
+      const sk = el.dataset.stat;
+      applyFilterForStat(sk);
+      switchMainTab("filtros");
+      showStatBanner(sk);
+    });
+  });
 
   // bind clicks pra applyFilterForStat — aplica filtro e mostra na aba Filtros & Hands
   document.querySelectorAll(".hud-stat").forEach(el => {
@@ -7425,6 +7617,14 @@ function toast(msg, ms = 2400) {
   }, ms);
 }
 window.toast = toast;
+
+// [VISUAL v2 onda 3] chips-clear button (limpa todos os filtros)
+document.addEventListener("click", (e) => {
+  if (e.target.id === "chips-clear") {
+    clearFilters();
+    toast("✓ Filtros limpos");
+  }
+});
 document.getElementById("modal-close").onclick = _closeModal;
 document.getElementById("modal").addEventListener("click", e => {
   if (e.target.id === "modal") _closeModal();
