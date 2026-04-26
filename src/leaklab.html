@@ -724,26 +724,29 @@
   <!-- Welcome -->
   <div class="welcome" id="welcome">
     <h2 style="color:var(--accent);font-size:32px;margin-bottom:8px">🎯 LeakLab</h2>
-    <p style="font-size:15px;color:var(--fg-dim);margin-bottom:8px">Treine ranges GTO de pôquer MTT em quiz interativo.</p>
-    <p style="font-size:12px;color:var(--fg-link);margin-bottom:30px">Sem cadastro, sem dados — começa direto com 6 ranges 80bb prontos.</p>
+    <p style="font-size:15px;color:var(--fg-dim);margin-bottom:8px">Análise individual de pôquer MTT — Coach, HUD e Quiz GTO.</p>
+    <p style="font-size:12px;color:var(--fg-link);margin-bottom:30px">100% privado — suas mãos ficam só no seu navegador, nada é enviado pra servidor.</p>
     <button class="cta primary-cta" onclick="document.getElementById('welcome').style.display='none';switchMainTab('quiz');" style="margin:8px auto;display:block">
       <div style="font-size:22px;margin-bottom:4px">▶ Começar Quiz</div>
       <div style="font-size:13px;opacity:0.9">Mesa visual, EVs, repetição espaçada</div>
     </button>
     <div style="display:flex;align-items:center;gap:14px;max-width:400px;margin:24px auto 16px;color:var(--fg-dim)">
       <div style="flex:1;height:1px;background:var(--border)"></div>
-      <span style="font-size:11px;text-transform:uppercase;letter-spacing:1px">Opcional</span>
+      <span style="font-size:11px;text-transform:uppercase;letter-spacing:1px">ou análise pessoal</span>
       <div style="flex:1;height:1px;background:var(--border)"></div>
     </div>
     <label class="cta secondary-cta" style="margin:0 auto;display:block;min-width:280px">
-      <div style="font-size:15px">📊 Carregar suas mãos (análise pessoal)</div>
-      <div style="font-size:11px;opacity:0.7;margin-top:2px">Arquivo JSON gerado pelo parser</div>
+      <div style="font-size:15px">📊 Carregar minhas mãos</div>
+      <div style="font-size:11px;opacity:0.7;margin-top:2px">JSON gerado pelo parser · só você vê</div>
       <input type="file" id="cta-hands" accept=".json" style="display:none">
     </label>
     <p style="font-size: 13px; color:var(--fg-dim); margin-top:30px">
       <a href="#" onclick="showOnboarding();return false;" style="color:var(--accent);text-decoration:underline">📖 Como funciona o LeakLab?</a>
       &nbsp;·&nbsp;
       <a href="#" onclick="showHowToParse();return false;" style="color:var(--accent);text-decoration:underline">🛠 Não tenho hands.json — como gero?</a>
+    </p>
+    <p style="font-size:11px;color:var(--fg-dim);margin-top:18px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.5">
+      🔒 <b>Privacidade:</b> tudo roda no seu navegador. As mãos que você carrega não saem do seu computador — não há login, servidor de dados, nem analytics. Cada usuário vê apenas suas próprias mãos.
     </p>
   </div>
 

@@ -80,9 +80,13 @@ def build(folders: list[str], hero: str | None, output: str,
     with open(template_path, "r", encoding="utf-8") as fh:
         tpl = fh.read()
 
-    print("Coletando maos:")
-    hands = collect_hands(folders, hero)
-    print(f"  total: {len(hands)} maos")
+    if folders:
+        print("Coletando maos:")
+        hands = collect_hands(folders, hero)
+        print(f"  total: {len(hands)} maos")
+    else:
+        hands = []
+        print("Sem pastas de maos -> build SEM maos (recomendado pra deploy publico).")
 
     print("Coletando ranges GTO:")
     ranges = collect_ranges(ranges_dir)
@@ -94,12 +98,15 @@ def build(folders: list[str], hero: str | None, output: str,
             benchmarks = json.load(fh)
         print(f"Benchmarks: {os.path.basename(benchmarks_path)}")
 
-    # injeta os dados antes do init
-    inject = (
-        "window.__BAKED_HANDS__ = " + json.dumps(hands, ensure_ascii=False) + ";\n"
-        "window.__BAKED_RANGES__ = " + json.dumps(ranges, ensure_ascii=False) + ";\n"
-        "window.__BAKED_BENCHMARKS__ = " + json.dumps(benchmarks, ensure_ascii=False) + ";\n"
-    )
+    # injeta os dados antes do init.
+    # PRIVACIDADE: se hands esta vazio, nao injeta __BAKED_HANDS__ pra nao haver
+    # qualquer chance de mistake — usuario carregara JSON proprio via Welcome screen.
+    inject_parts = []
+    if hands:
+        inject_parts.append("window.__BAKED_HANDS__ = " + json.dumps(hands, ensure_ascii=False) + ";")
+    inject_parts.append("window.__BAKED_RANGES__ = " + json.dumps(ranges, ensure_ascii=False) + ";")
+    inject_parts.append("window.__BAKED_BENCHMARKS__ = " + json.dumps(benchmarks, ensure_ascii=False) + ";")
+    inject = "\n".join(inject_parts) + "\n"
     # marcador no leaklab.html: "// ===== Init ====="
     marker = "// ===== Init ====="
     if marker in tpl:
@@ -115,15 +122,19 @@ def build(folders: list[str], hero: str | None, output: str,
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Gera app HTML single-file com dados embutidos.")
-    ap.add_argument("folders", nargs="+", help="Pasta(s) com .xml (pode passar varias)")
+    ap = argparse.ArgumentParser(description="Gera app HTML single-file com ranges + benchmarks (sem maos).")
+    ap.add_argument("folders", nargs="*", default=[], help="Pasta(s) com .xml (deixa vazio pra gerar versao SEM maos - recomendado pra deploy publico)")
     ap.add_argument("--hero", default=None, help="Nome do hero (default: auto-detecta)")
     ap.add_argument("--output", "-o", default="app.html", help="Caminho do HTML gerado")
     ap.add_argument("--ranges-dir", default=None, help="Pasta com ranges GTO (default: data/ranges/)")
     ap.add_argument("--template", default=None, help="Path para template HTML alternativo (default: leaklab.html)")
     ap.add_argument("--benchmarks", default=None, help="Path para benchmarks JSON (default: data/benchmarks_default.json)")
+    ap.add_argument("--no-hands", action="store_true", help="Forca build SEM maos embutidas (default se folders vazio).")
     args = ap.parse_args()
-    build(args.folders, args.hero, args.output, args.ranges_dir, args.template, args.benchmarks)
+    folders = [] if args.no_hands else args.folders
+    if not folders:
+        print("=> SEM MAOS embutidas (versao publica - cada usuario carrega proprio JSON)")
+    build(folders, args.hero, args.output, args.ranges_dir, args.template, args.benchmarks)
 
 
 if __name__ == "__main__":
