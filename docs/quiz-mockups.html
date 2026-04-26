@@ -137,7 +137,7 @@
   }
   .b-seat {
     position: absolute; transform: translate(-50%, -50%);
-    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
   }
   .b-seat .dot {
     width: 8px; height: 8px; border-radius: 50%;
@@ -145,15 +145,34 @@
     transition: all 0.2s;
   }
   .b-seat .pos {
-    font-size: 9px; letter-spacing: 1.2px; text-transform: uppercase;
-    color: var(--fg-dim); font-weight: 600;
+    font-size: 12px; letter-spacing: 0.8px; text-transform: uppercase;
+    color: var(--fg-dim); font-weight: 700;
   }
+  /* Mini face-down cards — exibidas em jogadores que ainda têm cartas (vão falar) */
+  .b-seat .mini-cards {
+    display: flex; gap: 2px;
+    margin-top: 1px;
+  }
+  .b-seat .mini-card {
+    width: 14px; height: 20px; border-radius: 2px;
+    background: linear-gradient(135deg, #1c4d6e 0%, #143952 60%, #0d2538 100%);
+    border: 0.5px solid rgba(120, 180, 220, 0.35);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.04);
+    position: relative;
+  }
+  .b-seat .mini-card::after {
+    content: ''; position: absolute; inset: 2px;
+    border: 0.5px solid rgba(120, 180, 220, 0.2);
+    border-radius: 1px;
+  }
+  /* Folded seats (já saíram da mão) — mais opacos */
+  .b-seat.folded { opacity: 0.4; }
   .b-seat.hero .dot {
     width: 14px; height: 14px;
     background: var(--accent);
     box-shadow: 0 0 0 4px rgba(45,212,191,0.18), 0 0 24px rgba(45,212,191,0.5);
   }
-  .b-seat.hero .pos { color: var(--accent); }
+  .b-seat.hero .pos { color: var(--accent); font-size: 13px; }
   .b-seat.btn .dot::after {
     content: 'D'; position: absolute; transform: translate(10px, -2px);
     font-size: 8px; color: #fff; background: #fff; color: #000;
@@ -372,17 +391,24 @@
   <div class="quiz-shell">
     <div class="b-stage">
       <div class="b-table"></div>
-      <!-- 8 seats around oval (8max) -->
-      <!-- Hero at bottom (BTN), positions clockwise -->
-      <div class="b-seat" style="left:50%; top:90%;"><div class="pos">BTN</div><div class="dot"></div></div>
-      <div class="b-seat hero" style="left:50%; top:90%;"></div>
-      <div class="b-seat" style="left:78%; top:75%;"><div class="dot"></div><div class="pos">CO</div></div>
-      <div class="b-seat" style="left:92%; top:50%;"><div class="dot"></div><div class="pos">HJ</div></div>
-      <div class="b-seat" style="left:78%; top:22%;"><div class="dot"></div><div class="pos">MP</div></div>
-      <div class="b-seat" style="left:50%; top:8%;"><div class="dot"></div><div class="pos">UTG+1</div></div>
-      <div class="b-seat" style="left:22%; top:22%;"><div class="dot"></div><div class="pos">UTG</div></div>
-      <div class="b-seat" style="left:8%; top:50%;"><div class="dot"></div><div class="pos">BB</div></div>
-      <div class="b-seat" style="left:22%; top:75%;"><div class="dot"></div><div class="pos">SB</div></div>
+      <!-- 8 seats around oval (8max) — em RFI BTN open: UTG/UTG+1/MP/HJ/CO já foldaram, hero (BTN) age, SB e BB ainda têm cartas -->
+      <div class="b-seat hero btn" style="left:50%; top:92%;"><div class="dot"></div><div class="pos">BTN · você</div></div>
+      <div class="b-seat folded" style="left:80%; top:78%;"><div class="dot"></div><div class="pos">CO</div></div>
+      <div class="b-seat folded" style="left:94%; top:50%;"><div class="dot"></div><div class="pos">HJ</div></div>
+      <div class="b-seat folded" style="left:80%; top:22%;"><div class="dot"></div><div class="pos">MP</div></div>
+      <div class="b-seat folded" style="left:50%; top:8%;"><div class="dot"></div><div class="pos">UTG+1</div></div>
+      <div class="b-seat folded" style="left:20%; top:22%;"><div class="dot"></div><div class="pos">UTG</div></div>
+      <!-- BB e SB ainda têm cartas (vão falar depois do hero) -->
+      <div class="b-seat" style="left:6%; top:50%;">
+        <div class="dot"></div>
+        <div class="pos">BB</div>
+        <div class="mini-cards"><div class="mini-card"></div><div class="mini-card"></div></div>
+      </div>
+      <div class="b-seat" style="left:20%; top:78%;">
+        <div class="dot"></div>
+        <div class="pos">SB</div>
+        <div class="mini-cards"><div class="mini-card"></div><div class="mini-card"></div></div>
+      </div>
 
       <div class="b-cards-center">
         <div class="b-card hearts"><span class="rank">K</span><span class="suit">♥</span></div>
