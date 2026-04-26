@@ -2319,23 +2319,54 @@ function openTournamentView(tcode) {
   const points = hands.map(h => { cumBb += (h.won_bb || 0); return cumBb; });
   const minY = Math.min(0, ...points);
   const maxY = Math.max(0, ...points);
-  const width = 800, height = 200;
-  const xStep = width / Math.max(hands.length - 1, 1);
-  const yScale = height / Math.max(maxY - minY, 1);
-  const path = points.map((p, i) => `${i === 0 ? "M" : "L"} ${(i * xStep).toFixed(1)} ${(height - (p - minY) * yScale).toFixed(1)}`).join(" ");
-  const zeroY = (height - (0 - minY) * yScale).toFixed(1);
 
+  // [VISUAL v2] Curva BB melhorada — axis labels + zero line + dots em all-ins/big wins/losses + tooltip on hover
+  const W = 800, H = 240, padL = 42, padR = 14, padT = 14, padB = 28;
+  const dx = (W - padL - padR) / Math.max(points.length - 1, 1);
+  const yScale = (H - padT - padB) / Math.max(maxY - minY, 1);
+  const yOf = v => H - padB - (v - minY) * yScale;
+  const xOf = i => padL + i * dx;
+  const dPath = points.map((p, i) => `${i?"L":"M"}${xOf(i).toFixed(1)},${yOf(p).toFixed(1)}`).join("");
+  const areaPath = `${dPath} L${xOf(points.length-1)},${yOf(0)} L${padL},${yOf(0)} Z`;
+  const sign = cumBb >= 0 ? "pos" : "neg";
+
+  // Gridlines a cada 25% do range
+  const gridY = [0, 0.25, 0.5, 0.75, 1].map(f => minY + (maxY - minY) * f);
+  const gridLines = gridY.map(v => `<line x1="${padL}" y1="${yOf(v)}" x2="${W-padR}" y2="${yOf(v)}"/>`).join("");
+  const yLabels = gridY.map(v => `<text x="${padL-6}" y="${yOf(v)+3}" text-anchor="end">${v.toFixed(0)}</text>`).join("");
+  const xTicks = [0, Math.floor(points.length/2), points.length-1].map(i => `<text x="${xOf(i)}" y="${H-8}" text-anchor="middle">#${i+1}</text>`).join("");
+  // Dots em all-ins ou |won_bb| >= 5
+  const dotsHtml = hands.map((h, i) => {
+    const big = Math.abs(h.won_bb || 0) >= 5;
+    const ai = (h.allin_street || h.allin) ? true : false;
+    if (!big && !ai) return "";
+    const cls = ai ? "allin" : (h.won_bb > 0 ? "win" : "loss");
+    return `<circle class="dot ${cls}" data-i="${i}" cx="${xOf(i).toFixed(1)}" cy="${yOf(points[i]).toFixed(1)}" r="3.5"/>`;
+  }).join("");
+
+  // Tabela de mãos com strength icon e cores por result
+  const strengthIcon = (h) => {
+    const s = (h.strength_river || h.strength_turn || h.strength_flop || "");
+    if (/quads|full_house/.test(s)) return "👑";
+    if (/flush|straight/.test(s))   return "💎";
+    if (/set|two_pair/.test(s))     return "💪";
+    if (/overpair|tpgk/.test(s))    return "✊";
+    if (/draw/.test(s))             return "🎯";
+    if (/trash|missed/.test(s))     return "💨";
+    return "·";
+  };
   const rows = hands.map(h => {
-    const winBb = h.won_bb || 0;
-    const cls = winBb > 0 ? "gain" : (winBb < 0 ? "loss" : "");
-    return `<tr class="hand-row" data-game="${h.gamecode}">
+    const w = h.won_bb || 0;
+    const rowCls = w > 0 ? "win" : w < 0 ? "loss" : "flat";
+    const bbCls = w > 0 ? "gain" : w < 0 ? "loss" : "";
+    return `<tr class="hand-row ${rowCls}" data-game="${h.gamecode}">
       <td>${(h.hand_startdate || "").slice(11, 16)}</td>
       <td>${h.pos}</td>
       <td>${h.faced || "—"}</td>
       <td>${h.hero_action || "—"}</td>
-      <td><b>${h.hero_cards_label}</b></td>
+      <td class="cards-cell"><span class="strength-icon">${strengthIcon(h)}</span>${h.hero_cards_label}</td>
       <td>${(h.stack_bb || 0).toFixed(1)}</td>
-      <td class="${cls}">${winBb >= 0 ? "+" : ""}${winBb.toFixed(2)}</td>
+      <td class="bb-cell ${bbCls}">${w >= 0 ? "+" : ""}${w.toFixed(2)}</td>
     </tr>`;
   }).join("");
 
@@ -2343,19 +2374,28 @@ function openTournamentView(tcode) {
     <h2>${escHtml(t.name)}</h2>
     <div class="sub">${escHtml(t.hero)} · ${escHtml(t.buyin || "")} · ${(t.startdate || "").slice(0, 16)} · ${hands.length} mãos · ${cumBb >= 0 ? "+" : ""}${cumBb.toFixed(1)} BB total</div>
     <h3 style="color:var(--fg-link);font-size:12px;margin:14px 0 6px">Curva de BB ao longo do torneio</h3>
-    <svg viewBox="0 0 ${width} ${height}" style="width:100%;height:200px;background:var(--bg);border:1px solid var(--border);border-radius:6px">
-      <line x1="0" y1="${zeroY}" x2="${width}" y2="${zeroY}" stroke="#333" stroke-dasharray="3,3"/>
-      <path d="${path}" fill="none" stroke="${cumBb >= 0 ? 'var(--good)' : 'var(--bad)'}" stroke-width="2"/>
-    </svg>
+    <div class="bb-chart">
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+        <g class="grid">${gridLines}</g>
+        <g class="axis">${yLabels}${xTicks}</g>
+        <line class="zero" x1="${padL}" y1="${yOf(0)}" x2="${W-padR}" y2="${yOf(0)}"/>
+        <path class="area ${sign}" d="${areaPath}"/>
+        <path class="curve ${sign}" d="${dPath}"/>
+        ${dotsHtml}
+        <line class="hover-line" id="bb-hover-line" y1="${padT}" y2="${H-padB}"/>
+        <rect id="bb-hit" x="${padL}" y="${padT}" width="${W-padL-padR}" height="${H-padT-padB}" fill="transparent"/>
+      </svg>
+      <div class="tip" id="bb-tip"></div>
+    </div>
     <h3 style="color:var(--fg-link);font-size:12px;margin:14px 0 6px">Mãos do torneio</h3>
     <table class="hands-table" style="font-size:11.5px">
       <thead><tr><th>Time</th><th>Pos</th><th>Faced</th><th>Action</th><th>Cards</th><th>BB</th><th>Won</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
-    <p style="text-align:center;color:var(--fg-dim);font-size:11px;margin-top:10px">Click numa mão pra ver replay</p>
+    <p style="text-align:center;color:var(--fg-dim);font-size:11px;margin-top:10px">💡 Click num ponto da curva ou linha pra ver replay · Hover no gráfico pra detalhes</p>
   `;
   document.getElementById("modal").classList.add("show");
-  // bind clicks
+  // bind clicks na tabela
   document.querySelectorAll("#modal-content .hand-row").forEach(tr => {
     tr.addEventListener("click", () => {
       const gc = tr.dataset.game;
@@ -2363,6 +2403,33 @@ function openTournamentView(tcode) {
       if (hand) openReplay(hand);
     });
   });
+  // bind dots na curva
+  document.querySelectorAll("#modal-content .bb-chart .dot").forEach(d => {
+    d.addEventListener("click", () => {
+      const i = parseInt(d.dataset.i);
+      const hand = hands[i];
+      if (hand) openReplay(hand);
+    });
+  });
+  // hover tooltip na curva
+  const hit = document.getElementById("bb-hit");
+  const tip = document.getElementById("bb-tip");
+  const hl = document.getElementById("bb-hover-line");
+  if (hit && tip && hl) {
+    hit.addEventListener("mousemove", e => {
+      const r = hit.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width * (W - padL - padR);
+      const i = Math.round(px / dx);
+      if (i < 0 || i >= points.length) return;
+      hl.setAttribute("x1", xOf(i)); hl.setAttribute("x2", xOf(i)); hl.style.opacity = 1;
+      const h = hands[i];
+      tip.style.display = "block";
+      tip.style.left = (e.clientX - r.left + 12) + "px";
+      tip.style.top = (e.clientY - r.top - 8) + "px";
+      tip.innerHTML = `Mão #${i+1} · ${h.hero_cards_label}<br>Stack <b>${(h.stack_bb||0).toFixed(1)} BB</b><br>Resultado: <b>${(h.won_bb>=0?"+":"")+(h.won_bb||0).toFixed(2)} BB</b><br>Acumulado: <b>${points[i].toFixed(1)} BB</b>`;
+    });
+    hit.addEventListener("mouseleave", () => { tip.style.display = "none"; hl.style.opacity = 0; });
+  }
 }
 
 // ===== Busca por texto (pattern matching) =====
