@@ -335,6 +335,8 @@
   .range-card .actions button.del { color: var(--bad); display: none; }
   body.range-mgmt-mode .range-card .actions button.del { display: inline-block; }
   .range-card .actions button:hover { border-color: var(--accent); color: var(--fg); }
+  /* [v6.9] Keyboard navigation visível */
+  .range-card .actions button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .range-card .badges { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:6px; }
   .badge { display:inline-block; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600; letter-spacing:0.3px; text-transform:uppercase; }
   .badge.mtt { background:#1a3a4a; color:#9bd4ff; border:1px solid #2a5468; }
@@ -461,9 +463,13 @@
     position: absolute; transform: translate(-50%, -50%);
     display: flex; flex-direction: column; align-items: center; gap: 4px;
     cursor: pointer;
+    /* [v6.9] WCAG 2.5.5 — click target mínimo 44×44px (área expandida sem alterar visual) */
+    min-width: 44px; min-height: 44px; justify-content: center;
+    padding: 4px;
     transition: transform var(--t-fast) var(--ease-std);
   }
   .qt-seat:hover { transform: translate(-50%, -50%) scale(1.08); }
+  .qt-seat:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 6px; }
   .qt-seat .qt-dot {
     width: 8px; height: 8px; border-radius: 50%;
     background: rgba(255,255,255,0.18);
@@ -472,6 +478,8 @@
   .qt-seat .qt-pos {
     font-size: 12px; letter-spacing: 0.8px; text-transform: uppercase;
     color: var(--fg-dim); font-weight: 700;
+    /* [v6.9] Text-shadow pra garantir contraste sobre gradient verde da mesa */
+    text-shadow: 0 0 4px rgba(0,0,0,0.85), 0 1px 2px rgba(0,0,0,0.6);
   }
   .qt-seat .qt-mini-cards {
     display: flex; gap: 2px; margin-top: 1px;
@@ -542,6 +550,15 @@
     .qt-hero-card { width: 48px; height: 68px; }
     .qt-hero-card .qt-rank { font-size: 19px; }
     .qt-hero-card .qt-suit { font-size: 21px; }
+  }
+  /* [v6.9] Telas pequenas (<400px): aspect mais alto + cartas menores pra evitar overlap */
+  @media (max-width: 400px) {
+    .qt-stage { aspect-ratio: 5/4; }
+    .qt-seat .qt-pos { font-size: 10px; letter-spacing: 0.5px; }
+    .qt-hero-card { width: 42px; height: 60px; padding: 5px 3px; }
+    .qt-hero-card .qt-rank { font-size: 17px; }
+    .qt-hero-card .qt-suit { font-size: 19px; }
+    .qt-mini-card { width: 11px; height: 16px; }
   }
   .quiz-config { display: flex; gap: 10px; justify-content: center; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
   .quiz-config select, .quiz-config button { background: var(--bg-3); border: 1px solid var(--border); color: var(--fg); padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; }
@@ -1123,6 +1140,9 @@ const POSITIONS = ["EP", "MP", "HJ", "CO", "BTN", "SB", "BB"];
 const FACED = ["unopened", "limped", "raised", "3bet", "4bet", "5bet+"];
 const ACTIONS = ["fold", "check", "call", "raise"];
 const RANKS = ["A","K","Q","J","T","9","8","7","6","5","4","3","2"];
+// [v6.9] Threshold de amostra mínima pra stat ser considerada confiável (não-dim).
+// Antes hardcoded como `30` em 3+ lugares — agora central pra ajustar fácil.
+const MIN_SAMPLE_SIZE = 30;
 // [PERF FIX 2026-04-25]: globais pra evitar 99k+ instanciacoes desnecessarias.
 // type 5 = bet, 7 = allin, 23 = raise (todos agressivos).
 // type 0 = fold, 3 = call (passivos).
@@ -3987,20 +4007,57 @@ function getPosOrderForRange(range) {
 }
 
 // [v6.8] Decide quais seats foldaram / ainda têm cartas baseado no scenario do range.
-// RFI/open: posições com idx < heroIdx foldaram (agem antes); idx > heroIdx ainda têm cartas.
-// Outros cenários (3bet/4bet/vs raise): default conservador — todos com cartas (sem fold info).
+// [v6.9] Refinado pra 3bet/4bet/iso/vs raise — só PFA (vilão) tem cartas além do hero,
+// não floods a mesa toda com mini-cartas.
+//
+// Scenarios suportados:
+// - open / unopened / rfi: hero é primeiro a falar; pos antes dele foldam, depois (SB/BB) têm cartas
+// - 3bet / vs_open / facing_open / vs raise: PFA ainda na mão (range.vs informa qual pos)
+// - 4bet: PFA + 3bettor ainda na mão (raro: só mostra opener)
+// - iso: limper(s) ainda na mão (default conservador: todos hasCards exceto hero)
 function getSeatStates(range, posOrder, heroIdx) {
   const N = posOrder.length;
-  const states = [];
+  const states = new Array(N).fill(null).map(() => ({ hero: false, folded: false, hasCards: false }));
+  states[heroIdx] = { hero: true, folded: false, hasCards: true };
+
   const scenario = ((range.scenario || 'open') + '').toLowerCase();
   const isRFI = scenario === 'open' || scenario === 'unopened' || scenario === 'rfi' || scenario === '';
-  for (let i = 0; i < N; i++) {
-    if (i === heroIdx) {
-      states.push({ hero: true, folded: false, hasCards: true });
-    } else if (isRFI && i < heroIdx) {
-      states.push({ hero: false, folded: true, hasCards: false });
-    } else {
-      states.push({ hero: false, folded: false, hasCards: true });
+  const is3bet = scenario.includes('3bet') || scenario.includes('vs_open') || scenario.includes('vs raise') || scenario.includes('facing_open');
+  const is4bet = scenario.includes('4bet');
+  const isIso = scenario.includes('iso') || scenario.includes('limp');
+
+  if (isRFI) {
+    for (let i = 0; i < N; i++) {
+      if (i === heroIdx) continue;
+      if (i < heroIdx) {
+        states[i].folded = true;
+      } else {
+        states[i].hasCards = true;
+      }
+    }
+  } else if (is3bet || is4bet) {
+    // Em 3bet/4bet, range.vs pode indicar quem foi o opener (PFA)
+    const vsPos = range.vs ? normalizePosForTable(String(range.vs).toUpperCase()) : null;
+    for (let i = 0; i < N; i++) {
+      if (i === heroIdx) continue;
+      const pos = posOrder[i];
+      if (vsPos && pos === vsPos) {
+        states[i].hasCards = true;  // PFA ainda na mão
+      } else {
+        states[i].folded = true;
+      }
+    }
+  } else if (isIso) {
+    // ISO: vilão limpou — sem info exata, default conservador (mostra todos folded except hero)
+    for (let i = 0; i < N; i++) {
+      if (i === heroIdx) continue;
+      states[i].folded = true;
+    }
+  } else {
+    // Cenário desconhecido — default conservador, todos com cartas
+    for (let i = 0; i < N; i++) {
+      if (i === heroIdx) continue;
+      states[i].hasCards = true;
     }
   }
   return states;
@@ -4788,9 +4845,9 @@ function classifyFlop(holeRaw, flopStr) {
     if (pairR === flopMax) {
       // top pair
       const kicker = heroRanks.find(r => r !== pairR) || 0;
-      if (kicker >= 12) cat = "tpgk";
-      else if (kicker >= 10) cat = "tpwk";
-      else cat = "tpwk";
+      // [v6.9] Simplificado: kicker Q+ (12+) → tpgk; T-J (10-11) e abaixo → tpwk
+      // (antes tinha 2 ramos `else if` redundantes ambos indo pra "tpwk")
+      cat = kicker >= 12 ? "tpgk" : "tpwk";
     } else if (pairR === flopMid) cat = "middle_pair";
     else cat = "low_pair";
   } else {
@@ -6036,7 +6093,7 @@ function colorClass(value, bench, n) {
   if (value === null || value === undefined) return "dim";
   if (!bench) return "";
   // Amostra muito baixa: marca como dim (sem confiança)
-  if (n !== undefined && n < 30) return "dim";
+  if (n !== undefined && n < MIN_SAMPLE_SIZE) return "dim";
   const ideal = bench.ideal;
   const min = bench.min, max = bench.max;
   // tolerância de 1pt do ideal = good
@@ -6366,7 +6423,7 @@ function detectLeaks(stats) {
   for (const [, sec] of Object.entries(BENCHMARKS.sections)) {
     for (const [statKey, bench] of Object.entries(sec.stats)) {
       const stat = stats[statKey];
-      if (!stat || stat.value === null || stat.n < 30) continue;
+      if (!stat || stat.value === null || stat.n < MIN_SAMPLE_SIZE) continue;
       const v = stat.value, ideal = bench.ideal, min = bench.min, max = bench.max;
       const friendly = STAT_FRIENDLY[statKey];
       if (!friendly) continue;
@@ -6797,7 +6854,7 @@ function renderHud() {
       const tt = (typeof STAT_TOOLTIPS !== "undefined" && STAT_TOOLTIPS[statKey])
         ? STAT_TOOLTIPS[statKey] + ` · Ideal ${bench.min}-${bench.ideal}-${bench.max}${bench.unit||""}`
         : `${bench.label}: ${idealStr}${bench.unit||""}`;
-      const nLabel = stat.n < 30 ? `n=${stat.n||0} (amostra baixa)` : `n=${stat.n || 0}`;
+      const nLabel = stat.n < MIN_SAMPLE_SIZE ? `n=${stat.n||0} (amostra baixa)` : `n=${stat.n || 0}`;
       // Gauge inline mostra posição "você" entre [min*0.6, max*1.4]
       const lo = bench.min * 0.6, hi = bench.max * 1.4;
       const pct = v === null ? null : Math.max(0, Math.min(100, ((v - lo) / (hi - lo)) * 100));
@@ -6805,7 +6862,7 @@ function renderHud() {
       const gaugeHtml = pct === null ? '<span class="ideal">'+idealStr+'</span>' :
         `<span class="hud-gauge" title="min ${bench.min} · ideal ${bench.ideal} · max ${bench.max}">
           <span class="ideal-tick" style="left:${idealPct}%"></span>
-          <span class="marker ${stat.n < 30 ? 'dim' : ''}" style="left:${pct}%"></span>
+          <span class="marker ${stat.n < MIN_SAMPLE_SIZE ? 'dim' : ''}" style="left:${pct}%"></span>
         </span>`;
       rows += `<div class="hud-stat" data-stat="${statKey}" title="${tt}">
         <span class="name">${bench.label}</span>
