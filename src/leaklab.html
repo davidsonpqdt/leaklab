@@ -9,7 +9,7 @@
 <style>
   :root {
     --bg: #000000; --bg-2: #0a0a0c; --bg-3: #111114; --bg-card: #0d0d10;
-    --fg: #e6e6e8; --fg-dim: #a8a8ad; --fg-link: #7dd3c0;
+    --fg: #e6e6e8; --fg-dim: #b8b8bd; --fg-link: #7dd3c0;
     --accent: #2dd4bf; --accent-2: #f0c419;
     --good: #5dd684; --warn: #f5c14a; --bad: #ed6a6a;
     --border: #25252c;
@@ -1156,6 +1156,13 @@ function deleteRange(id) {
     delete stored[id];
     localStorage.setItem("leaklab_ranges", JSON.stringify(stored));
   } catch {}
+  // [v6.6] Limpa QUIZ.current se o range deletado é o atual (evita reler range fantasma)
+  if (typeof QUIZ !== "undefined" && QUIZ.current && QUIZ.current.range && QUIZ.current.range.id === id) {
+    QUIZ.current = null;
+  }
+  if (typeof QUIZ !== "undefined" && QUIZ.selectedRangeId === id) {
+    QUIZ.selectedRangeId = null;
+  }
   renderRanges();
   applyFilters();
 }
@@ -2132,7 +2139,7 @@ function autoMatchGto() {
   const indicator = document.getElementById("gto-match-indicator");
   if (indicator) {
     indicator.innerHTML = `<span style="color:#5dd684">●</span> Comparando contra <b>${best.id}</b> ` +
-      `<span style="color:#888">(${best.format || "?"} · ${best.stack_bb || "?"}bb · ${best.scenario})</span>`;
+      `<span style="color:var(--fg-dim)">(${best.format || "?"} · ${best.stack_bb || "?"}bb · ${best.scenario})</span>`;
     indicator.style.display = "block";
   }
   return gtoOpenSet(best);
@@ -2187,7 +2194,7 @@ function renderHandsList(subset, header) {
     ${header ? `<h3 style="color:var(--accent);font-size:14px;margin:0 0 10px 0">${header} (${sorted.length})</h3>` : ""}
     <table class="hands-table">
       <thead><tr>${headerRow}</tr></thead>
-      <tbody>${rows || "<tr><td colspan='8' style='text-align:center;color:#888;padding:20px'>Nenhuma mão</td></tr>"}</tbody>
+      <tbody>${rows || "<tr><td colspan='8' style='text-align:center;color:var(--fg-dim);padding:20px'>Nenhuma mão</td></tr>"}</tbody>
     </table>
     <div class="pager">
       <button id="prev-pg" ${HANDS_PAGE === 0 ? "disabled" : ""}>‹</button>
@@ -3830,11 +3837,25 @@ function ranksForLabel(label) {
 
 // === Mesa visual contextual ===
 // Renderiza canvas com mesa de poker mostrando posições + hero highlighted
+// [v6.6] POS_ORDER agora é dinâmico (depende do format do range)
 const POS_ORDER_8MAX = ['UTG', 'UTG+1', 'MP', 'HJ', 'CO', 'BTN', 'SB', 'BB'];
+const POS_ORDER_6MAX = ['UTG', 'MP', 'CO', 'BTN', 'SB', 'BB'];
+const POS_ORDER_9MAX = ['UTG', 'UTG+1', 'MP', 'LJ', 'HJ', 'CO', 'BTN', 'SB', 'BB'];
+const POS_ORDER_HU   = ['BTN', 'BB'];
 const POS_ALIASES = { 'EP': 'UTG+1', 'LJ': 'MP' };  // user usa "EP" pra UTG+1 e "MP" pra LJ
 
 function normalizePosForTable(pos) {
   return POS_ALIASES[pos] || pos;
+}
+
+// [v6.6] Detecta o POS_ORDER correto baseado no format do range.
+// Default: 8max (preserva comportamento legado pra ranges sem format claro).
+function getPosOrderForRange(range) {
+  const fmt = ((range && range.format) || '').toLowerCase();
+  if (fmt.includes('hu') || fmt.includes('heads')) return POS_ORDER_HU;
+  if (fmt.includes('6max') || fmt.includes('6-max')) return POS_ORDER_6MAX;
+  if (fmt.includes('9max') || fmt.includes('9-max')) return POS_ORDER_9MAX;
+  return POS_ORDER_8MAX;
 }
 
 function drawQuizTable(canvas, range, hand) {
@@ -3862,19 +3883,22 @@ function drawQuizTable(canvas, range, hand) {
   ctx.lineWidth = 3;
   ctx.stroke();
 
-  // Posições ao redor (8 seats)
+  // [v6.6] Posições ao redor — N seats dinâmico (6/8/9-max ou HU)
+  const posOrder = getPosOrderForRange(range);
+  const N = posOrder.length;
   const heroPos = normalizePosForTable(range.hero_pos);
-  const heroIdx = POS_ORDER_8MAX.indexOf(heroPos);
+  let heroIdx = posOrder.indexOf(heroPos);
+  if (heroIdx < 0) heroIdx = 0;  // fallback safe se posição não bater com format
   // Anchor: posição do hero no bottom (ângulo Math.PI/2 = sul)
   // Outros giram clockwise a partir dela
   const baseAngle = Math.PI / 2; // bottom
-  const step = (Math.PI * 2) / 8;
-  for (let i = 0; i < 8; i++) {
-    const relIdx = (i - heroIdx + 8) % 8;
+  const step = (Math.PI * 2) / N;
+  for (let i = 0; i < N; i++) {
+    const relIdx = (i - heroIdx + N) % N;
     const angle = baseAngle - relIdx * step;  // hero embaixo, others around
     const px = cx + Math.cos(angle) * (rx + 28);
     const py = cy + Math.sin(angle) * (ry + 28);
-    const pos = POS_ORDER_8MAX[i];
+    const pos = posOrder[i];
     const isHero = (i === heroIdx);
 
     // Halo dourado pulsante no hero
@@ -3938,7 +3962,7 @@ function drawQuizTable(canvas, range, hand) {
   // Stack info + % do range
   const rangePct = range.extracted_pct ?? range.gto_target_pct ?? null;
   const pctStr = rangePct !== null ? ` · abre ${rangePct}%` : '';
-  ctx.fillStyle = '#888';
+  ctx.fillStyle = '#b8b8bd';
   ctx.font = '11px Inter, Arial';
   ctx.fillText(`${range.stack_bb || '?'}bb · ${range.icm || 'ChipEV'} · ${range.format || '8max'}${pctStr}`, W / 2, 40);
 
@@ -4089,21 +4113,25 @@ function showQuizToast(msg) {
 }
 
 // Calcula coordenadas dos seats pra hit-test (mesma lógica de drawQuizTable)
+// [v6.6] N seats dinâmico (6/8/9-max ou HU)
 function computeQuizTableSeats(canvas, range) {
   const W = canvas.width, H = canvas.height;
   const cx = W / 2, cy = H / 2 + 10;
   const rx = W * 0.42, ry = H * 0.32;
+  const posOrder = getPosOrderForRange(range);
+  const N = posOrder.length;
   const heroPos = normalizePosForTable(range.hero_pos);
-  const heroIdx = POS_ORDER_8MAX.indexOf(heroPos);
+  let heroIdx = posOrder.indexOf(heroPos);
+  if (heroIdx < 0) heroIdx = 0;
   const baseAngle = Math.PI / 2;
-  const step = (Math.PI * 2) / 8;
+  const step = (Math.PI * 2) / N;
   const seats = [];
-  for (let i = 0; i < 8; i++) {
-    const relIdx = (i - heroIdx + 8) % 8;
+  for (let i = 0; i < N; i++) {
+    const relIdx = (i - heroIdx + N) % N;
     const angle = baseAngle - relIdx * step;
     const px = cx + Math.cos(angle) * (rx + 28);
     const py = cy + Math.sin(angle) * (ry + 28);
-    seats.push({ pos: POS_ORDER_8MAX[i], x: px, y: py });
+    seats.push({ pos: posOrder[i], x: px, y: py });
   }
   return seats;
 }
@@ -5305,7 +5333,7 @@ function updateReplayStep() {
         <div class="name">${escHtml(p.name)}${isHero ? " ⭐" : ""}</div>
         <div class="pos">${posLabel}</div>
         <div class="stack">${stackBb}<small>bb</small></div>
-        ${ps.lastAction ? `<div style="font-size:10px;color:#888;margin-top:2px">${escHtml(ps.lastAction)}</div>` : ""}
+        ${ps.lastAction ? `<div style="font-size:10px;color:var(--fg-dim);margin-top:2px">${escHtml(ps.lastAction)}</div>` : ""}
       </div>
       ${cardsHtml}
       ${betHtml}
@@ -7794,16 +7822,29 @@ function renderRanges() {
       </div>
     </div>`;
   }).join("");
-  document.querySelectorAll(".range-card .view").forEach(b => {
-    b.addEventListener("click", e => { e.stopPropagation(); viewRange(e.target.closest(".range-card").dataset.id); });
-  });
-  document.querySelectorAll(".range-card .del").forEach(b => {
-    b.addEventListener("click", e => {
+  // [v6.6] Listeners agora são event-delegated em bindRangesListEvents() — instalado 1x no init
+  // (evita memory leak: antes adicionava 2 listeners por card a cada renderRanges)
+}
+
+// [v6.6] Event delegation no #ranges-list — instalado UMA vez na primeira chamada
+let _rangesListEventsBound = false;
+function bindRangesListEvents() {
+  if (_rangesListEventsBound) return;
+  const list = document.getElementById("ranges-list");
+  if (!list) return;
+  list.addEventListener("click", (e) => {
+    const card = e.target.closest(".range-card");
+    if (!card) return;
+    const id = card.dataset.id;
+    if (e.target.classList.contains("view")) {
       e.stopPropagation();
-      const id = e.target.closest(".range-card").dataset.id;
+      viewRange(id);
+    } else if (e.target.classList.contains("del")) {
+      e.stopPropagation();
       if (confirm(`Excluir range "${id}"?`)) deleteRange(id);
-    });
+    }
   });
+  _rangesListEventsBound = true;
 }
 
 function viewRange(id) {
@@ -8179,6 +8220,8 @@ function getShareableQuizUrl() {
 
 // ===== Init =====
 loadRangesFromStorage();
+// [v6.6] Instala event delegation no #ranges-list (1x, antes de qualquer renderRanges)
+bindRangesListEvents();
 // Ranges em localStorage já permitem usar Quiz mesmo antes de hands.json carregar
 if (Object.keys(RANGES).length > 0) {
   applyUrlParams();

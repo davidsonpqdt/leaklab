@@ -9,7 +9,7 @@
 <style>
   :root {
     --bg: #000000; --bg-2: #0a0a0c; --bg-3: #111114; --bg-card: #0d0d10;
-    --fg: #e6e6e8; --fg-dim: #a8a8ad; --fg-link: #7dd3c0;
+    --fg: #e6e6e8; --fg-dim: #b8b8bd; --fg-link: #7dd3c0;
     --accent: #2dd4bf; --accent-2: #f0c419;
     --good: #5dd684; --warn: #f5c14a; --bad: #ed6a6a;
     --border: #25252c;
@@ -1156,6 +1156,13 @@ function deleteRange(id) {
     delete stored[id];
     localStorage.setItem("leaklab_ranges", JSON.stringify(stored));
   } catch {}
+  // [v6.6] Limpa QUIZ.current se o range deletado é o atual (evita reler range fantasma)
+  if (typeof QUIZ !== "undefined" && QUIZ.current && QUIZ.current.range && QUIZ.current.range.id === id) {
+    QUIZ.current = null;
+  }
+  if (typeof QUIZ !== "undefined" && QUIZ.selectedRangeId === id) {
+    QUIZ.selectedRangeId = null;
+  }
   renderRanges();
   applyFilters();
 }
@@ -2134,7 +2141,7 @@ function autoMatchGto() {
   const indicator = document.getElementById("gto-match-indicator");
   if (indicator) {
     indicator.innerHTML = `<span style="color:#5dd684">●</span> Comparando contra <b>${best.id}</b> ` +
-      `<span style="color:#888">(${best.format || "?"} · ${best.stack_bb || "?"}bb · ${best.scenario})</span>`;
+      `<span style="color:var(--fg-dim)">(${best.format || "?"} · ${best.stack_bb || "?"}bb · ${best.scenario})</span>`;
     indicator.style.display = "block";
   }
   return gtoOpenSet(best);
@@ -2189,7 +2196,7 @@ function renderHandsList(subset, header) {
     ${header ? `<h3 style="color:var(--accent);font-size:14px;margin:0 0 10px 0">${header} (${sorted.length})</h3>` : ""}
     <table class="hands-table">
       <thead><tr>${headerRow}</tr></thead>
-      <tbody>${rows || "<tr><td colspan='8' style='text-align:center;color:#888;padding:20px'>Nenhuma mão</td></tr>"}</tbody>
+      <tbody>${rows || "<tr><td colspan='8' style='text-align:center;color:var(--fg-dim);padding:20px'>Nenhuma mão</td></tr>"}</tbody>
     </table>
     <div class="pager">
       <button id="prev-pg" ${HANDS_PAGE === 0 ? "disabled" : ""}>‹</button>
@@ -3832,11 +3839,25 @@ function ranksForLabel(label) {
 
 // === Mesa visual contextual ===
 // Renderiza canvas com mesa de poker mostrando posições + hero highlighted
+// [v6.6] POS_ORDER agora é dinâmico (depende do format do range)
 const POS_ORDER_8MAX = ['UTG', 'UTG+1', 'MP', 'HJ', 'CO', 'BTN', 'SB', 'BB'];
+const POS_ORDER_6MAX = ['UTG', 'MP', 'CO', 'BTN', 'SB', 'BB'];
+const POS_ORDER_9MAX = ['UTG', 'UTG+1', 'MP', 'LJ', 'HJ', 'CO', 'BTN', 'SB', 'BB'];
+const POS_ORDER_HU   = ['BTN', 'BB'];
 const POS_ALIASES = { 'EP': 'UTG+1', 'LJ': 'MP' };  // user usa "EP" pra UTG+1 e "MP" pra LJ
 
 function normalizePosForTable(pos) {
   return POS_ALIASES[pos] || pos;
+}
+
+// [v6.6] Detecta o POS_ORDER correto baseado no format do range.
+// Default: 8max (preserva comportamento legado pra ranges sem format claro).
+function getPosOrderForRange(range) {
+  const fmt = ((range && range.format) || '').toLowerCase();
+  if (fmt.includes('hu') || fmt.includes('heads')) return POS_ORDER_HU;
+  if (fmt.includes('6max') || fmt.includes('6-max')) return POS_ORDER_6MAX;
+  if (fmt.includes('9max') || fmt.includes('9-max')) return POS_ORDER_9MAX;
+  return POS_ORDER_8MAX;
 }
 
 function drawQuizTable(canvas, range, hand) {
@@ -3864,19 +3885,22 @@ function drawQuizTable(canvas, range, hand) {
   ctx.lineWidth = 3;
   ctx.stroke();
 
-  // Posições ao redor (8 seats)
+  // [v6.6] Posições ao redor — N seats dinâmico (6/8/9-max ou HU)
+  const posOrder = getPosOrderForRange(range);
+  const N = posOrder.length;
   const heroPos = normalizePosForTable(range.hero_pos);
-  const heroIdx = POS_ORDER_8MAX.indexOf(heroPos);
+  let heroIdx = posOrder.indexOf(heroPos);
+  if (heroIdx < 0) heroIdx = 0;  // fallback safe se posição não bater com format
   // Anchor: posição do hero no bottom (ângulo Math.PI/2 = sul)
   // Outros giram clockwise a partir dela
   const baseAngle = Math.PI / 2; // bottom
-  const step = (Math.PI * 2) / 8;
-  for (let i = 0; i < 8; i++) {
-    const relIdx = (i - heroIdx + 8) % 8;
+  const step = (Math.PI * 2) / N;
+  for (let i = 0; i < N; i++) {
+    const relIdx = (i - heroIdx + N) % N;
     const angle = baseAngle - relIdx * step;  // hero embaixo, others around
     const px = cx + Math.cos(angle) * (rx + 28);
     const py = cy + Math.sin(angle) * (ry + 28);
-    const pos = POS_ORDER_8MAX[i];
+    const pos = posOrder[i];
     const isHero = (i === heroIdx);
 
     // Halo dourado pulsante no hero
@@ -3940,7 +3964,7 @@ function drawQuizTable(canvas, range, hand) {
   // Stack info + % do range
   const rangePct = range.extracted_pct ?? range.gto_target_pct ?? null;
   const pctStr = rangePct !== null ? ` · abre ${rangePct}%` : '';
-  ctx.fillStyle = '#888';
+  ctx.fillStyle = '#b8b8bd';
   ctx.font = '11px Inter, Arial';
   ctx.fillText(`${range.stack_bb || '?'}bb · ${range.icm || 'ChipEV'} · ${range.format || '8max'}${pctStr}`, W / 2, 40);
 
@@ -4091,21 +4115,25 @@ function showQuizToast(msg) {
 }
 
 // Calcula coordenadas dos seats pra hit-test (mesma lógica de drawQuizTable)
+// [v6.6] N seats dinâmico (6/8/9-max ou HU)
 function computeQuizTableSeats(canvas, range) {
   const W = canvas.width, H = canvas.height;
   const cx = W / 2, cy = H / 2 + 10;
   const rx = W * 0.42, ry = H * 0.32;
+  const posOrder = getPosOrderForRange(range);
+  const N = posOrder.length;
   const heroPos = normalizePosForTable(range.hero_pos);
-  const heroIdx = POS_ORDER_8MAX.indexOf(heroPos);
+  let heroIdx = posOrder.indexOf(heroPos);
+  if (heroIdx < 0) heroIdx = 0;
   const baseAngle = Math.PI / 2;
-  const step = (Math.PI * 2) / 8;
+  const step = (Math.PI * 2) / N;
   const seats = [];
-  for (let i = 0; i < 8; i++) {
-    const relIdx = (i - heroIdx + 8) % 8;
+  for (let i = 0; i < N; i++) {
+    const relIdx = (i - heroIdx + N) % N;
     const angle = baseAngle - relIdx * step;
     const px = cx + Math.cos(angle) * (rx + 28);
     const py = cy + Math.sin(angle) * (ry + 28);
-    seats.push({ pos: POS_ORDER_8MAX[i], x: px, y: py });
+    seats.push({ pos: posOrder[i], x: px, y: py });
   }
   return seats;
 }
@@ -5307,7 +5335,7 @@ function updateReplayStep() {
         <div class="name">${escHtml(p.name)}${isHero ? " ⭐" : ""}</div>
         <div class="pos">${posLabel}</div>
         <div class="stack">${stackBb}<small>bb</small></div>
-        ${ps.lastAction ? `<div style="font-size:10px;color:#888;margin-top:2px">${escHtml(ps.lastAction)}</div>` : ""}
+        ${ps.lastAction ? `<div style="font-size:10px;color:var(--fg-dim);margin-top:2px">${escHtml(ps.lastAction)}</div>` : ""}
       </div>
       ${cardsHtml}
       ${betHtml}
@@ -7796,16 +7824,29 @@ function renderRanges() {
       </div>
     </div>`;
   }).join("");
-  document.querySelectorAll(".range-card .view").forEach(b => {
-    b.addEventListener("click", e => { e.stopPropagation(); viewRange(e.target.closest(".range-card").dataset.id); });
-  });
-  document.querySelectorAll(".range-card .del").forEach(b => {
-    b.addEventListener("click", e => {
+  // [v6.6] Listeners agora são event-delegated em bindRangesListEvents() — instalado 1x no init
+  // (evita memory leak: antes adicionava 2 listeners por card a cada renderRanges)
+}
+
+// [v6.6] Event delegation no #ranges-list — instalado UMA vez na primeira chamada
+let _rangesListEventsBound = false;
+function bindRangesListEvents() {
+  if (_rangesListEventsBound) return;
+  const list = document.getElementById("ranges-list");
+  if (!list) return;
+  list.addEventListener("click", (e) => {
+    const card = e.target.closest(".range-card");
+    if (!card) return;
+    const id = card.dataset.id;
+    if (e.target.classList.contains("view")) {
       e.stopPropagation();
-      const id = e.target.closest(".range-card").dataset.id;
+      viewRange(id);
+    } else if (e.target.classList.contains("del")) {
+      e.stopPropagation();
       if (confirm(`Excluir range "${id}"?`)) deleteRange(id);
-    });
+    }
   });
+  _rangesListEventsBound = true;
 }
 
 function viewRange(id) {
@@ -8183,6 +8224,8 @@ window.__BAKED_RANGES__ = [{"id": "open_BTN_30bb_chipev_8max", "format": "8max",
 window.__BAKED_BENCHMARKS__ = {"version": 1, "description": "Benchmarks default (min/ideal/max). Editavel pela aba Benchmarks no app.", "sections": {"geral": {"title": "General", "stats": {"vpip": {"label": "VPIP", "min": 26, "ideal": 28, "max": 30, "unit": "%"}, "pfr": {"label": "PFR", "min": 20, "ideal": 22, "max": 24, "unit": "%"}, "steal_total": {"label": "Steal % (CO+BTN+SB)", "min": 35, "ideal": 40, "max": 45, "unit": "%"}, "limp": {"label": "Limp (open-limp)", "min": 0, "ideal": 1, "max": 3, "unit": "%"}, "iso_raise": {"label": "Iso-raise vs limp", "min": 20, "ideal": 30, "max": 50, "unit": "%"}, "af": {"label": "AF (Aggression Factor)", "min": 1.5, "ideal": 2.5, "max": 4, "unit": ""}}}, "preflop_rfi": {"title": "Pre-Flop — RFI by Position", "stats": {"rfi_EP": {"label": "RFI EP", "min": 17, "ideal": 19, "max": 20, "unit": "%"}, "rfi_MP": {"label": "RFI MP", "min": 23, "ideal": 25, "max": 26, "unit": "%"}, "rfi_HJ": {"label": "RFI HJ", "min": 27, "ideal": 29, "max": 32, "unit": "%"}, "rfi_CO": {"label": "RFI CO", "min": 34, "ideal": 37, "max": 38, "unit": "%"}, "rfi_BTN": {"label": "RFI BTN", "min": 48, "ideal": 50, "max": 55, "unit": "%"}, "rfi_SB": {"label": "RFI SB", "min": 28, "ideal": 30, "max": 33, "unit": "%"}}}, "preflop_flat": {"title": "Pre-Flop — Flat by Position", "stats": {"flat_ip_EP": {"label": "Flat IP EP", "min": 4, "ideal": 5, "max": 6, "unit": "%"}, "flat_ip_MP": {"label": "Flat IP MP", "min": 5, "ideal": 6, "max": 7, "unit": "%"}, "flat_ip_HJ": {"label": "Flat IP HJ", "min": 7, "ideal": 8, "max": 9, "unit": "%"}, "flat_ip_CO": {"label": "Flat IP CO", "min": 10, "ideal": 12, "max": 14, "unit": "%"}, "flat_ip_BTN": {"label": "Flat IP BTN", "min": 14, "ideal": 16, "max": 18, "unit": "%"}, "flat_oop_SB": {"label": "Flat OOP SB", "min": 11, "ideal": 13, "max": 15, "unit": "%"}, "flat_oop_BB": {"label": "Flat OOP BB", "min": 50, "ideal": 53, "max": 60, "unit": "%"}}}, "preflop_3bet_pos": {"title": "Pre-Flop — 3bet by Position (non-allin)", "stats": {"3bet_nai_EP": {"label": "3bet nai EP", "min": 2, "ideal": 3, "max": 4, "unit": "%"}, "3bet_nai_MP": {"label": "3bet nai MP", "min": 3, "ideal": 4, "max": 5, "unit": "%"}, "3bet_nai_HJ": {"label": "3bet nai HJ", "min": 4, "ideal": 5, "max": 6, "unit": "%"}, "3bet_nai_CO": {"label": "3bet nai CO", "min": 5, "ideal": 6, "max": 7, "unit": "%"}, "3bet_nai_BTN": {"label": "3bet nai BTN", "min": 7, "ideal": 7, "max": 9, "unit": "%"}, "3bet_nai_SB": {"label": "3bet nai SB", "min": 7, "ideal": 7, "max": 9, "unit": "%"}, "3bet_nai_BB": {"label": "3bet nai BB", "min": 8, "ideal": 9, "max": 10, "unit": "%"}}}, "preflop_3bet_total": {"title": "Pre-Flop — 3bet/F3bet/4bet totals", "stats": {"3bet_tot_nai": {"label": "3Bet Total (nai)", "min": 5, "ideal": 6, "max": 7, "unit": "%"}, "3bet_tot_ai": {"label": "3Bet Total (ai)", "min": 3, "ideal": 4, "max": 5, "unit": "%"}, "3bet_tot": {"label": "3Bet Total (tot)", "min": 8, "ideal": 9, "max": 10, "unit": "%"}, "f3bet_tot_nai": {"label": "F3bet Total (nai)", "min": 50, "ideal": 55, "max": 63, "unit": "%"}, "f3bet_tot_ai": {"label": "F3bet Total (ai)", "min": 50, "ideal": 55, "max": 63, "unit": "%"}, "f3bet_tot": {"label": "F3bet Total (tot)", "min": 47, "ideal": 55, "max": 63, "unit": "%"}, "f3bet_blind_nai": {"label": "F3bet vs blind (nai)", "min": 50, "ideal": 55, "max": 63, "unit": "%"}, "f3bet_blind_ai": {"label": "F3bet vs blind (ai)", "min": 50, "ideal": 55, "max": 63, "unit": "%"}, "f3bet_blind_tot": {"label": "F3bet vs blind (tot)", "min": 47, "ideal": 55, "max": 63, "unit": "%"}, "4bet_tot_nai": {"label": "4bet Total (nai)", "min": 3, "ideal": 4, "max": 6, "unit": "%"}, "4bet_tot_ai": {"label": "4bet Total (ai)", "min": 10, "ideal": 12, "max": 14, "unit": "%"}, "4bet_tot": {"label": "4bet Total (tot)", "min": 14, "ideal": 16, "max": 18, "unit": "%"}}}, "preflop_squeeze": {"title": "Pre-Flop — Squeeze", "stats": {"squeeze_nai": {"label": "Squeeze (nai)", "min": 4.5, "ideal": 5, "max": 7, "unit": "%"}, "squeeze_ai": {"label": "Squeeze (ai)", "min": 4, "ideal": 4.5, "max": 5, "unit": "%"}, "squeeze_tot": {"label": "Squeeze (tot)", "min": 8, "ideal": 9, "max": 12, "unit": "%"}, "squeeze_ip_nai": {"label": "Squeeze IP (nai)", "min": 4.5, "ideal": 5, "max": 6.5, "unit": "%"}, "squeeze_ip_ai": {"label": "Squeeze IP (ai)", "min": 2.5, "ideal": 3, "max": 4, "unit": "%"}, "squeeze_ip_tot": {"label": "Squeeze IP (tot)", "min": 8, "ideal": 7, "max": 12, "unit": "%"}, "squeeze_oop_nai": {"label": "Squeeze OOP (nai)", "min": 4, "ideal": 5, "max": 6, "unit": "%"}, "squeeze_oop_ai": {"label": "Squeeze OOP (ai)", "min": 4, "ideal": 4.5, "max": 5.5, "unit": "%"}, "squeeze_oop_tot": {"label": "Squeeze OOP (tot)", "min": 8, "ideal": 9, "max": 12, "unit": "%"}}}, "preflop_3bet_oa": {"title": "Pre-Flop — 3bet vs Open Allin", "stats": {"3bet_ip_no_btn_oa": {"label": "3bet IP (no BU) OA", "min": 6, "ideal": 7, "max": 8, "unit": "%"}, "3bet_btn_oa": {"label": "3bet BTN OA", "min": 6.5, "ideal": 7, "max": 8, "unit": "%"}, "3bet_sb_oa": {"label": "3bet SB OA", "min": 6.5, "ideal": 7, "max": 9, "unit": "%"}, "3bet_bb_oa": {"label": "3bet BB OA", "min": 7, "ideal": 8, "max": 10, "unit": "%"}, "3bet_sb_lp_oa": {"label": "3bet SB vs LP OA", "min": 9, "ideal": 12, "max": 14, "unit": "%"}, "3bet_bb_lp_oa": {"label": "3bet BB vs LP OA", "min": 10, "ideal": 14, "max": 18, "unit": "%"}}}, "postflop_ip": {"title": "Post-Flop IP", "stats": {"cbet_ip_vs_bb": {"label": "Cbet IP vs BB", "min": 85, "ideal": 88, "max": 95, "unit": "%"}, "bet_turn_ip": {"label": "+ bet turn (IP)", "min": 60, "ideal": 65, "max": 70, "unit": "%"}, "bet_river_ip": {"label": "+ bet river (IP)", "min": 50, "ideal": 55, "max": 59, "unit": "%"}, "bet_vs_missed": {"label": "bet vs missed", "min": 65, "ideal": 70, "max": 80, "unit": "%"}}}, "postflop_oop": {"title": "Post-Flop OOP", "stats": {"cbet_oop": {"label": "Cbet OOP", "min": 35, "ideal": 40, "max": 55, "unit": "%"}, "bet_turn_oop": {"label": "+ bet turn (OOP)", "min": 52, "ideal": 55, "max": 65, "unit": "%"}, "bet_river_oop": {"label": "+ bet river (OOP)", "min": 48, "ideal": 50, "max": 52, "unit": "%"}, "check_raise": {"label": "check-raise", "min": 20, "ideal": 22, "max": 25, "unit": "%"}}}, "river": {"title": "River", "stats": {"river_bet": {"label": "River bet", "min": 40, "ideal": 45, "max": 50, "unit": "%"}, "call_river": {"label": "Call river", "min": 30, "ideal": 32, "max": 35, "unit": "%"}}}, "bb_defense": {"title": "BB Defense", "stats": {"bb_f2_steal": {"label": "BB F2 steal", "min": 15, "ideal": 22, "max": 25, "unit": "%"}, "bb_xf": {"label": "BB XF", "min": 38, "ideal": 40, "max": 42, "unit": "%"}, "bb_xc": {"label": "BB XC", "min": 38, "ideal": 40, "max": 46, "unit": "%"}, "bb_xr": {"label": "BB XR", "min": 19, "ideal": 20, "max": 24, "unit": "%"}, "prob_turn": {"label": "Prob turn", "min": 60, "ideal": 65, "max": 70, "unit": "%"}, "bb_prob_river": {"label": "BB prob river", "min": 55, "ideal": 60, "max": 62, "unit": "%"}}}, "advanced": {"title": "Advanced", "stats": {"agg_flop": {"label": "Aggression F flop", "min": 50, "ideal": 52, "max": 54, "unit": "%"}, "agg_turn": {"label": "Aggression F turn", "min": 40, "ideal": 42, "max": 43, "unit": "%"}, "agg_river": {"label": "Aggression F river", "min": 40, "ideal": 42, "max": 43, "unit": "%"}}}, "showdown": {"title": "Showdown", "stats": {"saw_flop": {"label": "Saw Flop %", "min": 22, "ideal": 25, "max": 30, "unit": "%"}, "wwsf": {"label": "WWSF (Won When Saw Flop)", "min": 45, "ideal": 50, "max": 54, "unit": "%"}, "wtsd": {"label": "WTSD (Went To Showdown)", "min": 22, "ideal": 25, "max": 28, "unit": "%"}, "won_sd": {"label": "W$SD (Won at Showdown)", "min": 50, "ideal": 54, "max": 58, "unit": "%"}}}, "blind_war": {"title": "Blind War (SB vs BB)", "stats": {"sb_cbet_flop": {"label": "SB cbet flop", "min": 75, "ideal": 80, "max": 85, "unit": "%"}, "sb_cbet_turn": {"label": "SB cbet turn", "min": 55, "ideal": 55, "max": 60, "unit": "%"}, "sb_cbet_river": {"label": "SB cbet river", "min": 45, "ideal": 45, "max": 50, "unit": "%"}, "bb_f2_sb_steal": {"label": "BB F2 SB steal", "min": 30, "ideal": 30, "max": 35, "unit": "%"}, "bb_3bet_bw": {"label": "BB 3BET BW", "min": 9, "ideal": 12, "max": 15, "unit": "%"}, "bb_fold_vs_stab": {"label": "BB fold vs stab", "min": 15, "ideal": 22, "max": 25, "unit": "%"}}}}};
 // ===== Init =====
 loadRangesFromStorage();
+// [v6.6] Instala event delegation no #ranges-list (1x, antes de qualquer renderRanges)
+bindRangesListEvents();
 // Ranges em localStorage já permitem usar Quiz mesmo antes de hands.json carregar
 if (Object.keys(RANGES).length > 0) {
   applyUrlParams();
