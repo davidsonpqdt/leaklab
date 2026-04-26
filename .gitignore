@@ -12,6 +12,9 @@ data/maos_*/
 data/temp_*/
 outputs/hands*.json
 outputs/*.html
+outputs/noshovepls*
+outputs/*.xlsx
+outputs/*.json
 # Editor / OS
 .vscode/
 *.swp

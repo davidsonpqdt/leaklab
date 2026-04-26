@@ -520,6 +520,87 @@
     100% { transform: scale(1); }
   }
 
+  /* ===== [VISUAL v2] Tournament cards (onda 2) ===== */
+  .tourney-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-left: 3px solid var(--border); border-radius: 10px;
+    padding: 12px 14px; cursor: pointer;
+    transition: transform var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out), box-shadow var(--t-fast) var(--ease-out);
+    display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: start;
+  }
+  .tourney-card:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
+  .tourney-card.win  { border-left-color: var(--good); }
+  .tourney-card.loss { border-left-color: var(--bad); }
+  .tourney-card.flat { border-left-color: var(--fg-dim); }
+  .tourney-card .icon { font-size: 18px; line-height: 1; margin-right: 6px; }
+  .tourney-card .name { color: var(--fg); font-weight: 600; font-size: 13.5px; display: flex; align-items: center; }
+  .tourney-card .buyin-tag { display:inline-block; background: var(--bg-3); color: var(--accent-2); font-size:10.5px; font-weight:700; padding:2px 7px; border-radius:10px; margin-left:8px; letter-spacing:0.3px; }
+  .tourney-card .meta { color: var(--fg-dim); font-size: 11px; margin-top: 4px; }
+  .tourney-card .result { text-align: right; font-weight: 700; font-size: 16px; min-width: 90px; font-variant-numeric: tabular-nums; }
+  .tourney-card .result.gain { color: var(--good); }
+  .tourney-card .result.loss { color: var(--bad); }
+  .tourney-card .result .sub { display:block; color: var(--fg-dim); font-size: 10.5px; font-weight: 500; margin-top:2px; }
+  .tourney-card .spark { margin-top: 6px; height: 22px; width: 100%; display: block; opacity: 0.85; }
+  /* Hero do tournaments tab com gráfico */
+  .t-hero { display: grid; grid-template-columns: 1fr 1.3fr; gap: 16px; margin-bottom: 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .t-hero h2 { margin:0 0 10px; font-size:14px; color:var(--accent); }
+  .t-hero .pills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .t-hero .pill { background: var(--bg-3); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+  .t-hero .pill .v { font-size: 18px; font-weight: 800; color: var(--accent-2); font-variant-numeric: tabular-nums; }
+  .t-hero .pill .l { font-size: 10.5px; color: var(--fg-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+  .t-hero .pill.bb-pos .v { color: var(--good); } .t-hero .pill.bb-neg .v { color: var(--bad); }
+  .t-hero .chart-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px; position: relative; }
+  .t-hero .chart-wrap h3 { color: var(--fg-link); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px 4px; }
+  /* Highlight cards */
+  .highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+  .hl-card { background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-3) 100%); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; position: relative; overflow: hidden; cursor: pointer; transition: transform var(--t-fast) var(--ease-out); }
+  .hl-card:hover { transform: translateY(-2px); }
+  .hl-card.win  { border-top: 2px solid var(--good); }
+  .hl-card.loss { border-top: 2px solid var(--bad); }
+  .hl-card.run  { border-top: 2px solid var(--accent-2); }
+  .hl-card .label { color: var(--fg-dim); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.6px; }
+  .hl-card .value { font-size: 22px; font-weight: 800; margin: 4px 0 2px; font-variant-numeric: tabular-nums; }
+  .hl-card.win .value  { color: var(--good); }
+  .hl-card.loss .value { color: var(--bad); }
+  .hl-card.run .value  { color: var(--accent-2); }
+  .hl-card .name { color: var(--fg); font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hl-card .emoji { position: absolute; right: 10px; top: 8px; font-size: 22px; opacity: 0.35; }
+  /* Sort buttons */
+  .t-sort { display: flex; gap: 6px; align-items: center; margin-left: auto; }
+  .t-sort .sort-btn { background: var(--bg-3); border: 1px solid var(--border); color: var(--fg-dim); padding: 6px 10px; border-radius: 5px; cursor: pointer; font-size: 11.5px; transition: all var(--t-fast) var(--ease-out); }
+  .t-sort .sort-btn:hover { border-color: var(--fg-link); color: var(--fg); }
+  .t-sort .sort-btn.on { background: var(--accent); color: #0d0d0f; border-color: var(--accent); font-weight: 600; }
+  .t-sort .arrow { display: inline-block; margin-left: 3px; font-size: 10px; }
+  /* BB curve modal melhorada */
+  .bb-chart { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 8px 4px; position: relative; }
+  .bb-chart svg { width: 100%; height: 240px; display: block; }
+  .bb-chart .axis text { fill: var(--fg-dim); font-size: 9.5px; }
+  .bb-chart .grid line { stroke: #1f1f25; stroke-dasharray: 2,3; }
+  .bb-chart .zero { stroke: #444; stroke-dasharray: 4,3; }
+  .bb-chart .curve { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .bb-chart .curve.pos { stroke: var(--good); }
+  .bb-chart .curve.neg { stroke: var(--bad); }
+  .bb-chart .area.pos { fill: rgba(93,214,132,0.10); }
+  .bb-chart .area.neg { fill: rgba(237,106,106,0.10); }
+  .bb-chart .dot { fill: var(--bg); stroke-width: 1.5; cursor: pointer; }
+  .bb-chart .dot.allin { stroke: var(--accent-2); fill: var(--accent-2); }
+  .bb-chart .dot.win  { stroke: var(--good); }
+  .bb-chart .dot.loss { stroke: var(--bad); }
+  .bb-chart .hover-line { stroke: var(--accent); stroke-width: 1; opacity: 0; }
+  .bb-chart .tip { position: absolute; pointer-events: none; background: var(--bg-3); border: 1px solid var(--accent); border-radius: 6px; padding: 6px 10px; font-size: 11px; color: var(--fg); display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); z-index: 10; }
+  .bb-chart .tip b { color: var(--accent-2); }
+  /* Hands-table colorida */
+  .hands-table tr.hand-row { transition: background 0.08s; }
+  .hands-table tr.hand-row:hover { background: var(--bg-3); cursor: pointer; }
+  .hands-table tr.hand-row.win  td:first-child { border-left: 2px solid var(--good); }
+  .hands-table tr.hand-row.loss td:first-child { border-left: 2px solid var(--bad); }
+  .hands-table tr.hand-row.flat td:first-child { border-left: 2px solid var(--border); }
+  .hands-table .strength-icon { display:inline-block; width:14px; text-align:center; margin-right:4px; opacity:0.85; }
+  .hands-table .cards-cell { font-family: 'Courier New', monospace; font-weight: 700; letter-spacing: 0.5px; }
+  .hands-table td.bb-cell { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .hands-table td.bb-cell.gain { color: var(--good); }
+  .hands-table td.bb-cell.loss { color: var(--bad); }
+
   /* ===== A11y: Respeita prefers-reduced-motion ===== */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -2029,18 +2110,40 @@ function renderTournaments() {
   const sliceEnd = Math.min(list.length, sliceStart + TOURN_PER_PAGE);
   const slice = list.slice(sliceStart, sliceEnd);
 
+  // [VISUAL v2] cards de torneio com border-color por win/loss + sparkline + ícone tipo
+  const datasetIcon = (ds) => ds === "bounty_ko" ? "🎯" : ds === "mystery" ? "💰" : "🏆";
+  const sparklineFor = (hands) => {
+    if (!hands || hands.length < 2) return "";
+    let cum = 0;
+    const pts = hands.map(h => (cum += (h.won_bb || 0)));
+    const minP = Math.min(0, ...pts), maxP = Math.max(0, ...pts);
+    const w = 240, h = 22, dx = w / (pts.length - 1);
+    const yScale = (h - 2) / Math.max(maxP - minP, 1);
+    const d = pts.map((p, i) => `${i ? "L" : "M"}${(i*dx).toFixed(1)},${(h - 1 - (p - minP) * yScale).toFixed(1)}`).join("");
+    const last = pts[pts.length - 1];
+    const color = last >= 0 ? "var(--good)" : "var(--bad)";
+    const fill = last >= 0 ? "rgba(93,214,132,0.12)" : "rgba(237,106,106,0.12)";
+    const area = `${d} L${w},${h} L0,${h} Z`;
+    return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+      <path d="${area}" fill="${fill}"/>
+      <path d="${d}" fill="none" stroke="${color}" stroke-width="1.2"/>
+    </svg>`;
+  };
   const cards = slice.map(t => {
-    const ds = t.__dataset;
-    const cls = t.won_bb > 0 ? "gain" : t.won_bb < 0 ? "loss" : "";
-    return `<div class="range-card" data-tcode="${t.code}">
-      <div class="id">${escHtml(t.name)}</div>
-      <div class="meta">
-        ${escHtml(t.hero)} · ${escHtml(t.buyin || "?")} · ${ds} · ${t.hands.length} mãos
-        · <span class="${cls}">${t.won_bb >= 0 ? "+" : ""}${t.won_bb.toFixed(1)} BB</span>
+    const cardCls = t.won_bb > 0 ? "win" : t.won_bb < 0 ? "loss" : "flat";
+    const resCls = t.won_bb > 0 ? "gain" : t.won_bb < 0 ? "loss" : "";
+    return `<div class="tourney-card ${cardCls}" data-tcode="${t.code}">
+      <div>
+        <div class="name">
+          <span class="icon">${datasetIcon(t.__dataset)}</span>${escHtml(t.name)}
+          ${t.buyin ? `<span class="buyin-tag">${escHtml(t.buyin)}</span>` : ""}
+        </div>
+        <div class="meta">${escHtml(t.hero)} · ${t.hands.length} mãos · ${(t.startdate || "").slice(0, 16)}</div>
+        ${sparklineFor(t.hands)}
       </div>
-      <div class="meta" style="margin-top:4px">${(t.startdate || "").slice(0, 16)}</div>
-      <div class="actions">
-        <button class="open-tourney">Ver mãos</button>
+      <div class="result ${resCls}">
+        ${t.won_bb >= 0 ? "+" : ""}${t.won_bb.toFixed(1)}
+        <span class="sub">BB</span>
       </div>
     </div>`;
   }).join("");
@@ -2054,19 +2157,92 @@ function renderTournaments() {
     pagerHtml = `<div style="display:flex;align-items:center;justify-content:center;margin-top:14px;gap:6px">${prev}${info}${next}</div>`;
   }
 
+  // [VISUAL v2] Hero com gráfico de evolução temporal (lucro acumulado)
+  const buildDailySeries = (tournaments) => {
+    const byDay = {};
+    for (const t of tournaments) {
+      const day = (t.startdate || "").slice(0, 10);
+      if (!day) continue;
+      byDay[day] = (byDay[day] || 0) + t.won_bb;
+    }
+    const days = Object.keys(byDay).sort();
+    let cum = 0;
+    return days.map(d => ({ day: d, cum: (cum += byDay[d]) }));
+  };
+  const renderHeroChart = (series) => {
+    if (series.length < 2) return `<div style="color:var(--fg-dim);font-size:11px;text-align:center;padding:30px">Carregue mais dias pra ver evolução</div>`;
+    const w = 480, hh = 130, pad = 18;
+    const ys = series.map(s => s.cum);
+    const minY = Math.min(0, ...ys), maxY = Math.max(0, ...ys);
+    const dx = (w - pad*2) / Math.max(series.length - 1, 1);
+    const yScale = (hh - pad*2) / Math.max(maxY - minY, 1);
+    const yOf = v => hh - pad - (v - minY) * yScale;
+    const path = series.map((s, i) => `${i ? "L" : "M"}${(pad + i*dx).toFixed(1)},${yOf(s.cum).toFixed(1)}`).join("");
+    const lastCum = ys[ys.length - 1];
+    const stroke = lastCum >= 0 ? "var(--good)" : "var(--bad)";
+    return `<svg viewBox="0 0 ${w} ${hh}" style="width:100%;height:130px">
+      <line x1="${pad}" y1="${yOf(0)}" x2="${w-pad}" y2="${yOf(0)}" stroke="#333" stroke-dasharray="2,3"/>
+      <text x="${pad}" y="${pad-4}" fill="var(--fg-dim)" font-size="9">${maxY.toFixed(0)} BB</text>
+      <text x="${pad}" y="${hh-4}" fill="var(--fg-dim)" font-size="9">${minY.toFixed(0)} BB</text>
+      <path d="${path}" fill="none" stroke="${stroke}" stroke-width="1.8" stroke-linejoin="round"/>
+    </svg>`;
+  };
+  // Highlights — biggest win/loss/heater
+  const pickHighlights = (l) => {
+    if (!l.length) return null;
+    const win = l.reduce((b, t) => t.won_bb > b.won_bb ? t : b, l[0]);
+    const loss = l.reduce((b, t) => t.won_bb < b.won_bb ? t : b, l[0]);
+    const sorted = [...l].sort((a,b) => (a.startdate||"").localeCompare(b.startdate||""));
+    let bestRun = 0, curRun = 0, runStart = null, bestRunStart = null;
+    for (const t of sorted) {
+      if (t.won_bb > 0) { if (!curRun) runStart = t; curRun++; if (curRun > bestRun) { bestRun = curRun; bestRunStart = runStart; } }
+      else curRun = 0;
+    }
+    return { win, loss, run: { count: bestRun, ref: bestRunStart } };
+  };
+  const hl = pickHighlights(list);
+  const highlightsHtml = hl ? `
+    <div class="highlights">
+      <div class="hl-card win" data-tcode="${hl.win.code}">
+        <div class="emoji">🚀</div>
+        <div class="label">Maior win</div>
+        <div class="value">+${hl.win.won_bb.toFixed(0)} BB</div>
+        <div class="name">${escHtml(hl.win.name)}</div>
+      </div>
+      <div class="hl-card loss" data-tcode="${hl.loss.code}">
+        <div class="emoji">💀</div>
+        <div class="label">Maior loss</div>
+        <div class="value">${hl.loss.won_bb.toFixed(0)} BB</div>
+        <div class="name">${escHtml(hl.loss.name)}</div>
+      </div>
+      <div class="hl-card run"${hl.run.ref ? ` data-tcode="${hl.run.ref.code}"` : ""}>
+        <div class="emoji">🔥</div>
+        <div class="label">Maior heater</div>
+        <div class="value">${hl.run.count} wins</div>
+        <div class="name">${hl.run.ref ? "começando " + (hl.run.ref.startdate||"").slice(0,10) : "—"}</div>
+      </div>
+    </div>` : "";
+
   document.getElementById("tournaments-content").innerHTML = `
-    <div class="coach-hero" style="margin-bottom:14px">
-      <h2>🏆 Resumo dos torneios</h2>
-      <div class="stats-row">
-        <div class="pill"><div class="v">${list.length}</div><div class="l">Torneios</div></div>
-        <div class="pill"><div class="v">${totalHands.toLocaleString("pt-BR")}</div><div class="l">Mãos totais</div></div>
-        <div class="pill ${totalWon>=0?'bb-pos':'bb-neg'}"><div class="v">${totalWon>=0?'+':''}${totalWon.toFixed(0)}</div><div class="l">BB total</div></div>
-        <div class="pill ${avgPerMtt>=0?'bb-pos':'bb-neg'}"><div class="v">${avgPerMtt>=0?'+':''}${avgPerMtt.toFixed(1)}</div><div class="l">BB / MTT (média)</div></div>
-        <div class="pill"><div class="v">${winRate.toFixed(0)}%</div><div class="l">Win rate</div></div>
-        <div class="pill"><div class="v">${wins} / ${losses}</div><div class="l">Wins / Losses</div></div>
+    <div class="t-hero">
+      <div>
+        <h2>🏆 Resumo dos torneios</h2>
+        <div class="pills-grid">
+          <div class="pill"><div class="v">${list.length}</div><div class="l">Torneios</div></div>
+          <div class="pill"><div class="v">${totalHands.toLocaleString("pt-BR")}</div><div class="l">Mãos totais</div></div>
+          <div class="pill ${totalWon>=0?'bb-pos':'bb-neg'}"><div class="v">${totalWon>=0?'+':''}${totalWon.toFixed(0)}</div><div class="l">BB total</div></div>
+          <div class="pill ${avgPerMtt>=0?'bb-pos':'bb-neg'}"><div class="v">${avgPerMtt>=0?'+':''}${avgPerMtt.toFixed(1)}</div><div class="l">BB / MTT</div></div>
+          <div class="pill"><div class="v">${winRate.toFixed(0)}%</div><div class="l">Win rate</div></div>
+          <div class="pill"><div class="v">${wins}/${losses}</div><div class="l">Wins/Losses</div></div>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <h3>Lucro acumulado ao longo do tempo</h3>
+        ${renderHeroChart(buildDailySeries(list))}
       </div>
     </div>
-    <div class="t-filters" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+    ${highlightsHtml}
+    <div class="t-filters" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
       <input id="t-search" placeholder="🔎 Buscar torneio..." value="${escHtml(TOURN_FILTER.search)}" style="flex:1;min-width:180px;padding:6px 10px;background:var(--bg-2);border:1px solid var(--border);color:var(--fg);border-radius:5px"/>
       <select id="t-result" style="padding:6px 10px;background:var(--bg-2);border:1px solid var(--border);color:var(--fg);border-radius:5px">
         <option value="">Todos resultados</option>
@@ -2081,15 +2257,22 @@ function renderTournaments() {
       </select>
       <button id="t-clear-filter" style="padding:6px 12px;background:var(--bg-3);border:1px solid var(--border);color:var(--fg-dim);border-radius:5px;cursor:pointer">Limpar</button>
     </div>
-    <div class="ranges-list">${cards}</div>
+    <div class="tourney-list" style="display:flex;flex-direction:column;gap:8px">${cards}</div>
     ${pagerHtml}
   `;
 
-  // Bind handlers
-  document.querySelectorAll(".open-tourney").forEach(b => {
-    b.addEventListener("click", e => {
-      const tcode = e.target.closest(".range-card").dataset.tcode;
-      openTournamentView(tcode);
+  // Bind handlers — click no card inteiro abre o torneio
+  document.querySelectorAll(".tourney-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const tcode = card.dataset.tcode;
+      if (tcode) openTournamentView(tcode);
+    });
+  });
+  // Highlight cards click
+  document.querySelectorAll(".hl-card[data-tcode]").forEach(card => {
+    card.addEventListener("click", () => {
+      const tcode = card.dataset.tcode;
+      if (tcode) openTournamentView(tcode);
     });
   });
   const sInput = document.getElementById("t-search");
