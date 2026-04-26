@@ -43,14 +43,15 @@ def collect_hands(folders: list[str], hero: str | None) -> list[dict]:
 
 
 def collect_ranges(ranges_dir: str) -> list[dict]:
-    """Coleta ranges recursivamente. Ignora arquivos que comecem com `_`
-    (manifests, scripts auxiliares como _index.json)."""
+    """Coleta ranges recursivamente. Ignora arquivos E diretórios que comecem com `_`
+    (manifests, scripts auxiliares, e pastas desativadas como _cash_6max_disabled)."""
     out = []
     seen_ids = set()
     if not os.path.isdir(ranges_dir):
         return out
-    # Walk recursivo
-    for root, _, files in os.walk(ranges_dir):
+    # Walk recursivo — modifica `dirs` in-place pra pular pastas com prefixo `_`
+    for root, dirs, files in os.walk(ranges_dir):
+        dirs[:] = [d for d in dirs if not d.startswith("_")]
         for fname in sorted(files):
             if fname.startswith("_") or not fname.endswith(".json"):
                 continue

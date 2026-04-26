@@ -1938,12 +1938,17 @@ function dateCmp(a, b) {
 }
 
 // ===== Resumo =====
+// [v6.7] Consolidado em 1 pass (era 4: 3 filters + 1 reduce). Com 99k mãos: 396k → 99k iterações.
 function renderSummary() {
   const total = CURRENT.length;
-  const folds = CURRENT.filter(h => h.hero_action === "fold").length;
-  const calls = CURRENT.filter(h => h.hero_action === "call").length;
-  const raises = CURRENT.filter(h => h.hero_action === "raise").length;
-  const wonBb = CURRENT.reduce((s, h) => s + (h.won_bb || 0), 0);
+  let folds = 0, calls = 0, raises = 0, wonBb = 0;
+  for (const h of CURRENT) {
+    const a = h.hero_action;
+    if (a === "fold") folds++;
+    else if (a === "call") calls++;
+    else if (a === "raise") raises++;
+    wonBb += h.won_bb || 0;
+  }
   const html = `
     <div class="stat-card"><div class="v">${total}</div><div class="l">Hands</div></div>
     <div class="stat-card"><div class="v">${folds}</div><div class="l">Folds</div></div>
@@ -2155,8 +2160,15 @@ function hideGtoMatchIndicator() {
 let HANDS_PAGE = 0, HANDS_SORT = "stack_bb", HANDS_SORT_DIR = -1;
 const HANDS_PER_PAGE = 50;
 
+// [v6.7] State pra delegation — guarda subset/header pra re-render no sort/pager
+let _handsListState = { subset: null, header: null };
+
 function renderHandsList(subset, header) {
-  const list = subset || CURRENT;
+  // Atualiza state quando chamada externamente (fora do delegated listener)
+  if (subset !== undefined) _handsListState.subset = subset;
+  if (header !== undefined) _handsListState.header = header;
+  const list = _handsListState.subset || CURRENT;
+  const hdr = _handsListState.header;
   const sorted = [...list].sort((a, b) => {
     const va = a[HANDS_SORT] ?? 0, vb = b[HANDS_SORT] ?? 0;
     if (typeof va === "string") return HANDS_SORT_DIR * va.localeCompare(vb);
@@ -2191,7 +2203,7 @@ function renderHandsList(subset, header) {
 
   const totalPages = Math.max(1, Math.ceil(sorted.length / HANDS_PER_PAGE));
   document.getElementById("hands-content").innerHTML = `
-    ${header ? `<h3 style="color:var(--accent);font-size:14px;margin:0 0 10px 0">${header} (${sorted.length})</h3>` : ""}
+    ${hdr ? `<h3 style="color:var(--accent);font-size:14px;margin:0 0 10px 0">${hdr} (${sorted.length})</h3>` : ""}
     <table class="hands-table">
       <thead><tr>${headerRow}</tr></thead>
       <tbody>${rows || "<tr><td colspan='8' style='text-align:center;color:var(--fg-dim);padding:20px'>Nenhuma mão</td></tr>"}</tbody>
@@ -2202,26 +2214,43 @@ function renderHandsList(subset, header) {
       <button id="next-pg" ${HANDS_PAGE >= totalPages - 1 ? "disabled" : ""}>›</button>
     </div>
   `;
-  document.querySelectorAll("th[data-sort]").forEach(th => {
-    th.addEventListener("click", () => {
+  bindHandsContentEvents();
+}
+
+// [v6.7] Listeners delegados em #hands-content (instalado UMA vez).
+// Antes: cada renderHandsList adicionava ~50 listeners (querySelectorAll forEach addEventListener).
+let _handsContentEventsBound = false;
+function bindHandsContentEvents() {
+  if (_handsContentEventsBound) return;
+  const container = document.getElementById("hands-content");
+  if (!container) return;
+  container.addEventListener("click", (e) => {
+    // Sort by column header
+    const th = e.target.closest("th[data-sort]");
+    if (th) {
       const k = th.dataset.sort;
       if (HANDS_SORT === k) HANDS_SORT_DIR = -HANDS_SORT_DIR;
       else { HANDS_SORT = k; HANDS_SORT_DIR = -1; }
       HANDS_PAGE = 0;
-      renderHandsList(list, header);
-    });
-  });
-  const prev = document.getElementById("prev-pg"); if (prev) prev.onclick = () => { HANDS_PAGE--; renderHandsList(list, header); };
-  const next = document.getElementById("next-pg"); if (next) next.onclick = () => { HANDS_PAGE++; renderHandsList(list, header); };
-
-  // click numa linha = abre replay
-  document.querySelectorAll(".hand-row").forEach(tr => {
-    tr.addEventListener("click", () => {
+      renderHandsList();  // re-render usando state guardado
+      return;
+    }
+    // Pager
+    if (e.target.id === "prev-pg" && !e.target.disabled) {
+      HANDS_PAGE--; renderHandsList(); return;
+    }
+    if (e.target.id === "next-pg" && !e.target.disabled) {
+      HANDS_PAGE++; renderHandsList(); return;
+    }
+    // Click numa linha = abre replay
+    const tr = e.target.closest(".hand-row");
+    if (tr) {
       const gc = tr.dataset.game;
       const hand = HANDS.find(h => h.gamecode === gc);
       if (hand) openReplay(hand);
-    });
+    }
   });
+  _handsContentEventsBound = true;
 }
 
 function renderHands() { HANDS_PAGE = 0; renderHandsList(); }
