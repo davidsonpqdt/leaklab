@@ -37,6 +37,97 @@
   }
   header.top button:hover, header.top label.btn:hover { border-color: var(--accent); }
   header.top input[type=file] { display: none; }
+  /* [v6.10] Feedback modal */
+  #feedback-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.78); backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  #feedback-overlay[style*="display: flex"], #feedback-overlay[style*="display:flex"] { display: flex !important; }
+  .fb-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px;
+    width: 100%; max-width: 540px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    position: relative;
+    animation: fb-in var(--t-base) var(--ease-out);
+  }
+  @keyframes fb-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .fb-close {
+    position: absolute; top: 12px; right: 12px;
+    background: transparent; border: none; color: var(--fg-dim);
+    font-size: 24px; cursor: pointer; line-height: 1;
+    width: 32px; height: 32px; border-radius: 6px;
+    transition: all 0.15s;
+  }
+  .fb-close:hover { background: var(--bg-3); color: var(--fg); }
+  .fb-card h3 { margin: 0 0 6px 0; font-size: 18px; color: var(--fg); }
+  .fb-pitch { color: var(--fg-dim); font-size: 13px; margin: 0 0 18px 0; line-height: 1.5; }
+  .fb-type-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .fb-type {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--bg-3); border: 1px solid var(--border);
+    padding: 8px 14px; border-radius: 8px; cursor: pointer;
+    font-size: 13px; color: var(--fg);
+    transition: all 0.15s;
+  }
+  .fb-type:hover { border-color: var(--accent); }
+  .fb-type input[type="radio"] { accent-color: var(--accent); cursor: pointer; }
+  .fb-type:has(input:checked) { border-color: var(--accent); background: rgba(45,212,191,0.08); }
+  #fb-text {
+    width: 100%; box-sizing: border-box;
+    background: var(--bg-3); border: 1px solid var(--border);
+    color: var(--fg); padding: 12px;
+    border-radius: 8px; font-size: 13px;
+    font-family: inherit; line-height: 1.5;
+    resize: vertical; min-height: 100px;
+    transition: border-color 0.15s;
+  }
+  #fb-text:focus { outline: none; border-color: var(--accent); }
+  .fb-hint {
+    background: rgba(245,193,74,0.08);
+    border: 1px solid rgba(245,193,74,0.25);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #f0d68f;
+    font-size: 12px;
+    margin: 12px 0 16px;
+    line-height: 1.5;
+  }
+  .fb-actions {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .fb-btn {
+    flex: 1; min-width: 180px;
+    padding: 12px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .fb-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .fb-email {
+    background: var(--bg-3); color: var(--fg);
+  }
+  .fb-email:hover { border-color: var(--accent); background: rgba(45,212,191,0.06); }
+  .fb-github {
+    background: var(--accent); color: #000; border-color: var(--accent);
+  }
+  .fb-github:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(45,212,191,0.3); }
+  .fb-footnote {
+    text-align: center; margin-top: 14px;
+    font-size: 11px; color: var(--fg-dim);
+  }
+  .fb-footnote code { background: var(--bg-3); padding: 1px 6px; border-radius: 3px; font-size: 10.5px; }
+  @media (max-width: 500px) {
+    .fb-actions { flex-direction: column; }
+    .fb-btn { min-width: 0; }
+  }
+
   /* [v6.5] Ecosystem links — discrete icons before help button */
   header.top .eco-links { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; margin: 0 4px; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
   header.top .eco-link {
@@ -904,9 +995,40 @@
       <a href="https://duvidas.pokermtts.com.br/dashboard" target="_blank" rel="noopener" class="eco-link" title="App de Dúvidas" aria-label="App de Dúvidas">❓</a>
       <a href="https://www.instagram.com/poker.mtts" target="_blank" rel="noopener" class="eco-link" title="Instagram @poker.mtts" aria-label="Instagram">📸</a>
     </span>
+    <button id="btn-feedback" title="Relatar bug ou sugerir melhoria" aria-label="Relatar bug ou sugerir melhoria">💬</button>
     <button id="btn-help" title="Ajuda" aria-label="Ajuda">?</button>
   </div>
 </header>
+
+<!-- [v6.10] Feedback modal — qualquer pessoa pode reportar bug/sugestão. Não requer login.
+     Caminhos: email (mailto, anexa print manualmente) ou GitHub Issue (suporta drag-drop de print). -->
+<div id="feedback-overlay" role="dialog" aria-modal="true" aria-labelledby="feedback-title" style="display:none">
+  <div class="fb-card">
+    <button class="fb-close" id="fb-close" aria-label="Fechar">×</button>
+    <h3 id="feedback-title">💬 Relatar bug ou sugerir melhoria</h3>
+    <p class="fb-pitch">Sua opinião ajuda a melhorar o LeakLab! Você não precisa criar conta — escolha email ou GitHub.</p>
+
+    <div class="fb-type-row" role="radiogroup" aria-label="Tipo de feedback">
+      <label class="fb-type"><input type="radio" name="fb-type" value="bug" checked> 🐛 Bug</label>
+      <label class="fb-type"><input type="radio" name="fb-type" value="sugestao"> 💡 Sugestão</label>
+      <label class="fb-type"><input type="radio" name="fb-type" value="pergunta"> ❓ Pergunta</label>
+    </div>
+
+    <textarea id="fb-text" rows="6" placeholder="Descreva o que aconteceu (ou o que você gostaria que tivesse).&#10;Quanto mais detalhe, melhor — qual aba? que stack? que range?"></textarea>
+
+    <div class="fb-hint">
+      📸 <b>Print ajuda muito!</b> Você pode anexar no email ou colar diretamente no GitHub (suporta arrastar imagem).
+    </div>
+
+    <div class="fb-actions">
+      <button class="fb-btn fb-email" id="fb-send-email">📧 Enviar por email</button>
+      <button class="fb-btn fb-github" id="fb-send-github">🐙 Abrir no GitHub</button>
+    </div>
+    <div class="fb-footnote">
+      Email: <code>poker.mtts@gmail.com</code> · GitHub: <code>davidsonpqdt/leaklab</code>
+    </div>
+  </div>
+</div>
 
 <nav class="tabs" id="main-tabs">
   <button data-tab="coach" class="active" aria-label="Coach - Painel">🎯 Coach</button>
@@ -1143,6 +1265,17 @@ const RANKS = ["A","K","Q","J","T","9","8","7","6","5","4","3","2"];
 // [v6.9] Threshold de amostra mínima pra stat ser considerada confiável (não-dim).
 // Antes hardcoded como `30` em 3+ lugares — agora central pra ajustar fácil.
 const MIN_SAMPLE_SIZE = 30;
+
+// [v6.10] Action types do iPoker XML — antes espalhados como magic numbers em 35+ lugares.
+// Ver CLAUDE.md "Action types" pra contexto completo.
+const ACTION_TYPE = {
+  FOLD: 0,
+  CALL: 3,
+  CHECK: 4,
+  BET: 5,
+  ALLIN: 7,
+  RAISE: 23,
+};
 // [PERF FIX 2026-04-25]: globais pra evitar 99k+ instanciacoes desnecessarias.
 // type 5 = bet, 7 = allin, 23 = raise (todos agressivos).
 // type 0 = fold, 3 = call (passivos).
@@ -1274,7 +1407,7 @@ function deleteRange(id) {
     const stored = JSON.parse(localStorage.getItem("leaklab_ranges") || "{}");
     delete stored[id];
     localStorage.setItem("leaklab_ranges", JSON.stringify(stored));
-  } catch {}
+  } catch (err) { console.warn("[deleteRange] localStorage falhou:", err); }
   // [v6.6] Limpa QUIZ.current se o range deletado é o atual (evita reler range fantasma)
   if (typeof QUIZ !== "undefined" && QUIZ.current && QUIZ.current.range && QUIZ.current.range.id === id) {
     QUIZ.current = null;
@@ -1291,7 +1424,7 @@ function loadBenchmarks() {
   try {
     const stored = localStorage.getItem("leaklab_benchmarks");
     if (stored) { BENCHMARKS = JSON.parse(stored); return Promise.resolve(); }
-  } catch {}
+  } catch (err) { console.warn("[loadBenchmarks] localStorage corrompido, usando fallback:", err); }
   // Fallback: tenta carregar default via fetch (cachebuster pra evitar cache stale)
   const url = "../data/benchmarks_default.json?_=" + Date.now();
   return fetch(url)
@@ -1952,11 +2085,11 @@ function matchHand(h) {
     const AGGR = new Set([5,7,23]);
     for (const a of acts) {
       if (a.player !== heroN) continue;
-      if (action === "check" && a.type === 4) return true;
-      if (action === "call" && a.type === 3) return true;
-      if (action === "fold" && a.type === 0) return true;
-      if (action === "bet" && (a.type === 5 || a.type === 7)) return true;
-      if (action === "raise" && a.type === 23) return true;
+      if (action === "check" && a.type === ACTION_TYPE.CHECK) return true;
+      if (action === "call" && a.type === ACTION_TYPE.CALL) return true;
+      if (action === "fold" && a.type === ACTION_TYPE.FOLD) return true;
+      if (action === "bet" && (a.type === ACTION_TYPE.BET || a.type === ACTION_TYPE.ALLIN)) return true;
+      if (action === "raise" && a.type === ACTION_TYPE.RAISE) return true;
       if (action === "raise" && AGGR.has(a.type)) return true;  // any aggressive
     }
     return false;
@@ -1980,11 +2113,11 @@ function matchHand(h) {
     const heroActs = [];
     for (const a of acts) {
       if (a.player !== heroN) continue;
-      if (a.type === 0) heroActs.push("fold");
-      else if (a.type === 4) heroActs.push("check");
-      else if (a.type === 3) heroActs.push("call");
-      else if (a.type === 5 || a.type === 7) heroActs.push("bet");
-      else if (a.type === 23) heroActs.push("raise");
+      if (a.type === ACTION_TYPE.FOLD) heroActs.push("fold");
+      else if (a.type === ACTION_TYPE.CHECK) heroActs.push("check");
+      else if (a.type === ACTION_TYPE.CALL) heroActs.push("call");
+      else if (a.type === ACTION_TYPE.BET || a.type === ACTION_TYPE.ALLIN) heroActs.push("bet");
+      else if (a.type === ACTION_TYPE.RAISE) heroActs.push("raise");
     }
     if (heroActs.length === 0) return false;
     // Match qualquer sequencia selecionada
@@ -4763,111 +4896,8 @@ function parseCards(s) {
   }).filter(Boolean);
 }
 
-function classifyFlop(holeRaw, flopStr) {
-  // Retorna {cat, draws[], boardTags[], heroPair?, heroKicker?}
-  const hero = parseCards(holeRaw);
-  const flop = parseCards(flopStr);
-  if (hero.length !== 2 || flop.length !== 3) return null;
-
-  const all = [...hero, ...flop];
-  const heroRanks = hero.map(c => c.ri).sort((a,b) => b-a);  // [maior, menor]
-  const flopRanks = flop.map(c => c.ri).sort((a,b) => b-a);
-  const flopMax = flopRanks[0], flopMid = flopRanks[1], flopMin = flopRanks[2];
-
-  // Board tags
-  const boardTags = [];
-  const flopSuits = flop.map(c => c.s);
-  const uniqSuits = [...new Set(flopSuits)];
-  if (uniqSuits.length === 3) boardTags.push("rainbow");
-  else if (uniqSuits.length === 1) boardTags.push("monotone");
-  else boardTags.push("two_tone");
-  if (flopMax === flopMid || flopMid === flopMin) boardTags.push("paired");
-  if (flopMax === 14) boardTags.push("ace_high");
-
-  // Pair detection
-  const heroIsPair = heroRanks[0] === heroRanks[1];
-  const pairs = {};  // rank_int -> count
-  for (const c of all) pairs[c.ri] = (pairs[c.ri] || 0) + 1;
-  const trips = Object.entries(pairs).filter(([r, n]) => n === 3).map(([r]) => parseInt(r));
-  const heroPairs = Object.entries(pairs).filter(([r, n]) => n === 2 && hero.some(c => c.ri === parseInt(r))).map(([r]) => parseInt(r));
-  const flopPairs = Object.entries(pairs).filter(([r, n]) => n === 2 && !hero.some(c => c.ri === parseInt(r)) && flop.some(c => c.ri === parseInt(r))).map(([r]) => parseInt(r));
-
-  // Draws
-  const draws = [];
-  // Flush draw: hero contributes to 4-suited count (only 2-tone or 3-tone count)
-  const suitCount = {};
-  for (const c of all) suitCount[c.s] = (suitCount[c.s] || 0) + 1;
-  const fdSuit = Object.entries(suitCount).find(([s, n]) => n === 4 && hero.some(c => c.s === s));
-  if (fdSuit) draws.push("flush_draw");
-
-  // Straight draw: check if hero contributes to 4-card window
-  const allRanksSet = new Set(all.map(c => c.ri));
-  if (allRanksSet.has(14)) allRanksSet.add(1); // A-baixo
-  let oesd = false, gutshot = false;
-  // OESD: 4 consecutivos
-  for (let lo = 1; lo <= 11; lo++) {
-    let n = 0;
-    for (let r = lo; r < lo + 4; r++) if (allRanksSet.has(r)) n++;
-    if (n === 4 && hero.some(c => c.ri >= lo && c.ri < lo + 4 || (c.ri === 14 && lo === 1))) {
-      oesd = true; break;
-    }
-  }
-  // Gutshot: 4 dentro de 5 com 1 buraco
-  if (!oesd) {
-    for (let lo = 1; lo <= 10; lo++) {
-      let n = 0;
-      for (let r = lo; r < lo + 5; r++) if (allRanksSet.has(r)) n++;
-      if (n === 4 && hero.some(c => c.ri >= lo && c.ri < lo + 5 || (c.ri === 14 && lo === 1))) {
-        gutshot = true; break;
-      }
-    }
-  }
-  if (oesd) draws.push("oesd");
-  else if (gutshot) draws.push("gutshot");
-
-  // Categoria principal
-  let cat;
-  if (trips.length > 0) {
-    if (trips.some(r => hero.some(c => c.ri === r) && pairs[r] === 3 && hero.filter(c => c.ri === r).length === 2)) {
-      cat = "set";
-    } else cat = "trips_board";
-  } else if (heroPairs.length === 2 || (heroPairs.length === 1 && flopPairs.length === 1) || (heroIsPair && flopPairs.length === 1)) {
-    cat = "two_pair_plus";
-  } else if (heroIsPair && heroRanks[0] > flopMax) {
-    cat = "overpair";
-  } else if (heroIsPair && heroRanks[0] >= flopMax) {
-    cat = "overpair";
-  } else if (heroIsPair) {
-    if (heroRanks[0] >= flopMid) cat = "middle_pair";
-    else cat = "low_pocket";
-  } else if (heroPairs.length === 1) {
-    const pairR = heroPairs[0];
-    if (pairR === flopMax) {
-      // top pair
-      const kicker = heroRanks.find(r => r !== pairR) || 0;
-      // [v6.9] Simplificado: kicker Q+ (12+) → tpgk; T-J (10-11) e abaixo → tpwk
-      // (antes tinha 2 ramos `else if` redundantes ambos indo pra "tpwk")
-      cat = kicker >= 12 ? "tpgk" : "tpwk";
-    } else if (pairR === flopMid) cat = "middle_pair";
-    else cat = "low_pair";
-  } else {
-    if (heroRanks[0] === 14) cat = "a_high";
-    else if (heroRanks[0] >= 12) cat = "high_card_kqj";
-    else cat = "trash";
-  }
-
-  if (cat === "trash" || cat === "a_high" || cat === "high_card_kqj") {
-    if (draws.length > 0) {
-      // se só draw sem made hand
-      if (draws.includes("flush_draw") || draws.includes("oesd")) cat = "draw";
-      else if (draws.includes("gutshot")) cat = "gutshot";
-    }
-  } else if (draws.length > 0 && (cat === "low_pair" || cat === "middle_pair" || cat === "tpwk" || cat === "low_pocket")) {
-    cat = cat + "_with_draw";
-  }
-
-  return { cat, draws, boardTags };
-}
+// [v6.10] classifyFlop() removida — era dead code (~105 linhas, jamais chamada).
+// Lógica vivia em paralelo com classifyBoard()/classifyFlopV2() que são as usadas hoje.
 
 const HAND_STRENGTH_CATEGORIES = [
   ["trash", "Trash"],
@@ -4898,7 +4928,7 @@ const BOARD_TAGS = [
   ["ace_high", "Ace High"], ["three_to_flush", "3rd card to flush"], ["over_card", "Over Card"]
 ];
 
-// classifyTurn / classifyRiver — usam a mesma lógica de classifyFlop
+// classifyTurn / classifyRiver — usam a mesma lógica de classifyBoard,
 // mas com mais cartas no board. Board flop = 3 cartas, turn = 4 cartas, river = 5 cartas
 function classifyBoard(holeRaw, boardCards) {
   // boardCards é array já parseado de cartas
@@ -5213,12 +5243,12 @@ function buildReplaySteps(hand) {
       const ps = state.playerStates[a.player]; if (!ps) continue;
       state.activePlayer = a.player;
       let label = "";
-      if (a.type === 0) { ps.folded = true; label = "fold"; }
-      else if (a.type === 3) { const d = a.sum - ps.bet; ps.chips -= d; ps.bet = a.sum; state.pot += d; label = `call ${(a.sum/bb).toFixed(2)}bb`; }
-      else if (a.type === 4) { label = "check"; }
-      else if (a.type === 5) { ps.chips -= a.sum; ps.bet = a.sum; state.pot += a.sum; label = `bet ${(a.sum/bb).toFixed(2)}bb`; }
-      else if (a.type === 7) { const d = a.sum - ps.bet; ps.chips -= d; ps.bet = a.sum; state.pot += d; label = `ALL-IN ${(a.sum/bb).toFixed(2)}bb`; }
-      else if (a.type === 23) { const d = a.sum - ps.bet; ps.chips -= d; ps.bet = a.sum; state.pot += d; label = `raise para ${(a.sum/bb).toFixed(2)}bb`; }
+      if (a.type === ACTION_TYPE.FOLD) { ps.folded = true; label = "fold"; }
+      else if (a.type === ACTION_TYPE.CALL) { const d = a.sum - ps.bet; ps.chips -= d; ps.bet = a.sum; state.pot += d; label = `call ${(a.sum/bb).toFixed(2)}bb`; }
+      else if (a.type === ACTION_TYPE.CHECK) { label = "check"; }
+      else if (a.type === ACTION_TYPE.BET) { ps.chips -= a.sum; ps.bet = a.sum; state.pot += a.sum; label = `bet ${(a.sum/bb).toFixed(2)}bb`; }
+      else if (a.type === ACTION_TYPE.ALLIN) { const d = a.sum - ps.bet; ps.chips -= d; ps.bet = a.sum; state.pot += d; label = `ALL-IN ${(a.sum/bb).toFixed(2)}bb`; }
+      else if (a.type === ACTION_TYPE.RAISE) { const d = a.sum - ps.bet; ps.chips -= d; ps.bet = a.sum; state.pot += d; label = `raise para ${(a.sum/bb).toFixed(2)}bb`; }
       else continue;
       ps.lastAction = label;
       steps.push(snapshot(state, `${a.player}: ${label}`));
@@ -5595,8 +5625,8 @@ function computeStats(hands) {
       const acts = rounds[streetKey] || [];
       for (const a of acts) {
         if (a.player !== heroName) continue;
-        if (a.type === 5 || a.type === 7 || a.type === 23) c[streetCounter.aggr]++;       // bet/allin/raise
-        else if (a.type === 0 || a.type === 3) c[streetCounter.pass]++;                    // fold/call
+        if (a.type === ACTION_TYPE.BET || a.type === ACTION_TYPE.ALLIN || a.type === ACTION_TYPE.RAISE) c[streetCounter.aggr]++;       // bet/allin/raise
+        else if (a.type === ACTION_TYPE.FOLD || a.type === ACTION_TYPE.CALL) c[streetCounter.pass]++;                    // fold/call
         // type 4 (check) e outros: ignorados
       }
     }
@@ -5625,7 +5655,7 @@ function computeStats(hands) {
       let priorCallers = 0;
       for (const a of pf1) {
         if (a.player === heroName) break;
-        if (a.type === 3) priorCallers++;  // call
+        if (a.type === ACTION_TYPE.CALL) priorCallers++;  // call
       }
       if (priorCallers > 0) {
         c.sq_opps++;
@@ -5827,7 +5857,7 @@ function computeStats(hands) {
       let heroRaised = false;
       for (const a of flopActs) {
         if (a.player === heroName) {
-          if (a.type === 4 && !heroChecked) { heroChecked = true; continue; }
+          if (a.type === ACTION_TYPE.CHECK && !heroChecked) { heroChecked = true; continue; }
           if (heroChecked && villainBetAfterCheck && AGGR.has(a.type)) { heroRaised = true; break; }
         } else if (heroChecked && AGGR.has(a.type)) {
           villainBetAfterCheck = true;
@@ -5863,7 +5893,7 @@ function computeStats(hands) {
         } else {
           if (pendingBet) {
             c.call_river_ch++;
-            if (a.type === 3) c.call_river_did++;
+            if (a.type === ACTION_TYPE.CALL) c.call_river_did++;
             break;
           }
         }
@@ -5887,9 +5917,9 @@ function computeStats(hands) {
         let bbAction = null;
         for (const a of flopActs) {
           if (a.player !== heroName) continue;
-          if (a.type === 4) continue;  // ignora o check inicial
-          if (a.type === 0) { bbAction = "fold"; break; }
-          if (a.type === 3) { bbAction = "call"; break; }
+          if (a.type === ACTION_TYPE.CHECK) continue;  // ignora o check inicial
+          if (a.type === ACTION_TYPE.FOLD) { bbAction = "fold"; break; }
+          if (a.type === ACTION_TYPE.CALL) { bbAction = "call"; break; }
           if (AGGR.has(a.type)) { bbAction = "raise"; break; }
         }
         if (bbAction === "fold") { c.bb_xf_ch++; c.bb_xf_did++; c.bb_xc_ch++; c.bb_xr_ch++; }
@@ -5952,7 +5982,7 @@ function computeStats(hands) {
       let bbResp = null;
       for (const a of flopActs) {
         if (a.player === heroName) {
-          if (!bbChecked && a.type === 4) { bbChecked = true; continue; }
+          if (!bbChecked && a.type === ACTION_TYPE.CHECK) { bbChecked = true; continue; }
           if (villainBet) { bbResp = a.type; break; }
         } else if (bbChecked && AGGR.has(a.type)) {
           villainBet = true;
@@ -6080,7 +6110,7 @@ function computeStats(hands) {
     for (const st of [2,3,4]) {
       const acts = rounds[st] || rounds[String(st)] || [];
       for (const a of acts) {
-        if (a.player === h.hero_name && a.type === 3) totalCalls++;
+        if (a.player === h.hero_name && a.type === ACTION_TYPE.CALL) totalCalls++;
       }
     }
   }
@@ -7439,7 +7469,7 @@ const DRILL_MAP = {
       let bbChecked = false; let villainBet = false; let bbResp = null;
       for (const a of acts) {
         if (a.player === h.hero_name) {
-          if (!bbChecked && a.type === 4) { bbChecked = true; continue; }
+          if (!bbChecked && a.type === ACTION_TYPE.CHECK) { bbChecked = true; continue; }
           if (villainBet) { bbResp = a.type; break; }
         } else if (bbChecked && AG.has(a.type)) {
           villainBet = true;
@@ -7501,27 +7531,27 @@ const DRILL_MAP = {
   agg_flop: (all) => {
     const AG = new Set([5,7,23]);
     const sub = all.filter(h => h.saw_flop && ((h.rounds || {})["2"] || []).some(a =>
-      a.player === h.hero_name && (AG.has(a.type) || a.type === 3 || a.type === 0)));
+      a.player === h.hero_name && (AG.has(a.type) || a.type === ACTION_TYPE.CALL || a.type === ACTION_TYPE.FOLD)));
     const leaks = sub.filter(h => ((h.rounds || {})["2"] || []).some(a =>
-      a.player === h.hero_name && (a.type === 3 || a.type === 0)));
+      a.player === h.hero_name && (a.type === ACTION_TYPE.CALL || a.type === ACTION_TYPE.FOLD)));
     return { allHands: sub, leakHands: leaks,
       explanation: "Aggression Flop = % de bets+raises do hero sobre (bets+raises+calls+folds) no flop. Vermelho = call ou fold (passivo). Se sua agressão está baixa, são essas mãos que você pode ter sido passivo demais." };
   },
   agg_turn: (all) => {
     const AG = new Set([5,7,23]);
     const sub = all.filter(h => h.saw_turn && ((h.rounds || {})["3"] || []).some(a =>
-      a.player === h.hero_name && (AG.has(a.type) || a.type === 3 || a.type === 0)));
+      a.player === h.hero_name && (AG.has(a.type) || a.type === ACTION_TYPE.CALL || a.type === ACTION_TYPE.FOLD)));
     const leaks = sub.filter(h => ((h.rounds || {})["3"] || []).some(a =>
-      a.player === h.hero_name && (a.type === 3 || a.type === 0)));
+      a.player === h.hero_name && (a.type === ACTION_TYPE.CALL || a.type === ACTION_TYPE.FOLD)));
     return { allHands: sub, leakHands: leaks,
       explanation: "Aggression Turn = idem mas no turn. Vermelho = ações passivas." };
   },
   agg_river: (all) => {
     const AG = new Set([5,7,23]);
     const sub = all.filter(h => h.saw_river && ((h.rounds || {})["4"] || []).some(a =>
-      a.player === h.hero_name && (AG.has(a.type) || a.type === 3 || a.type === 0)));
+      a.player === h.hero_name && (AG.has(a.type) || a.type === ACTION_TYPE.CALL || a.type === ACTION_TYPE.FOLD)));
     const leaks = sub.filter(h => ((h.rounds || {})["4"] || []).some(a =>
-      a.player === h.hero_name && (a.type === 3 || a.type === 0)));
+      a.player === h.hero_name && (a.type === ACTION_TYPE.CALL || a.type === ACTION_TYPE.FOLD)));
     return { allHands: sub, leakHands: leaks,
       explanation: "Aggression River = idem mas no river. Vermelho = ações passivas." };
   },
@@ -7534,7 +7564,7 @@ const DRILL_MAP = {
       let heroChecked = false; let villainBet = false; let heroResp = null;
       for (const a of acts) {
         if (a.player === h.hero_name) {
-          if (!heroChecked && a.type === 4) { heroChecked = true; continue; }
+          if (!heroChecked && a.type === ACTION_TYPE.CHECK) { heroChecked = true; continue; }
           if (villainBet) { heroResp = a.type; break; }
         } else if (heroChecked && AG.has(a.type)) {
           villainBet = true;
@@ -7595,7 +7625,7 @@ const DRILL_MAP = {
       for (const a of acts) {
         if (a.player === h.first_aggressor && AG.has(a.type)) { openerCbet = true; continue; }
         if (openerCbet && a.player === h.hero_name) {
-          if (a.type === 4) continue;  // BB checou inicial
+          if (a.type === ACTION_TYPE.CHECK) continue;  // BB checou inicial
           bbResp = a.type; break;
         }
       }
@@ -8041,7 +8071,7 @@ document.getElementById("btn-clear-ranges").addEventListener("click", () => {
   if (count === 0) { alert("Nenhum range pra limpar."); return; }
   if (!confirm(`Apagar TODOS os ${count} ranges do localStorage?\n\nIsso não apaga os arquivos do servidor — eles vão ser recarregados na próxima vez que abrir o app via http (auto-fetch).`)) return;
   for (const id of Object.keys(RANGES)) delete RANGES[id];
-  try { localStorage.removeItem("leaklab_ranges"); } catch {}
+  try { localStorage.removeItem("leaklab_ranges"); } catch (err) { console.warn("[localStorage] removeItem falhou:", err); }
   updateBadge();
   if (typeof renderRanges === "function") renderRanges();
   if (typeof applyFilters === "function") applyFilters();
@@ -8058,14 +8088,14 @@ document.getElementById("btn-clear-ranges").addEventListener("click", () => {
   if (saved) document.body.classList.add("range-mgmt-mode");
   chk.addEventListener("change", () => {
     document.body.classList.toggle("range-mgmt-mode", chk.checked);
-    try { localStorage.setItem(KEY, chk.checked ? "1" : "0"); } catch {}
+    try { localStorage.setItem(KEY, chk.checked ? "1" : "0"); } catch (err) { console.warn("[range-mgmt] setItem falhou:", err); }
   });
 })();
 
 document.getElementById("btn-reload-ranges").addEventListener("click", async () => {
   // Limpa localStorage + faz fetch novamente do manifest
   for (const id of Object.keys(RANGES)) delete RANGES[id];
-  try { localStorage.removeItem("leaklab_ranges"); } catch {}
+  try { localStorage.removeItem("leaklab_ranges"); } catch (err) { console.warn("[localStorage] removeItem falhou:", err); }
   const before = Date.now();
   const added = await autoLoadRangesFromManifest();
   const dt = Date.now() - before;
@@ -8220,6 +8250,85 @@ function showOnboarding() {
 }
 
 document.getElementById("btn-help").addEventListener("click", showOnboarding);
+
+// [v6.10] Feedback modal — abrir/fechar + send via mailto ou GitHub Issue
+(function initFeedback() {
+  const btn = document.getElementById("btn-feedback");
+  const overlay = document.getElementById("feedback-overlay");
+  const closeBtn = document.getElementById("fb-close");
+  const sendEmail = document.getElementById("fb-send-email");
+  const sendGithub = document.getElementById("fb-send-github");
+  const txt = document.getElementById("fb-text");
+  if (!btn || !overlay) return;
+
+  function openModal() {
+    overlay.style.display = "flex";
+    setTimeout(() => txt && txt.focus(), 50);
+  }
+  function closeModal() { overlay.style.display = "none"; }
+
+  btn.addEventListener("click", openModal);
+  closeBtn.addEventListener("click", closeModal);
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) closeModal(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && overlay.style.display === "flex") closeModal();
+  });
+
+  function getType() {
+    const r = document.querySelector('input[name="fb-type"]:checked');
+    return r ? r.value : "bug";
+  }
+  function getContext() {
+    // Tenta achar a aba ativa
+    let tab = "?";
+    try {
+      const active = document.querySelector("nav.tabs button.active");
+      if (active) tab = active.dataset.tab || active.textContent.trim();
+    } catch (_) { /* fallback defensivo — querySelector raramente falha mas não vale logar */ }
+    const handsCount = (typeof HANDS !== "undefined" && Array.isArray(HANDS)) ? HANDS.length : 0;
+    const rangesCount = (typeof RANGES !== "undefined") ? Object.keys(RANGES).length : 0;
+    return [
+      `App: LeakLab v6.10`,
+      `Aba: ${tab}`,
+      `Mãos carregadas: ${handsCount}`,
+      `Ranges: ${rangesCount}`,
+      `User-Agent: ${navigator.userAgent.slice(0, 120)}`,
+      `Data: ${new Date().toISOString()}`,
+    ].join("\n");
+  }
+
+  sendEmail.addEventListener("click", () => {
+    const type = getType();
+    const desc = (txt.value || "").trim() || "(sem descrição)";
+    const typeLabel = { bug: "Bug", sugestao: "Sugestão", pergunta: "Pergunta" }[type] || "Feedback";
+    const subject = encodeURIComponent(`[LeakLab] ${typeLabel}: ${desc.slice(0, 60)}${desc.length > 60 ? '…' : ''}`);
+    const body = encodeURIComponent(
+      `${desc}\n\n` +
+      `---\n` +
+      `📸 Anexe um print neste email (botão de anexar do seu app de email).\n\n` +
+      `--- contexto técnico (auto) ---\n` +
+      getContext()
+    );
+    location.href = `mailto:poker.mtts@gmail.com?subject=${subject}&body=${body}`;
+  });
+
+  sendGithub.addEventListener("click", () => {
+    const type = getType();
+    const desc = (txt.value || "").trim() || "(descreva aqui)";
+    const labelMap = { bug: "bug", sugestao: "enhancement", pergunta: "question" };
+    const titlePrefix = { bug: "🐛", sugestao: "💡", pergunta: "❓" }[type] || "💬";
+    const title = encodeURIComponent(`${titlePrefix} ${desc.slice(0, 70)}${desc.length > 70 ? '…' : ''}`);
+    const body = encodeURIComponent(
+      `${desc}\n\n` +
+      `**Print/Screenshot:** _arraste a imagem aqui ou cole (Ctrl+V)_\n\n` +
+      `---\n\n` +
+      `<details><summary>contexto técnico (auto)</summary>\n\n\`\`\`\n${getContext()}\n\`\`\`\n</details>`
+    );
+    const labels = encodeURIComponent(labelMap[type] || "");
+    const url = `https://github.com/davidsonpqdt/leaklab/issues/new?title=${title}&body=${body}&labels=${labels}`;
+    window.open(url, "_blank", "noopener");
+  });
+})();
 
 // Search panel listeners
 document.getElementById("search-go")?.addEventListener("click", runSearch);
