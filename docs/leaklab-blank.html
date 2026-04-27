@@ -5589,6 +5589,14 @@ function computeStats(hands) {
     river_bet_ch: 0, river_bet_did: 0,
     // Call river (quando vilão betou river)
     call_river_ch: 0, call_river_did: 0,
+    // [v6.11] Fold to Cbet GENÉRICA (qualquer pos não-PFA que defendeu pre).
+    // Diferente de bb_xf (que é só BB). Aqui inclui CO/HJ/MP/etc IP ou OOP.
+    cbet_fold_ch: 0, cbet_fold_did: 0,           // total (IP + OOP combinados)
+    cbet_fold_ip_ch: 0, cbet_fold_ip_did: 0,     // hero IP vs PFA cbetando
+    cbet_fold_oop_ch: 0, cbet_fold_oop_did: 0,   // hero OOP vs PFA cbetando (excluindo BB já em bb_xf)
+    // [v6.11] Donk Bet — hero OOP não-PFA, callou pre, apostou flop ANTES do PFA agir.
+    // Distinto de probe (probe = aposta após PFA checked back).
+    donk_flop_ch: 0, donk_flop_did: 0,
     // BB defense pos-flop (BB defendeu preflop, foi pro flop)
     // Quando opener cbetou flop, o que BB fez? XF / XC / XR
     bb_xf_ch: 0, bb_xf_did: 0,
@@ -5928,6 +5936,68 @@ function computeStats(hands) {
       }
     }
 
+    // [v6.11] Fold to Cbet GENÉRICO — hero não-PFA defendeu pre, opener cbetou flop, hero respondeu.
+    // Cobre TODAS posições (CO/HJ/MP/EP/SB/BB IP ou OOP), substitui o limite "BB only" do bb_xf.
+    if (!h.is_pfa && h.faced === "raised" && h.hero_action === "call" &&
+        h.saw_flop && h.first_aggressor) {
+      const opener = h.first_aggressor;
+      const flopActs = rounds[2] || [];
+      // Opener cbetou primeiro? (mesma lógica de bb_xf)
+      let openerCbetFirst = false;
+      for (const a of flopActs) {
+        if (a.player === opener && AGGR.has(a.type)) { openerCbetFirst = true; break; }
+        if (a.player !== opener && AGGR.has(a.type)) break;  // alguém betou antes
+      }
+      if (openerCbetFirst) {
+        // Hero respondeu como? Procura primeira ação dele DEPOIS do cbet do opener.
+        let cbetSeen = false;
+        let heroResponse = null;
+        for (const a of flopActs) {
+          if (a.player === opener && AGGR.has(a.type)) { cbetSeen = true; continue; }
+          if (!cbetSeen) continue;
+          if (a.player !== heroName) continue;
+          if (a.type === ACTION_TYPE.FOLD) { heroResponse = "fold"; break; }
+          if (a.type === ACTION_TYPE.CALL) { heroResponse = "call"; break; }
+          if (AGGR.has(a.type)) { heroResponse = "raise"; break; }
+        }
+        if (heroResponse !== null) {
+          c.cbet_fold_ch++;
+          if (heroResponse === "fold") c.cbet_fold_did++;
+          // Split IP/OOP
+          if (h.pos_relative_to_pfa === "ip") {
+            c.cbet_fold_ip_ch++;
+            if (heroResponse === "fold") c.cbet_fold_ip_did++;
+          } else if (h.pos_relative_to_pfa === "oop") {
+            c.cbet_fold_oop_ch++;
+            if (heroResponse === "fold") c.cbet_fold_oop_did++;
+          }
+        }
+      }
+    }
+
+    // [v6.11] Donk Bet — hero OOP não-PFA, callou pre, apostou flop ANTES do PFA agir.
+    // Distinto de Probe Bet (probe = OOP aposta DEPOIS do PFA checked back).
+    if (!h.is_pfa && h.faced === "raised" && h.hero_action === "call" &&
+        h.saw_flop && h.first_aggressor && h.pos_relative_to_pfa === "oop") {
+      const opener = h.first_aggressor;
+      const flopActs = rounds[2] || [];
+      // Hero é primeiro a agir no flop? Aposta antes do opener?
+      let heroFirstActionType = null;
+      let openerActedFirst = false;
+      for (const a of flopActs) {
+        if (a.player === opener) { openerActedFirst = (heroFirstActionType === null); break; }
+        if (a.player === heroName && heroFirstActionType === null) {
+          heroFirstActionType = a.type;
+          // Continua loop pra ver se opener agiu antes (não deveria — opener é PFA atrás)
+        }
+      }
+      // Donk = hero foi primeiro a apostar no flop, ANTES do opener tomar qualquer ação
+      if (heroFirstActionType !== null && !openerActedFirst) {
+        c.donk_flop_ch++;
+        if (AGGR.has(heroFirstActionType)) c.donk_flop_did++;
+      }
+    }
+
     // Probe turn: BB defendeu, opener checked back flop, BB bets turn
     if (h.pos === "BB" && h.faced === "raised" && h.hero_action === "call" &&
         h.saw_turn && h.first_aggressor) {
@@ -6062,6 +6132,12 @@ function computeStats(hands) {
   s["bb_xf"] = { value: P(c.bb_xf_did, c.bb_xf_ch), n: c.bb_xf_ch };
   s["bb_xc"] = { value: P(c.bb_xc_did, c.bb_xc_ch), n: c.bb_xc_ch };
   s["bb_xr"] = { value: P(c.bb_xr_did, c.bb_xr_ch), n: c.bb_xr_ch };
+  // [v6.11] Fold to Cbet (genérico, qualquer pos não-PFA) + IP/OOP split
+  s["cbet_fold"] = { value: P(c.cbet_fold_did, c.cbet_fold_ch), n: c.cbet_fold_ch };
+  s["cbet_fold_ip"] = { value: P(c.cbet_fold_ip_did, c.cbet_fold_ip_ch), n: c.cbet_fold_ip_ch };
+  s["cbet_fold_oop"] = { value: P(c.cbet_fold_oop_did, c.cbet_fold_oop_ch), n: c.cbet_fold_oop_ch };
+  // [v6.11] Donk Bet flop (hero OOP não-PFA aposta antes do PFA agir)
+  s["donk_flop"] = { value: P(c.donk_flop_did, c.donk_flop_ch), n: c.donk_flop_ch };
   // Probe turn/river
   s["prob_turn"] = { value: P(c.prob_turn_did, c.prob_turn_ch), n: c.prob_turn_ch };
   s["bb_prob_river"] = { value: P(c.bb_prob_river_did, c.bb_prob_river_ch), n: c.bb_prob_river_ch };
@@ -6330,6 +6406,10 @@ const STAT_TOOLTIPS = {
   bb_xf: "BB Check-Fold = você BB defendeu, opener cbetou, você foldou.",
   bb_xc: "BB Check-Call vs cbet.",
   bb_xr: "BB Check-Raise vs cbet.",
+  cbet_fold: "Fold to Cbet (qualquer pos) = você defendeu pre, PFA cbetou flop, você foldou. ~50-55% balanceado. Mais alto = exploitable (vilão pode bluff cbet).",
+  cbet_fold_ip: "Fold to Cbet IP. Tipicamente menor que OOP (em IP você pode floatear).",
+  cbet_fold_oop: "Fold to Cbet OOP (excluindo BB que tem stat própria). Tipicamente 50-60%.",
+  donk_flop: "Donk Bet Flop = você OOP, callou pre, apostou no flop ANTES do PFA agir. Diferente de Probe (probe = depois de PFA check). Geralmente <10% (donk demais = leak).",
   prob_turn: "Probe turn = BB defendeu, opener checou flop atrás, você apostou turn primeiro.",
   bb_prob_river: "Probe river — similar ao turn mas no river após turn checked back.",
   agg_flop: "AFq flop = (bets+raises)/(bets+raises+calls+folds). Exclui checks. ~50% = balanceado.",
@@ -6376,6 +6456,10 @@ const STAT_FRIENDLY = {
   call_river: { name: "Call river", high: "calldown river muito leve — pague menos hero calls", low: "fold river demais — exploitable", action: "ver call rivers" },
   bb_f2_steal: { name: "BB f2 Steal", high: "fold BB vs steal demais — exploitable, defenda mais wide", low: "defende BB demais — calls leves perdem", action: "ver BB defense" },
   bb_xf: { name: "BB X/F vs cbet", high: "check-fold BB demais vs cbet — defenda mais", low: "check-fold pouco", action: "ver BB X/F" },
+  cbet_fold: { name: "Fold to Cbet", high: "fold demais vs cbet — vilão pode bluff cbet impune", low: "fold pouco vs cbet — chama com mãos fracas demais", action: "ver fold to cbet" },
+  cbet_fold_ip: { name: "Fold to Cbet IP", high: "fold demais IP — float mais", low: "fold pouco IP", action: "ver fold to cbet IP" },
+  cbet_fold_oop: { name: "Fold to Cbet OOP", high: "fold demais OOP", low: "fold pouco OOP", action: "ver fold to cbet OOP" },
+  donk_flop: { name: "Donk Bet Flop", high: "donk demais — geralmente leak (revela mão)", low: "ok / nunca donk", action: "ver donk bets" },
   prob_turn: { name: "Probe turn", high: "probe turn demais", low: "probe turn pouco — está deixando cbet free", action: "ver probes turn" },
   agg_flop: { name: "Aggression flop", high: "muito agressivo no flop", low: "passivo no flop — está pagando ao invés de raise", action: "ver flop play" },
   agg_turn: { name: "Aggression turn", high: "muito agressivo no turn", low: "passivo no turn", action: "ver turn play" },

@@ -5,153 +5,673 @@
     "geral": {
       "title": "General",
       "stats": {
-        "vpip": {"label": "VPIP", "min": 26, "ideal": 28, "max": 30, "unit": "%"},
-        "pfr": {"label": "PFR", "min": 20, "ideal": 22, "max": 24, "unit": "%"},
-        "steal_total": {"label": "Steal % (CO+BTN+SB)", "min": 35, "ideal": 40, "max": 45, "unit": "%"},
-        "limp": {"label": "Limp (open-limp)", "min": 0, "ideal": 1, "max": 3, "unit": "%"},
-        "iso_raise": {"label": "Iso-raise vs limp", "min": 20, "ideal": 30, "max": 50, "unit": "%"},
-        "af": {"label": "AF (Aggression Factor)", "min": 1.5, "ideal": 2.5, "max": 4, "unit": ""}
+        "vpip": {
+          "label": "VPIP",
+          "min": 26,
+          "ideal": 28,
+          "max": 30,
+          "unit": "%"
+        },
+        "pfr": {
+          "label": "PFR",
+          "min": 20,
+          "ideal": 22,
+          "max": 24,
+          "unit": "%"
+        },
+        "steal_total": {
+          "label": "Steal % (CO+BTN+SB)",
+          "min": 35,
+          "ideal": 40,
+          "max": 45,
+          "unit": "%"
+        },
+        "limp": {
+          "label": "Limp (open-limp)",
+          "min": 0,
+          "ideal": 1,
+          "max": 3,
+          "unit": "%"
+        },
+        "iso_raise": {
+          "label": "Iso-raise vs limp",
+          "min": 20,
+          "ideal": 30,
+          "max": 50,
+          "unit": "%"
+        },
+        "af": {
+          "label": "AF (Aggression Factor)",
+          "min": 1.5,
+          "ideal": 2.5,
+          "max": 4,
+          "unit": ""
+        }
       }
     },
     "preflop_rfi": {
       "title": "Pre-Flop — RFI by Position",
       "stats": {
-        "rfi_EP": {"label": "RFI EP", "min": 17, "ideal": 19, "max": 20, "unit": "%"},
-        "rfi_MP": {"label": "RFI MP", "min": 23, "ideal": 25, "max": 26, "unit": "%"},
-        "rfi_HJ": {"label": "RFI HJ", "min": 27, "ideal": 29, "max": 32, "unit": "%"},
-        "rfi_CO": {"label": "RFI CO", "min": 34, "ideal": 37, "max": 38, "unit": "%"},
-        "rfi_BTN": {"label": "RFI BTN", "min": 48, "ideal": 50, "max": 55, "unit": "%"},
-        "rfi_SB": {"label": "RFI SB", "min": 28, "ideal": 30, "max": 33, "unit": "%"}
+        "rfi_EP": {
+          "label": "RFI EP",
+          "min": 17,
+          "ideal": 19,
+          "max": 20,
+          "unit": "%"
+        },
+        "rfi_MP": {
+          "label": "RFI MP",
+          "min": 23,
+          "ideal": 25,
+          "max": 26,
+          "unit": "%"
+        },
+        "rfi_HJ": {
+          "label": "RFI HJ",
+          "min": 27,
+          "ideal": 29,
+          "max": 32,
+          "unit": "%"
+        },
+        "rfi_CO": {
+          "label": "RFI CO",
+          "min": 34,
+          "ideal": 37,
+          "max": 38,
+          "unit": "%"
+        },
+        "rfi_BTN": {
+          "label": "RFI BTN",
+          "min": 48,
+          "ideal": 50,
+          "max": 55,
+          "unit": "%"
+        },
+        "rfi_SB": {
+          "label": "RFI SB",
+          "min": 28,
+          "ideal": 30,
+          "max": 33,
+          "unit": "%"
+        }
       }
     },
     "preflop_flat": {
       "title": "Pre-Flop — Flat by Position",
       "stats": {
-        "flat_ip_EP": {"label": "Flat IP EP", "min": 4, "ideal": 5, "max": 6, "unit": "%"},
-        "flat_ip_MP": {"label": "Flat IP MP", "min": 5, "ideal": 6, "max": 7, "unit": "%"},
-        "flat_ip_HJ": {"label": "Flat IP HJ", "min": 7, "ideal": 8, "max": 9, "unit": "%"},
-        "flat_ip_CO": {"label": "Flat IP CO", "min": 10, "ideal": 12, "max": 14, "unit": "%"},
-        "flat_ip_BTN": {"label": "Flat IP BTN", "min": 14, "ideal": 16, "max": 18, "unit": "%"},
-        "flat_oop_SB": {"label": "Flat OOP SB", "min": 11, "ideal": 13, "max": 15, "unit": "%"},
-        "flat_oop_BB": {"label": "Flat OOP BB", "min": 50, "ideal": 53, "max": 60, "unit": "%"}
+        "flat_ip_EP": {
+          "label": "Flat IP EP",
+          "min": 4,
+          "ideal": 5,
+          "max": 6,
+          "unit": "%"
+        },
+        "flat_ip_MP": {
+          "label": "Flat IP MP",
+          "min": 5,
+          "ideal": 6,
+          "max": 7,
+          "unit": "%"
+        },
+        "flat_ip_HJ": {
+          "label": "Flat IP HJ",
+          "min": 7,
+          "ideal": 8,
+          "max": 9,
+          "unit": "%"
+        },
+        "flat_ip_CO": {
+          "label": "Flat IP CO",
+          "min": 10,
+          "ideal": 12,
+          "max": 14,
+          "unit": "%"
+        },
+        "flat_ip_BTN": {
+          "label": "Flat IP BTN",
+          "min": 14,
+          "ideal": 16,
+          "max": 18,
+          "unit": "%"
+        },
+        "flat_oop_SB": {
+          "label": "Flat OOP SB",
+          "min": 11,
+          "ideal": 13,
+          "max": 15,
+          "unit": "%"
+        },
+        "flat_oop_BB": {
+          "label": "Flat OOP BB",
+          "min": 50,
+          "ideal": 53,
+          "max": 60,
+          "unit": "%"
+        }
       }
     },
     "preflop_3bet_pos": {
       "title": "Pre-Flop — 3bet by Position (non-allin)",
       "stats": {
-        "3bet_nai_EP": {"label": "3bet nai EP", "min": 2, "ideal": 3, "max": 4, "unit": "%"},
-        "3bet_nai_MP": {"label": "3bet nai MP", "min": 3, "ideal": 4, "max": 5, "unit": "%"},
-        "3bet_nai_HJ": {"label": "3bet nai HJ", "min": 4, "ideal": 5, "max": 6, "unit": "%"},
-        "3bet_nai_CO": {"label": "3bet nai CO", "min": 5, "ideal": 6, "max": 7, "unit": "%"},
-        "3bet_nai_BTN": {"label": "3bet nai BTN", "min": 7, "ideal": 7, "max": 9, "unit": "%"},
-        "3bet_nai_SB": {"label": "3bet nai SB", "min": 7, "ideal": 7, "max": 9, "unit": "%"},
-        "3bet_nai_BB": {"label": "3bet nai BB", "min": 8, "ideal": 9, "max": 10, "unit": "%"}
+        "3bet_nai_EP": {
+          "label": "3bet nai EP",
+          "min": 2,
+          "ideal": 3,
+          "max": 4,
+          "unit": "%"
+        },
+        "3bet_nai_MP": {
+          "label": "3bet nai MP",
+          "min": 3,
+          "ideal": 4,
+          "max": 5,
+          "unit": "%"
+        },
+        "3bet_nai_HJ": {
+          "label": "3bet nai HJ",
+          "min": 4,
+          "ideal": 5,
+          "max": 6,
+          "unit": "%"
+        },
+        "3bet_nai_CO": {
+          "label": "3bet nai CO",
+          "min": 5,
+          "ideal": 6,
+          "max": 7,
+          "unit": "%"
+        },
+        "3bet_nai_BTN": {
+          "label": "3bet nai BTN",
+          "min": 7,
+          "ideal": 7,
+          "max": 9,
+          "unit": "%"
+        },
+        "3bet_nai_SB": {
+          "label": "3bet nai SB",
+          "min": 7,
+          "ideal": 7,
+          "max": 9,
+          "unit": "%"
+        },
+        "3bet_nai_BB": {
+          "label": "3bet nai BB",
+          "min": 8,
+          "ideal": 9,
+          "max": 10,
+          "unit": "%"
+        }
       }
     },
     "preflop_3bet_total": {
       "title": "Pre-Flop — 3bet/F3bet/4bet totals",
       "stats": {
-        "3bet_tot_nai": {"label": "3Bet Total (nai)", "min": 5, "ideal": 6, "max": 7, "unit": "%"},
-        "3bet_tot_ai": {"label": "3Bet Total (ai)", "min": 3, "ideal": 4, "max": 5, "unit": "%"},
-        "3bet_tot": {"label": "3Bet Total (tot)", "min": 8, "ideal": 9, "max": 10, "unit": "%"},
-        "f3bet_tot_nai": {"label": "F3bet Total (nai)", "min": 50, "ideal": 55, "max": 63, "unit": "%"},
-        "f3bet_tot_ai": {"label": "F3bet Total (ai)", "min": 50, "ideal": 55, "max": 63, "unit": "%"},
-        "f3bet_tot": {"label": "F3bet Total (tot)", "min": 47, "ideal": 55, "max": 63, "unit": "%"},
-        "f3bet_blind_nai": {"label": "F3bet vs blind (nai)", "min": 50, "ideal": 55, "max": 63, "unit": "%"},
-        "f3bet_blind_ai": {"label": "F3bet vs blind (ai)", "min": 50, "ideal": 55, "max": 63, "unit": "%"},
-        "f3bet_blind_tot": {"label": "F3bet vs blind (tot)", "min": 47, "ideal": 55, "max": 63, "unit": "%"},
-        "4bet_tot_nai": {"label": "4bet Total (nai)", "min": 3, "ideal": 4, "max": 6, "unit": "%"},
-        "4bet_tot_ai": {"label": "4bet Total (ai)", "min": 10, "ideal": 12, "max": 14, "unit": "%"},
-        "4bet_tot": {"label": "4bet Total (tot)", "min": 14, "ideal": 16, "max": 18, "unit": "%"}
+        "3bet_tot_nai": {
+          "label": "3Bet Total (nai)",
+          "min": 5,
+          "ideal": 6,
+          "max": 7,
+          "unit": "%"
+        },
+        "3bet_tot_ai": {
+          "label": "3Bet Total (ai)",
+          "min": 3,
+          "ideal": 4,
+          "max": 5,
+          "unit": "%"
+        },
+        "3bet_tot": {
+          "label": "3Bet Total (tot)",
+          "min": 8,
+          "ideal": 9,
+          "max": 10,
+          "unit": "%"
+        },
+        "f3bet_tot_nai": {
+          "label": "F3bet Total (nai)",
+          "min": 50,
+          "ideal": 55,
+          "max": 63,
+          "unit": "%"
+        },
+        "f3bet_tot_ai": {
+          "label": "F3bet Total (ai)",
+          "min": 50,
+          "ideal": 55,
+          "max": 63,
+          "unit": "%"
+        },
+        "f3bet_tot": {
+          "label": "F3bet Total (tot)",
+          "min": 47,
+          "ideal": 55,
+          "max": 63,
+          "unit": "%"
+        },
+        "f3bet_blind_nai": {
+          "label": "F3bet vs blind (nai)",
+          "min": 50,
+          "ideal": 55,
+          "max": 63,
+          "unit": "%"
+        },
+        "f3bet_blind_ai": {
+          "label": "F3bet vs blind (ai)",
+          "min": 50,
+          "ideal": 55,
+          "max": 63,
+          "unit": "%"
+        },
+        "f3bet_blind_tot": {
+          "label": "F3bet vs blind (tot)",
+          "min": 47,
+          "ideal": 55,
+          "max": 63,
+          "unit": "%"
+        },
+        "4bet_tot_nai": {
+          "label": "4bet Total (nai)",
+          "min": 3,
+          "ideal": 4,
+          "max": 6,
+          "unit": "%"
+        },
+        "4bet_tot_ai": {
+          "label": "4bet Total (ai)",
+          "min": 10,
+          "ideal": 12,
+          "max": 14,
+          "unit": "%"
+        },
+        "4bet_tot": {
+          "label": "4bet Total (tot)",
+          "min": 14,
+          "ideal": 16,
+          "max": 18,
+          "unit": "%"
+        }
       }
     },
     "preflop_squeeze": {
       "title": "Pre-Flop — Squeeze",
       "stats": {
-        "squeeze_nai": {"label": "Squeeze (nai)", "min": 4.5, "ideal": 5, "max": 7, "unit": "%"},
-        "squeeze_ai": {"label": "Squeeze (ai)", "min": 4, "ideal": 4.5, "max": 5, "unit": "%"},
-        "squeeze_tot": {"label": "Squeeze (tot)", "min": 8, "ideal": 9, "max": 12, "unit": "%"},
-        "squeeze_ip_nai": {"label": "Squeeze IP (nai)", "min": 4.5, "ideal": 5, "max": 6.5, "unit": "%"},
-        "squeeze_ip_ai": {"label": "Squeeze IP (ai)", "min": 2.5, "ideal": 3, "max": 4, "unit": "%"},
-        "squeeze_ip_tot": {"label": "Squeeze IP (tot)", "min": 8, "ideal": 7, "max": 12, "unit": "%"},
-        "squeeze_oop_nai": {"label": "Squeeze OOP (nai)", "min": 4, "ideal": 5, "max": 6, "unit": "%"},
-        "squeeze_oop_ai": {"label": "Squeeze OOP (ai)", "min": 4, "ideal": 4.5, "max": 5.5, "unit": "%"},
-        "squeeze_oop_tot": {"label": "Squeeze OOP (tot)", "min": 8, "ideal": 9, "max": 12, "unit": "%"}
+        "squeeze_nai": {
+          "label": "Squeeze (nai)",
+          "min": 4.5,
+          "ideal": 5,
+          "max": 7,
+          "unit": "%"
+        },
+        "squeeze_ai": {
+          "label": "Squeeze (ai)",
+          "min": 4,
+          "ideal": 4.5,
+          "max": 5,
+          "unit": "%"
+        },
+        "squeeze_tot": {
+          "label": "Squeeze (tot)",
+          "min": 8,
+          "ideal": 9,
+          "max": 12,
+          "unit": "%"
+        },
+        "squeeze_ip_nai": {
+          "label": "Squeeze IP (nai)",
+          "min": 4.5,
+          "ideal": 5,
+          "max": 6.5,
+          "unit": "%"
+        },
+        "squeeze_ip_ai": {
+          "label": "Squeeze IP (ai)",
+          "min": 2.5,
+          "ideal": 3,
+          "max": 4,
+          "unit": "%"
+        },
+        "squeeze_ip_tot": {
+          "label": "Squeeze IP (tot)",
+          "min": 8,
+          "ideal": 7,
+          "max": 12,
+          "unit": "%"
+        },
+        "squeeze_oop_nai": {
+          "label": "Squeeze OOP (nai)",
+          "min": 4,
+          "ideal": 5,
+          "max": 6,
+          "unit": "%"
+        },
+        "squeeze_oop_ai": {
+          "label": "Squeeze OOP (ai)",
+          "min": 4,
+          "ideal": 4.5,
+          "max": 5.5,
+          "unit": "%"
+        },
+        "squeeze_oop_tot": {
+          "label": "Squeeze OOP (tot)",
+          "min": 8,
+          "ideal": 9,
+          "max": 12,
+          "unit": "%"
+        }
       }
     },
     "preflop_3bet_oa": {
       "title": "Pre-Flop — 3bet vs Open Allin",
       "stats": {
-        "3bet_ip_no_btn_oa": {"label": "3bet IP (no BU) OA", "min": 6, "ideal": 7, "max": 8, "unit": "%"},
-        "3bet_btn_oa": {"label": "3bet BTN OA", "min": 6.5, "ideal": 7, "max": 8, "unit": "%"},
-        "3bet_sb_oa": {"label": "3bet SB OA", "min": 6.5, "ideal": 7, "max": 9, "unit": "%"},
-        "3bet_bb_oa": {"label": "3bet BB OA", "min": 7, "ideal": 8, "max": 10, "unit": "%"},
-        "3bet_sb_lp_oa": {"label": "3bet SB vs LP OA", "min": 9, "ideal": 12, "max": 14, "unit": "%"},
-        "3bet_bb_lp_oa": {"label": "3bet BB vs LP OA", "min": 10, "ideal": 14, "max": 18, "unit": "%"}
+        "3bet_ip_no_btn_oa": {
+          "label": "3bet IP (no BU) OA",
+          "min": 6,
+          "ideal": 7,
+          "max": 8,
+          "unit": "%"
+        },
+        "3bet_btn_oa": {
+          "label": "3bet BTN OA",
+          "min": 6.5,
+          "ideal": 7,
+          "max": 8,
+          "unit": "%"
+        },
+        "3bet_sb_oa": {
+          "label": "3bet SB OA",
+          "min": 6.5,
+          "ideal": 7,
+          "max": 9,
+          "unit": "%"
+        },
+        "3bet_bb_oa": {
+          "label": "3bet BB OA",
+          "min": 7,
+          "ideal": 8,
+          "max": 10,
+          "unit": "%"
+        },
+        "3bet_sb_lp_oa": {
+          "label": "3bet SB vs LP OA",
+          "min": 9,
+          "ideal": 12,
+          "max": 14,
+          "unit": "%"
+        },
+        "3bet_bb_lp_oa": {
+          "label": "3bet BB vs LP OA",
+          "min": 10,
+          "ideal": 14,
+          "max": 18,
+          "unit": "%"
+        }
       }
     },
     "postflop_ip": {
       "title": "Post-Flop IP",
       "stats": {
-        "cbet_ip_vs_bb": {"label": "Cbet IP vs BB", "min": 85, "ideal": 88, "max": 95, "unit": "%"},
-        "bet_turn_ip": {"label": "+ bet turn (IP)", "min": 60, "ideal": 65, "max": 70, "unit": "%"},
-        "bet_river_ip": {"label": "+ bet river (IP)", "min": 50, "ideal": 55, "max": 59, "unit": "%"},
-        "bet_vs_missed": {"label": "bet vs missed", "min": 65, "ideal": 70, "max": 80, "unit": "%"}
+        "cbet_ip_vs_bb": {
+          "label": "Cbet IP vs BB",
+          "min": 85,
+          "ideal": 88,
+          "max": 95,
+          "unit": "%"
+        },
+        "bet_turn_ip": {
+          "label": "+ bet turn (IP)",
+          "min": 60,
+          "ideal": 65,
+          "max": 70,
+          "unit": "%"
+        },
+        "bet_river_ip": {
+          "label": "+ bet river (IP)",
+          "min": 50,
+          "ideal": 55,
+          "max": 59,
+          "unit": "%"
+        },
+        "bet_vs_missed": {
+          "label": "bet vs missed",
+          "min": 65,
+          "ideal": 70,
+          "max": 80,
+          "unit": "%"
+        },
+        "cbet_fold_ip": {
+          "label": "Fold vs Cbet IP",
+          "min": 38,
+          "ideal": 45,
+          "max": 52,
+          "unit": "%"
+        }
       }
     },
     "postflop_oop": {
       "title": "Post-Flop OOP",
       "stats": {
-        "cbet_oop": {"label": "Cbet OOP", "min": 35, "ideal": 40, "max": 55, "unit": "%"},
-        "bet_turn_oop": {"label": "+ bet turn (OOP)", "min": 52, "ideal": 55, "max": 65, "unit": "%"},
-        "bet_river_oop": {"label": "+ bet river (OOP)", "min": 48, "ideal": 50, "max": 52, "unit": "%"},
-        "check_raise": {"label": "check-raise", "min": 20, "ideal": 22, "max": 25, "unit": "%"}
+        "cbet_oop": {
+          "label": "Cbet OOP",
+          "min": 35,
+          "ideal": 40,
+          "max": 55,
+          "unit": "%"
+        },
+        "bet_turn_oop": {
+          "label": "+ bet turn (OOP)",
+          "min": 52,
+          "ideal": 55,
+          "max": 65,
+          "unit": "%"
+        },
+        "bet_river_oop": {
+          "label": "+ bet river (OOP)",
+          "min": 48,
+          "ideal": 50,
+          "max": 52,
+          "unit": "%"
+        },
+        "check_raise": {
+          "label": "check-raise",
+          "min": 20,
+          "ideal": 22,
+          "max": 25,
+          "unit": "%"
+        },
+        "cbet_fold_oop": {
+          "label": "Fold vs Cbet OOP",
+          "min": 45,
+          "ideal": 52,
+          "max": 60,
+          "unit": "%"
+        },
+        "donk_flop": {
+          "label": "Donk Bet Flop",
+          "min": 0,
+          "ideal": 3,
+          "max": 8,
+          "unit": "%"
+        }
       }
     },
     "river": {
       "title": "River",
       "stats": {
-        "river_bet": {"label": "River bet", "min": 40, "ideal": 45, "max": 50, "unit": "%"},
-        "call_river": {"label": "Call river", "min": 30, "ideal": 32, "max": 35, "unit": "%"}
+        "river_bet": {
+          "label": "River bet",
+          "min": 40,
+          "ideal": 45,
+          "max": 50,
+          "unit": "%"
+        },
+        "call_river": {
+          "label": "Call river",
+          "min": 30,
+          "ideal": 32,
+          "max": 35,
+          "unit": "%"
+        }
       }
     },
     "bb_defense": {
       "title": "BB Defense",
       "stats": {
-        "bb_f2_steal": {"label": "BB F2 steal", "min": 15, "ideal": 22, "max": 25, "unit": "%"},
-        "bb_xf": {"label": "BB XF", "min": 38, "ideal": 40, "max": 42, "unit": "%"},
-        "bb_xc": {"label": "BB XC", "min": 38, "ideal": 40, "max": 46, "unit": "%"},
-        "bb_xr": {"label": "BB XR", "min": 19, "ideal": 20, "max": 24, "unit": "%"},
-        "prob_turn": {"label": "Prob turn", "min": 60, "ideal": 65, "max": 70, "unit": "%"},
-        "bb_prob_river": {"label": "BB prob river", "min": 55, "ideal": 60, "max": 62, "unit": "%"}
+        "bb_f2_steal": {
+          "label": "BB F2 steal",
+          "min": 15,
+          "ideal": 22,
+          "max": 25,
+          "unit": "%"
+        },
+        "bb_xf": {
+          "label": "BB XF",
+          "min": 38,
+          "ideal": 40,
+          "max": 42,
+          "unit": "%"
+        },
+        "bb_xc": {
+          "label": "BB XC",
+          "min": 38,
+          "ideal": 40,
+          "max": 46,
+          "unit": "%"
+        },
+        "bb_xr": {
+          "label": "BB XR",
+          "min": 19,
+          "ideal": 20,
+          "max": 24,
+          "unit": "%"
+        },
+        "prob_turn": {
+          "label": "Prob turn",
+          "min": 60,
+          "ideal": 65,
+          "max": 70,
+          "unit": "%"
+        },
+        "bb_prob_river": {
+          "label": "BB prob river",
+          "min": 55,
+          "ideal": 60,
+          "max": 62,
+          "unit": "%"
+        }
       }
     },
     "advanced": {
       "title": "Advanced",
       "stats": {
-        "agg_flop": {"label": "Aggression F flop", "min": 50, "ideal": 52, "max": 54, "unit": "%"},
-        "agg_turn": {"label": "Aggression F turn", "min": 40, "ideal": 42, "max": 43, "unit": "%"},
-        "agg_river": {"label": "Aggression F river", "min": 40, "ideal": 42, "max": 43, "unit": "%"}
+        "agg_flop": {
+          "label": "Aggression F flop",
+          "min": 50,
+          "ideal": 52,
+          "max": 54,
+          "unit": "%"
+        },
+        "agg_turn": {
+          "label": "Aggression F turn",
+          "min": 40,
+          "ideal": 42,
+          "max": 43,
+          "unit": "%"
+        },
+        "agg_river": {
+          "label": "Aggression F river",
+          "min": 40,
+          "ideal": 42,
+          "max": 43,
+          "unit": "%"
+        },
+        "cbet_fold": {
+          "label": "Fold vs Cbet (total)",
+          "min": 45,
+          "ideal": 50,
+          "max": 55,
+          "unit": "%"
+        }
       }
     },
     "showdown": {
       "title": "Showdown",
       "stats": {
-        "saw_flop": {"label": "Saw Flop %", "min": 22, "ideal": 25, "max": 30, "unit": "%"},
-        "wwsf": {"label": "WWSF (Won When Saw Flop)", "min": 45, "ideal": 50, "max": 54, "unit": "%"},
-        "wtsd": {"label": "WTSD (Went To Showdown)", "min": 22, "ideal": 25, "max": 28, "unit": "%"},
-        "won_sd": {"label": "W$SD (Won at Showdown)", "min": 50, "ideal": 54, "max": 58, "unit": "%"}
+        "saw_flop": {
+          "label": "Saw Flop %",
+          "min": 22,
+          "ideal": 25,
+          "max": 30,
+          "unit": "%"
+        },
+        "wwsf": {
+          "label": "WWSF (Won When Saw Flop)",
+          "min": 45,
+          "ideal": 50,
+          "max": 54,
+          "unit": "%"
+        },
+        "wtsd": {
+          "label": "WTSD (Went To Showdown)",
+          "min": 22,
+          "ideal": 25,
+          "max": 28,
+          "unit": "%"
+        },
+        "won_sd": {
+          "label": "W$SD (Won at Showdown)",
+          "min": 50,
+          "ideal": 54,
+          "max": 58,
+          "unit": "%"
+        }
       }
     },
     "blind_war": {
       "title": "Blind War (SB vs BB)",
       "stats": {
-        "sb_cbet_flop": {"label": "SB cbet flop", "min": 75, "ideal": 80, "max": 85, "unit": "%"},
-        "sb_cbet_turn": {"label": "SB cbet turn", "min": 55, "ideal": 55, "max": 60, "unit": "%"},
-        "sb_cbet_river": {"label": "SB cbet river", "min": 45, "ideal": 45, "max": 50, "unit": "%"},
-        "bb_f2_sb_steal": {"label": "BB F2 SB steal", "min": 30, "ideal": 30, "max": 35, "unit": "%"},
-        "bb_3bet_bw": {"label": "BB 3BET BW", "min": 9, "ideal": 12, "max": 15, "unit": "%"},
-        "bb_fold_vs_stab": {"label": "BB fold vs stab", "min": 15, "ideal": 22, "max": 25, "unit": "%"}
+        "sb_cbet_flop": {
+          "label": "SB cbet flop",
+          "min": 75,
+          "ideal": 80,
+          "max": 85,
+          "unit": "%"
+        },
+        "sb_cbet_turn": {
+          "label": "SB cbet turn",
+          "min": 55,
+          "ideal": 55,
+          "max": 60,
+          "unit": "%"
+        },
+        "sb_cbet_river": {
+          "label": "SB cbet river",
+          "min": 45,
+          "ideal": 45,
+          "max": 50,
+          "unit": "%"
+        },
+        "bb_f2_sb_steal": {
+          "label": "BB F2 SB steal",
+          "min": 30,
+          "ideal": 30,
+          "max": 35,
+          "unit": "%"
+        },
+        "bb_3bet_bw": {
+          "label": "BB 3BET BW",
+          "min": 9,
+          "ideal": 12,
+          "max": 15,
+          "unit": "%"
+        },
+        "bb_fold_vs_stab": {
+          "label": "BB fold vs stab",
+          "min": 15,
+          "ideal": 22,
+          "max": 25,
+          "unit": "%"
+        }
       }
     }
   }
