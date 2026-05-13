@@ -861,22 +861,22 @@
   .skeleton-line.short { width: 40%; }
   .skeleton-card { height: 80px; margin-bottom: 12px; }
 
-  /* ===== [VISUAL v2] Pill animations ===== */
+  /* [v6.13 Bloco 8] Pill toggle — sem overshoot spring (era 0.92→1.04→1 com ease-spring).
+     Agora fade suave (scale 0.96 → 1) com ease-out. Feedback de estado sem "bounce" cute. */
   .pills button {
     transition: transform var(--t-fast) var(--ease-out),
                 background-color var(--t-fast) var(--ease-out),
                 border-color var(--t-fast) var(--ease-out),
                 box-shadow var(--t-fast) var(--ease-out);
   }
-  .pills button:active:not(.on) { transform: scale(0.94); }
+  .pills button:active:not(.on) { transform: scale(0.96); }
   .pills button.on {
     box-shadow: 0 0 0 2px rgba(45,212,191,0.18), 0 2px 8px rgba(45,212,191,0.25);
-    animation: pill-pop 220ms var(--ease-spring);
+    animation: pill-pop 160ms var(--ease-out);
   }
   @keyframes pill-pop {
-    0%   { transform: scale(0.92); }
-    60%  { transform: scale(1.04); }
-    100% { transform: scale(1); }
+    from { transform: scale(0.96); }
+    to   { transform: scale(1); }
   }
 
   /* ===== [VISUAL v2] Tournament cards (onda 2) ===== */
