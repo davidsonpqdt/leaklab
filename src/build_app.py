@@ -111,7 +111,10 @@ def build(folders: list[str], hero: str | None, output: str,
     # marcador no leaklab.html: "// ===== Init ====="
     marker = "// ===== Init ====="
     if marker in tpl:
-        tpl = tpl.replace(marker, inject + marker)
+        # count=1: marker aparece 2x no leaklab.html (linhas 1457 e 8529).
+        # Sem count=1, replace substituiria AMBAS as ocorrências e dobraria
+        # o tamanho do output quando bake hands.
+        tpl = tpl.replace(marker, inject + marker, 1)
     else:
         tpl = tpl.replace("</script>", inject + "</script>", 1)
 

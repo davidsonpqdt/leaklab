@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap: não publicado — single-page app sem rotas reais.
+# Site oficial: https://leaklab.pokermtts.com.br/
