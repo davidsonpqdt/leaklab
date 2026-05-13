@@ -64,8 +64,10 @@
 </script>
 <style>
   :root {
+    /* [v6.13 Bloco 1] Paleta enxuta. --fg-link removido (redundante com --accent),
+       agora consolidada em --fg-dim (labels) e --accent (destaques de ação). */
     --bg: #000000; --bg-2: #0a0a0c; --bg-3: #111114; --bg-card: #0d0d10;
-    --fg: #e6e6e8; --fg-dim: #b8b8bd; --fg-link: #7dd3c0;
+    --fg: #e6e6e8; --fg-dim: #b8b8bd; --fg-mute: #6a6a72;
     --accent: #2dd4bf; --accent-2: #f0c419;
     --good: #5dd684; --warn: #f5c14a; --bad: #ed6a6a;
     --border: #25252c;
@@ -75,22 +77,48 @@
     --ease-in:  cubic-bezier(0.7, 0, 0.84, 0);
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     --t-fast: 120ms; --t-base: 200ms; --t-slow: 280ms;
+    /* [v6.13 Bloco 1] Letter-spacing — 2 variantes: 0 (texto normal) e wide (uppercase labels) */
+    --ls-normal: 0;
+    --ls-wide: 0.06em;
+    /* [v6.13 Bloco 1] Radius scale — 3 variantes (substitui mistura de 4/5/6/8/10/12/14) */
+    --r-sm: 6px;   /* botões, inputs, pills */
+    --r-md: 10px;  /* cards, painéis */
+    --r-lg: 12px;  /* modal, dialogs */
+    /* [v6.13 Bloco 1] Type scale — 8 sizes (substitui mistura de ~15 sizes diferentes) */
+    --ts-xs: 11px;
+    --ts-sm: 12px;
+    --ts-base: 13px;
+    --ts-md: 14px;
+    --ts-lg: 16px;
+    --ts-xl: 18px;
+    --ts-2xl: 22px;
+    --ts-3xl: 32px;
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; }
-  body { background: var(--bg); color: var(--fg); font-family: 'Inter', -apple-system, 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; line-height: 1.4; }
+  /* [v6.13 Bloco 1] tabular-nums universal — todos os numéricos alinham. */
+  body { background: var(--bg); color: var(--fg); font-family: 'Inter', -apple-system, 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; line-height: 1.4; font-variant-numeric: tabular-nums; }
+
+  /* [v6.13 Bloco 2] Icon helper — usa currentColor pra herdar do parent. */
+  .icon { width: 16px; height: 16px; flex-shrink: 0; vertical-align: middle; stroke-width: 2; }
+  .icon-sm { width: 14px; height: 14px; }
+  .icon-lg { width: 20px; height: 20px; }
 
   /* Header */
   header.top { background: var(--bg-2); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; gap: 14px; }
   header.top .brand { display: flex; align-items: baseline; gap: 8px; }
-  header.top .brand .name { color: var(--accent); font-size: 20px; font-weight: 800; letter-spacing: 0.5px; }
-  header.top .brand .tag { color: var(--fg-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
-  header.top .badge { background: var(--bg-3); color: var(--fg-link); font-size: 11px; padding: 3px 10px; border-radius: 12px; }
-  header.top .actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  header.top .brand .name { color: var(--accent); font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+  header.top .badge { background: var(--bg-3); color: var(--fg-dim); font-size: 11px; padding: 3px 10px; border-radius: 12px; }
+  header.top .actions { margin-left: auto; display: flex; gap: 6px; align-items: center; }
   header.top button, header.top label.btn {
     background: var(--bg-3); border: 1px solid var(--border); color: var(--fg);
-    padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500;
+    padding: 6px 12px; border-radius: var(--r-sm); cursor: pointer; font-size: 12px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 6px;
   }
+  header.top button.icon-only {
+    padding: 6px; width: 32px; height: 32px; justify-content: center; color: var(--fg-dim);
+  }
+  header.top button.icon-only:hover { color: var(--fg); }
   header.top button:hover, header.top label.btn:hover { border-color: var(--accent); }
   header.top input[type=file] { display: none; }
   /* [v6.10] Feedback modal */
@@ -184,16 +212,16 @@
     .fb-btn { min-width: 0; }
   }
 
-  /* [v6.5] Ecosystem links — discrete icons before help button */
-  header.top .eco-links { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; margin: 0 4px; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+  /* [v6.13 Bloco 2] Ecosystem links — SVG icons, sem bordas verticais decorativas. */
+  header.top .eco-links { display: inline-flex; align-items: center; gap: 2px; margin: 0 4px; }
   header.top .eco-link {
     display: inline-flex; align-items: center; justify-content: center;
-    width: 28px; height: 28px; border-radius: 6px;
-    text-decoration: none; font-size: 14px; line-height: 1;
-    color: var(--fg-dim); opacity: 0.7;
-    transition: opacity var(--t-fast) var(--ease-std), background var(--t-fast) var(--ease-std);
+    width: 32px; height: 32px; border-radius: var(--r-sm);
+    text-decoration: none;
+    color: var(--fg-dim);
+    transition: color var(--t-fast) var(--ease-std), background var(--t-fast) var(--ease-std);
   }
-  header.top .eco-link:hover { opacity: 1; background: var(--bg-3); }
+  header.top .eco-link:hover { color: var(--fg); background: var(--bg-3); }
   header.top .eco-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   @media (max-width: 768px) {
     header.top .eco-links { display: none; }
@@ -203,15 +231,12 @@
   nav.tabs { background: var(--bg-2); border-bottom: 1px solid var(--border); padding: 0 20px; display: flex; gap: 0; }
   nav.tabs button {
     background: transparent; border: none; color: var(--fg-dim);
-    padding: 12px 20px; cursor: pointer; font-size: 13px; font-weight: 500;
-    border-bottom: 2px solid transparent; transition: all 0.15s;
+    padding: 12px 16px; cursor: pointer; font-size: 13px; font-weight: 500;
+    border-bottom: 2px solid transparent; transition: color var(--t-fast) var(--ease-std), border-color var(--t-fast) var(--ease-std);
+    letter-spacing: var(--ls-normal);
   }
   nav.tabs button:hover { color: var(--fg); }
   nav.tabs button.active { color: var(--accent); border-bottom-color: var(--accent); }
-  /* Destaca tabs primárias (Quiz + Library) */
-  nav.tabs button[data-tab="quiz"], nav.tabs button[data-tab="ranges"] { font-weight: 600; }
-  nav.tabs button[data-tab="quiz"]:not(.active) { color: var(--good); opacity: 0.8; }
-  nav.tabs button[data-tab="quiz"]:not(.active):hover { opacity: 1; }
   nav.tabs button .filter-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-2); margin-left: 4px; vertical-align: middle; }
 
   main { padding: 16px 20px; }
@@ -235,19 +260,42 @@
     .chips-clear { padding: 10px 14px; }
   }
 
-  /* Welcome */
-  .welcome { text-align: center; padding: 80px 20px; }
-  .welcome h2 { color: var(--accent); font-size: 28px; margin-bottom: 8px; }
-  .welcome p { color: var(--fg-dim); font-size: 14px; margin: 8px 0; }
-  .welcome .cta { display: inline-block; padding: 18px 28px; border-radius: 10px; font-weight: 600; margin: 8px 4px; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; border: none; text-align:center; min-width:200px; }
-  .welcome .cta:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
-  .welcome .cta.primary-cta { background: var(--accent); color: #000000; }
-  .welcome .cta.secondary-cta { background: var(--bg-3); color: var(--fg); border: 1px solid var(--border); }
+  /* [v6.13 Bloco 3] Welcome — redesign editorial.
+     Hierarquia: H1 → subtitle → 2 cards CTA lado a lado → links auxiliares → privacy. */
+  .welcome { text-align: center; padding: 72px 20px 40px; max-width: 720px; margin: 0 auto; }
+  .welcome h1 { color: var(--fg); font-size: var(--ts-3xl); font-weight: 700; letter-spacing: -0.02em; margin: 0 0 12px; line-height: 1.1; }
+  .welcome h1 .accent { color: var(--accent); }
+  .welcome .subtitle { color: var(--fg-dim); font-size: var(--ts-lg); margin: 0 0 8px; line-height: 1.5; }
+  .welcome .privacy-note { color: var(--fg-mute); font-size: var(--ts-sm); margin: 0 0 36px; }
+  .welcome-ctas { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 auto 24px; max-width: 560px; }
+  .welcome-cta {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 20px 22px; border-radius: var(--r-md);
+    cursor: pointer; text-align: left;
+    transition: transform var(--t-fast) var(--ease-std), border-color var(--t-fast) var(--ease-std), box-shadow var(--t-fast) var(--ease-std);
+    border: 1px solid var(--border);
+  }
+  .welcome-cta:hover { transform: translateY(-1px); border-color: var(--accent); box-shadow: 0 4px 16px rgba(0,0,0,0.35); }
+  .welcome-cta .cta-title { font-size: var(--ts-md); font-weight: 600; }
+  .welcome-cta .cta-desc { font-size: var(--ts-sm); }
+  .welcome-cta.primary { background: var(--accent); color: #000; border-color: var(--accent); }
+  .welcome-cta.primary .cta-desc { color: rgba(0,0,0,0.7); }
+  .welcome-cta.secondary { background: var(--bg-card); color: var(--fg); }
+  .welcome-cta.secondary .cta-desc { color: var(--fg-dim); }
+  .welcome .aux-links { font-size: var(--ts-base); color: var(--fg-dim); margin: 20px 0 32px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .welcome .aux-links a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); padding-bottom: 1px; }
+  .welcome .aux-links a:hover { border-bottom-style: solid; }
+  .welcome .privacy-footer { color: var(--fg-mute); font-size: var(--ts-xs); margin: 0 auto; max-width: 480px; line-height: 1.6; }
+  @media (max-width: 560px) {
+    .welcome { padding: 48px 16px 24px; }
+    .welcome h1 { font-size: 26px; }
+    .welcome-ctas { grid-template-columns: 1fr; }
+  }
 
   /* Filtros tab */
   .filters-layout { display: grid; grid-template-columns: 320px 1fr; gap: 16px; }
   .filters-side { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; max-height: calc(100vh - 140px); overflow-y: auto; }
-  .filters-side h3 { color: var(--fg-link); font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; margin: 12px 0 8px 0; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .filters-side h3 { color: var(--fg-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; margin: 12px 0 8px 0; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
   .filters-side h3:first-child { margin-top: 0; }
   /* [VISUAL v2 onda 3] Filter search input dentro da sidebar */
   .f-search { position: sticky; top: 0; z-index: 5; background: var(--bg-card); padding: 4px 0 10px 0; margin: 0 0 8px; border-bottom: 1px solid var(--border); display: flex; gap: 4px; }
@@ -263,7 +311,7 @@
   /* [VISUAL v2 onda 3] Chips de filtros aplicados no topo */
   .active-chips { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: linear-gradient(180deg, rgba(45,212,191,0.06), transparent); border: 1px solid #1f3a36; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; }
   .active-chips.empty { display: none; }
-  .chips-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--fg-link); font-weight: 600; }
+  .chips-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--fg-dim); font-weight: 600; }
   .chips-list { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
   .chip { display: inline-flex; align-items: center; gap: 6px; background: var(--bg-3); border: 1px solid var(--border); color: var(--fg); padding: 4px 4px 4px 10px; border-radius: 14px; font-size: 12px; animation: chipIn .18s ease-out; }
   .chip-key { color: var(--fg-dim); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -286,7 +334,7 @@
     padding: 4px 10px; border-radius: 12px; cursor: pointer; font-size: 11px;
   }
   .pills button.on { background: var(--accent); color: #000000; border-color: var(--accent); font-weight: 600; }
-  .pills button:hover:not(.on) { border-color: var(--fg-link); color: var(--fg); }
+  .pills button:hover:not(.on) { border-color: var(--accent); color: var(--fg); }
 
   .hand-grid-mini {
     display: grid; grid-template-columns: repeat(13, 1fr); gap: 1px;
@@ -320,7 +368,7 @@
     padding: 8px 14px; min-width: 100px;
   }
   .summary-row .stat-card .v { color: var(--accent-2); font-weight: 700; font-size: 18px; }
-  .summary-row .stat-card .l { color: var(--fg-link); font-size: 11px; }
+  .summary-row .stat-card .l { color: var(--fg-dim); font-size: 11px; }
 
   /* Matrix */
   .grid-large { display: grid; grid-template-columns: repeat(13, minmax(44px, 1fr)); gap: 2px; max-width: 760px; }
@@ -353,43 +401,37 @@
   .coach-hero h2 { color: var(--accent); margin: 0 0 6px 0; font-size: 20px; }
   /* Hero hierárquico: 2 KPI grandes + 5 pills compactas */
   .coach-hero .stats-grid { display: grid; grid-template-columns: minmax(220px, 1.2fr) minmax(220px, 1.2fr) 2fr; gap: 14px; margin-top: 16px; align-items: stretch; }
-  .coach-kpi { background: linear-gradient(135deg, rgba(45,212,191,0.08), rgba(45,212,191,0.02)); border: 1px solid rgba(45,212,191,0.18); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
-  .coach-kpi::before { content: ""; position: absolute; right: -20px; top: -20px; width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, rgba(45,212,191,0.12), transparent 70%); }
-  .coach-kpi .icon { font-size: 22px; opacity: 0.85; margin-bottom: 6px; }
-  .coach-kpi .v { font-size: 36px; font-weight: 800; line-height: 1; letter-spacing: -0.5px; color: var(--accent); font-variant-numeric: tabular-nums; }
-  .coach-kpi .l { font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--fg-dim); margin-top: 8px; font-weight: 600; }
+  /* [v6.13 Bloco 6] Coach KPI — sem ::before radial decorativo. Cor + tamanho já chamam. */
+  .coach-kpi { background: linear-gradient(135deg, rgba(45,212,191,0.08), rgba(45,212,191,0.02)); border: 1px solid rgba(45,212,191,0.18); border-radius: var(--r-lg); padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; }
+  .coach-kpi .v { font-size: 36px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .coach-kpi .l { font-size: var(--ts-xs); text-transform: uppercase; letter-spacing: var(--ls-wide); color: var(--fg-dim); margin-top: 10px; font-weight: 600; }
   .coach-kpi.bb-pos { border-color: rgba(93,214,132,0.25); }
   .coach-kpi.bb-pos .v { color: var(--good); }
-  .coach-kpi.bb-pos::before { background: radial-gradient(circle, rgba(93,214,132,0.15), transparent 70%); }
   .coach-kpi.bb-neg { border-color: rgba(237,106,106,0.25); }
   .coach-kpi.bb-neg .v { color: var(--bad); }
-  .coach-kpi.bb-neg::before { background: radial-gradient(circle, rgba(237,106,106,0.15), transparent 70%); }
   .coach-pills-mini { display: grid; grid-template-columns: repeat(auto-fit, minmax(78px, 1fr)); gap: 8px; }
   .coach-pills-mini .pill { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; text-align: center; }
   .coach-pills-mini .pill .v { color: var(--fg); font-size: 16px; font-weight: 700; line-height: 1; }
   .coach-pills-mini .pill .l { color: var(--fg-dim); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
   /* Section titles */
-  .coach-section-title { color: var(--fg-link); font-size: 13px; text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; margin: 22px 0 10px; }
+  .coach-section-title { color: var(--fg-dim); font-size: var(--ts-base); text-transform: uppercase; letter-spacing: var(--ls-wide); font-weight: 700; margin: 22px 0 10px; }
   .coach-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; }
-  /* Cards de leak — com ícone e barra comparativa */
-  .coach-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px 14px 64px; cursor: pointer; transition: transform .16s, border-color .16s, box-shadow .16s; position: relative; }
+  /* [v6.13 Bloco 6] Coach card — sem leak-icon emoji (era 5 sinais de "isto é importante").
+     Mantém: border-left colorido, severity badge, coach-bar. */
+  .coach-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px; cursor: pointer; transition: transform var(--t-fast) var(--ease-std), border-color var(--t-fast) var(--ease-std), box-shadow var(--t-fast) var(--ease-std); position: relative; }
   .coach-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.35); border-color: var(--accent); }
   .coach-card.leak { border-left: 4px solid var(--bad); }
   .coach-card.warn { border-left: 4px solid var(--warn); }
   .coach-card.strength { border-left: 4px solid var(--good); }
-  .coach-card .leak-icon { position: absolute; left: 14px; top: 14px; width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; background: rgba(45,212,191,0.08); border: 1px solid var(--border); }
-  .coach-card.leak .leak-icon { background: rgba(237,106,106,0.10); border-color: rgba(237,106,106,0.30); }
-  .coach-card.warn .leak-icon { background: rgba(245,193,74,0.10); border-color: rgba(245,193,74,0.30); }
-  .coach-card.strength .leak-icon { background: rgba(93,214,132,0.10); border-color: rgba(93,214,132,0.30); }
-  .coach-card .severity { position: absolute; top: 14px; right: 14px; font-size: 11px; padding: 3px 9px; border-radius: 12px; font-weight: 700; }
+  .coach-card .severity { position: absolute; top: 14px; right: 14px; font-size: var(--ts-xs); padding: 3px 9px; border-radius: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .coach-card.leak .severity { background: rgba(237,106,106,0.15); color: var(--bad); }
   .coach-card.warn .severity { background: rgba(245,193,74,0.15); color: var(--warn); }
   .coach-card.strength .severity { background: rgba(93,214,132,0.15); color: var(--good); }
-  .coach-card .h { color: var(--fg); font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-  .coach-card .stat-line { color: var(--fg-dim); font-size: 12.5px; margin-bottom: 8px; }
+  .coach-card .h { color: var(--fg); font-size: var(--ts-md); font-weight: 600; margin-bottom: 6px; padding-right: 90px; }
+  .coach-card .stat-line { color: var(--fg-dim); font-size: var(--ts-sm); margin-bottom: 8px; }
   .coach-card .stat-line b { color: var(--fg); }
-  .coach-card .desc { color: var(--fg-dim); font-size: 13px; line-height: 1.5; }
-  .coach-card .action { color: var(--accent); font-size: 11px; margin-top: 10px; font-weight: 600; }
+  .coach-card .desc { color: var(--fg-dim); font-size: var(--ts-base); line-height: 1.5; }
+  .coach-card .action { color: var(--accent); font-size: var(--ts-xs); margin-top: 10px; font-weight: 600; }
   /* Barra comparativa "você vs ideal" */
   .coach-bar { position: relative; height: 8px; background: var(--bg-3); border-radius: 4px; margin: 10px 0 6px; overflow: visible; }
   .coach-bar .ideal-zone { position: absolute; top: 0; bottom: 0; background: rgba(93,214,132,0.18); border-left: 1px solid rgba(93,214,132,0.5); border-right: 1px solid rgba(93,214,132,0.5); border-radius: 2px; }
@@ -398,28 +440,22 @@
   .coach-card.strength .coach-bar .you-marker { background: var(--good); box-shadow: 0 0 8px rgba(93,214,132,0.6); }
   .coach-bar .ideal-tick { position: absolute; top: -2px; width: 2px; height: 12px; background: var(--accent); opacity: 0.7; }
   .coach-bar-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--fg-dim); margin-top: 2px; }
-  /* Severity high — pulse animation */
+  /* [v6.13 Bloco 6] Severity high — só border-left mais grosso + box-shadow sutil.
+     Removidos: ::before pulse animation infinita + emoji 🚨. Severity badge sólido já basta. */
   .coach-card.leak.severity-high { border-left-width: 5px; box-shadow: 0 0 0 1px rgba(237,106,106,0.25); }
-  .coach-card.leak.severity-high::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--bad), transparent); animation: severity-pulse 2s ease-in-out infinite; }
   .coach-card.leak.severity-high .severity { background: var(--bad); color: #1a0a0a; font-weight: 800; }
-  .coach-card.leak.severity-high .severity::before { content: "🚨 "; }
-  @keyframes severity-pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-  /* Padrões compostos — destaque accent gradient */
-  .coach-patterns-wrap { background: linear-gradient(135deg, rgba(45,212,191,0.05), rgba(125,211,192,0.02)); border: 1px solid rgba(45,212,191,0.18); border-radius: 14px; padding: 14px 16px 18px; margin: 18px 0; }
+  /* Padrões compostos — destaque accent. Sem 💡, sem ::after inset shadow. */
+  .coach-patterns-wrap { background: linear-gradient(135deg, rgba(45,212,191,0.05), rgba(125,211,192,0.02)); border: 1px solid rgba(45,212,191,0.18); border-radius: var(--r-lg); padding: 14px 16px 18px; margin: 18px 0; }
   .coach-patterns-wrap .coach-section-title { margin-top: 0; color: var(--accent); }
-  .coach-card.compound { background: rgba(13,13,15,0.5); border: 1px solid rgba(45,212,191,0.25); border-left: 4px solid var(--accent); padding-left: 16px; }
-  .coach-card.compound .leak-icon { display: none; }
-  .coach-card.compound::after { content: ""; position: absolute; inset: 0; border-radius: 10px; pointer-events: none; box-shadow: inset 0 0 30px rgba(45,212,191,0.05); }
+  .coach-card.compound { background: rgba(13,13,15,0.5); border: 1px solid rgba(45,212,191,0.25); border-left: 4px solid var(--accent); }
   .coach-card.compound .severity { background: rgba(45,212,191,0.15); color: var(--accent); border: 1px solid rgba(45,212,191,0.3); }
-  .coach-card.compound .h::before { content: "💡 "; }
-  /* Empty states */
+  /* [v6.13 Bloco 6] Empty + celebrate — sem big-icon emoji nem celebrate-pop animation. */
   .coach-empty { text-align: center; color: var(--fg-dim); padding: 60px 30px; }
-  .coach-empty h3 { color: var(--accent); margin-bottom: 8px; }
-  .coach-celebrate { text-align: center; padding: 50px 30px; background: linear-gradient(135deg, rgba(93,214,132,0.08), rgba(45,212,191,0.04)); border: 1px solid rgba(93,214,132,0.25); border-radius: 14px; margin: 18px 0; }
-  .coach-celebrate .big-icon { font-size: 56px; margin-bottom: 12px; animation: celebrate-pop .6s ease-out; }
-  .coach-celebrate h3 { color: var(--good); font-size: 20px; margin: 0 0 8px; }
-  .coach-celebrate p { color: var(--fg-dim); font-size: 13px; max-width: 480px; margin: 0 auto; line-height: 1.6; }
-  @keyframes celebrate-pop { 0% { transform: scale(0.5); opacity: 0; } 60% { transform: scale(1.15); opacity: 1; } 100% { transform: scale(1); } }
+  .coach-empty h3 { color: var(--accent); margin-bottom: 8px; font-size: var(--ts-xl); font-weight: 600; }
+  .coach-empty p { font-size: var(--ts-base); }
+  .coach-celebrate { text-align: center; padding: 48px 30px; background: linear-gradient(135deg, rgba(93,214,132,0.08), rgba(45,212,191,0.04)); border: 1px solid rgba(93,214,132,0.25); border-radius: var(--r-lg); margin: 18px 0; }
+  .coach-celebrate h3 { color: var(--good); font-size: var(--ts-xl); margin: 0 0 8px; font-weight: 600; }
+  .coach-celebrate p { color: var(--fg-dim); font-size: var(--ts-base); max-width: 480px; margin: 0 auto; line-height: 1.6; }
   /* Skeleton loading */
   .coach-skel { animation: skel-fade-in .2s ease-out; }
   .coach-skel-block { background: linear-gradient(90deg, var(--bg-2) 0%, var(--bg-3) 50%, var(--bg-2) 100%); background-size: 200% 100%; animation: skel-shimmer 1.4s ease-in-out infinite; border-radius: 8px; }
@@ -432,7 +468,7 @@
   .hud-toolbar { background: linear-gradient(180deg, #131318, #0e0e10); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 16px; box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset; }
   .hud-tb-row { display: flex; gap: 28px; flex-wrap: wrap; align-items: center; }
   .hud-tb-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .hud-tb-label { color: var(--fg-link); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-right: 4px; }
+  .hud-tb-label { color: var(--fg-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-right: 4px; }
   .hud-tb-input { background: #0a0a0c; border: 1px solid var(--border); color: var(--fg); padding: 5px 9px; border-radius: 5px; font-size: 12px; width: 110px; font-family: inherit; }
   .hud-tb-input:focus { outline: none; border-color: var(--accent); }
   .hud-tb-sep { color: var(--fg-dim); font-size: 11px; }
@@ -445,14 +481,15 @@
   .hud-tb-pills button.on { background: #1a3a3a; border-color: var(--accent); color: var(--accent); font-weight: 600; }
   .hud-tb-summary { color: var(--fg-dim); font-size: 12px; }
   .hud-tb-summary strong { color: var(--accent); }
+  /* [v6.13 Bloco 6] HUD card — tokens consistentes pra h4, stat row, val. */
   .hud-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 14px; }
-  .hud-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
-  .hud-card h4 { color: var(--accent); font-size: 12px; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 0.6px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-  .hud-stat { display: grid; grid-template-columns: 1fr auto auto auto; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid #222227; cursor: pointer; transition: background 0.1s; }
+  .hud-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px; }
+  .hud-card h4 { color: var(--accent); font-size: var(--ts-sm); margin: 0 0 10px; text-transform: uppercase; letter-spacing: var(--ls-wide); padding-bottom: 8px; border-bottom: 1px solid var(--border); font-weight: 700; }
+  .hud-stat { display: grid; grid-template-columns: 1fr auto auto auto; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid #222227; cursor: pointer; transition: background var(--t-fast) var(--ease-std); }
   .hud-stat:hover { background: #1f1f25; }
   .hud-stat:last-child { border-bottom: none; }
-  .hud-stat .name { font-size: 12.5px; color: var(--fg); }
-  .hud-stat .val { font-size: 13px; font-weight: 700; min-width: 60px; text-align: right; }
+  .hud-stat .name { font-size: var(--ts-sm); color: var(--fg); }
+  .hud-stat .val { font-size: var(--ts-base); font-weight: 700; min-width: 60px; text-align: right; font-variant-numeric: tabular-nums; }
   .hud-stat .val.good { color: var(--good); }
   .hud-stat .val.warn { color: var(--warn); }
   .hud-stat .val.bad { color: var(--bad); }
@@ -465,12 +502,17 @@
   .bench-toolbar button { background: var(--bg-3); border: 1px solid var(--border); color: var(--fg); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; }
   .bench-toolbar button:hover { border-color: var(--accent); }
   .bench-toolbar button.primary { background: var(--accent); color: #000000; border-color: var(--accent); font-weight: 600; }
-  .bench-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
-  .bench-section h4 { color: var(--accent); font-size: 12px; margin: 0 0 10px 0; text-transform: uppercase; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-  .bench-row { display: grid; grid-template-columns: 1fr 80px 80px 80px; gap: 8px; align-items: center; padding: 5px 0; border-bottom: 1px solid #222227; font-size: 12px; }
+  /* [v6.13 Bloco 7] Padrões — header de coluna explícito + tipografia consistente. */
+  .bench-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 18px; margin-bottom: 12px; }
+  .bench-section h4 { color: var(--accent); font-size: var(--ts-sm); margin: 0 0 12px; letter-spacing: var(--ls-wide); text-transform: uppercase; font-weight: 700; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .bench-head { display: grid; grid-template-columns: 1fr 80px 80px 80px; gap: 8px; align-items: center; padding: 4px 0 8px; font-size: var(--ts-xs); color: var(--fg-mute); text-transform: uppercase; letter-spacing: var(--ls-wide); font-weight: 600; }
+  .bench-head .col-head { text-align: center; }
+  .bench-head .col-head.ideal { color: var(--good); }
+  .bench-row { display: grid; grid-template-columns: 1fr 80px 80px 80px; gap: 8px; align-items: center; padding: 5px 0; border-bottom: 1px solid #222227; font-size: var(--ts-sm); }
   .bench-row:last-child { border-bottom: none; }
   .bench-row .name { color: var(--fg); }
-  .bench-row input { background: var(--bg); border: 1px solid var(--border); color: var(--fg); padding: 4px 8px; border-radius: 4px; font-size: 12px; width: 100%; text-align: center; }
+  .bench-row input { background: var(--bg); border: 1px solid var(--border); color: var(--fg); padding: 5px 8px; border-radius: var(--r-sm); font-size: var(--ts-sm); width: 100%; text-align: center; font-variant-numeric: tabular-nums; }
+  .bench-row input:focus { outline: none; border-color: var(--accent); }
   .bench-row input.ideal { color: var(--good); font-weight: 600; }
 
   /* Ranges tab */
@@ -478,12 +520,14 @@
   .ranges-toolbar button, .ranges-toolbar label.btn { background: var(--bg-3); border: 1px solid var(--border); color: var(--fg); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; }
   .ranges-toolbar button:hover, .ranges-toolbar label.btn:hover { border-color: var(--accent); }
   .ranges-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
-  .range-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; cursor: pointer; transition: border-color 0.1s; }
-  .range-card:hover { border-color: var(--accent); }
-  .range-card .id { color: var(--accent-2); font-weight: 600; font-size: 13px; }
-  .range-card .meta { color: var(--fg-dim); font-size: 11px; margin-top: 4px; }
-  .range-card .actions { display: flex; gap: 6px; margin-top: 8px; }
-  .range-card .actions button { background: var(--bg-3); border: 1px solid var(--border); color: var(--fg-dim); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+  /* [v6.13 Bloco 5] Range card mais espaçoso, todo clicável, hover refinado.
+     Label humano em destaque (era ID técnico). Botão "Ver" removido (todo card já clica). */
+  .range-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px; cursor: pointer; transition: transform var(--t-fast) var(--ease-std), border-color var(--t-fast) var(--ease-std), box-shadow var(--t-fast) var(--ease-std); }
+  .range-card:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.35); }
+  .range-card .id { color: var(--fg); font-weight: 600; font-size: var(--ts-md); letter-spacing: -0.005em; }
+  .range-card .meta { color: var(--fg-dim); font-size: var(--ts-xs); margin-top: 4px; }
+  .range-card .actions { display: flex; gap: 6px; margin-top: 12px; }
+  .range-card .actions button { background: var(--bg-3); border: 1px solid var(--border); color: var(--fg-dim); padding: 4px 10px; border-radius: var(--r-sm); cursor: pointer; font-size: var(--ts-xs); }
   .range-card .actions button.del { color: var(--bad); display: none; }
   body.range-mgmt-mode .range-card .actions button.del { display: inline-block; }
   .range-card .actions button:hover { border-color: var(--accent); color: var(--fg); }
@@ -505,7 +549,7 @@
   .hands-table td { padding: 6px; border-bottom: 1px solid #222227; }
   .hands-table tr.hand-row { cursor: pointer; }
   .hands-table tr.hand-row:hover { background: #1f1f25; }
-  .hands-table .pos { font-weight: 600; color: var(--fg-link); }
+  .hands-table .pos { font-weight: 600; color: var(--fg-dim); }
   .hands-table .gain { color: var(--good); }
   .hands-table .loss { color: var(--bad); }
   .pager { margin-top: 12px; display: flex; gap: 8px; align-items: center; justify-content: center; font-size: 12px; color: var(--fg-dim); }
@@ -519,7 +563,7 @@
   .modal .close { float: right; background: transparent; border: none; color: var(--fg-dim); font-size: 22px; cursor: pointer; }
   .modal .close:hover { color: var(--fg); }
   .modal h2 { color: var(--accent); font-size: 18px; margin: 0 0 6px 0; }
-  .modal .sub { color: var(--fg-link); font-size: 12px; margin-bottom: 14px; }
+  .modal .sub { color: var(--fg-dim); font-size: 12px; margin-bottom: 14px; }
 
   .quiz-placeholder { text-align: center; padding: 60px; color: var(--fg-dim); }
   .quiz-placeholder h3 { color: var(--accent); margin-bottom: 8px; }
@@ -548,7 +592,7 @@
   .kw-card h4 { color: var(--accent); margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
   .kw-card .kw-row { display: flex; justify-content: space-between; gap: 8px; padding: 4px 0; font-size: 12px; align-items: flex-start; }
   .kw-card .kw-row:not(:last-child) { border-bottom: 1px solid #222227; }
-  .kw-card .kw-target { color: var(--fg-link); font-weight: 600; flex-shrink: 0; }
+  .kw-card .kw-target { color: var(--fg-dim); font-weight: 600; flex-shrink: 0; }
   .kw-card .kw-words { color: var(--fg-dim); text-align: right; font-family: monospace; }
   .kw-card .kw-words code { background: #111114; padding: 1px 6px; border-radius: 3px; color: var(--accent-2); font-size: 11px; margin-left: 3px; }
 
@@ -574,10 +618,10 @@
 
   .quiz-wrap { max-width: 720px; margin: 0 auto; padding: 20px; }
   .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-  .quiz-header .score { color: var(--fg-link); font-size: 13px; }
+  .quiz-header .score { color: var(--fg-dim); font-size: 13px; }
   .quiz-header .score b { color: var(--accent-2); font-size: 16px; }
   .quiz-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 26px; text-align: center; }
-  .quiz-card .scenario { color: var(--fg-link); font-size: 13px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .quiz-card .scenario { color: var(--fg-dim); font-size: 13px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
   .quiz-card .stack { color: var(--fg-dim); font-size: 12px; margin-bottom: 24px; }
   .quiz-card .hand-display { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
   .quiz-card .qcard { width: 80px; height: 110px; background: #fff; color: #000; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 44px; font-weight: 800; box-shadow: 0 4px 12px rgba(0,0,0,0.6); }
@@ -688,13 +732,15 @@
   .qt-context-bar b { color: var(--fg); font-weight: 600; }
   .qt-context-bar .qt-sep { opacity: 0.4; }
   /* Header do cenário */
+  /* [v6.13 Bloco 4] Hierarquia da pergunta — label discreto + pergunta firme.
+     Era amarelo uppercase chamativo, agora cinza dim. Foco vai pra "O que GTO faz com...". */
   .qt-question { text-align: center; margin: 18px 0 16px 0; }
   .qt-question .qt-scenario {
-    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--accent-2); font-weight: 600; margin-bottom: 4px;
+    font-size: var(--ts-xs); letter-spacing: var(--ls-wide); text-transform: uppercase;
+    color: var(--fg-dim); font-weight: 600; margin-bottom: 6px;
   }
-  .qt-question .qt-ask { font-size: 16px; color: var(--fg); }
-  .qt-question .qt-ask b { color: var(--accent); font-family: 'Inter', sans-serif; }
+  .qt-question .qt-ask { font-size: var(--ts-lg); color: var(--fg); font-weight: 500; }
+  .qt-question .qt-ask b { color: var(--accent); font-weight: 700; }
   /* Mobile */
   @media (max-width: 600px) {
     .qt-stage { aspect-ratio: 16/11; }
@@ -715,7 +761,7 @@
   .quiz-config { display: flex; gap: 10px; justify-content: center; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
   .quiz-config select, .quiz-config button { background: var(--bg-3); border: 1px solid var(--border); color: var(--fg); padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; }
   .quiz-history { margin-top: 24px; }
-  .quiz-history h4 { color: var(--fg-link); font-size: 12px; text-transform: uppercase; margin-bottom: 8px; }
+  .quiz-history h4 { color: var(--fg-dim); font-size: 12px; text-transform: uppercase; margin-bottom: 8px; }
   .quiz-history-row { display: flex; gap: 10px; padding: 5px 8px; border-bottom: 1px solid #222227; font-size: 12px; }
   .quiz-history-row.correct { color: var(--good); }
   .quiz-history-row.wrong { color: var(--bad); }
@@ -725,7 +771,7 @@
   .quiz-insight { padding:10px 14px; border-radius:6px; margin-bottom:10px; font-size:13px; line-height:1.5; }
   .quiz-insight.bad { background:#3a1a1a; border:1px solid #5a2828; color:#ffd0d0; }
   .quiz-insight.good { background:#1a3a25; border:1px solid #2a5238; color:#cfe8d6; }
-  .quiz-trend { margin-top:10px; padding:8px 12px; background:#161618; border-radius:6px; font-size:12px; color:var(--fg-link); }
+  .quiz-trend { margin-top:10px; padding:8px 12px; background:#161618; border-radius:6px; font-size:12px; color:var(--fg-dim); }
 
   /* Replay */
   .replay-table { position: relative; width: 100%; max-width: 920px; aspect-ratio: 17/10; margin: 8px auto 12px; background: #0a0a0a; border-radius: 14px; }
@@ -734,9 +780,9 @@
   .player-card.active { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(45,212,191,.3); }
   .player-card.folded { opacity: 0.35; }
   .player-card .name { color: var(--fg); font-weight: 600; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }
-  .player-card .pos { font-size: 10px; color: var(--fg-link); }
+  .player-card .pos { font-size: 10px; color: var(--fg-dim); }
   .player-card .stack { color: #fff; font-weight: 700; font-size: 12px; margin-top: 2px; }
-  .player-card .stack small { color: var(--fg-link); font-weight: 500; margin-left: 2px; font-size: 10px; }
+  .player-card .stack small { color: var(--fg-dim); font-weight: 500; margin-left: 2px; font-size: 10px; }
   .player-card.hero { border-color: var(--accent-2); }
   .player-cards-mini { position: absolute; transform: translate(-50%,-50%); display: flex; gap: 3px; z-index: 2; }
   .mini-card { width: 28px; height: 38px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; background: #fff; color: #000; box-shadow: 0 2px 4px rgba(0,0,0,.6); }
@@ -760,7 +806,7 @@
   .action-log { background: #0e0e10; border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; max-height: 100px; overflow-y: auto; font-size: 12px; margin-bottom: 10px; }
   .action-log .ln { padding: 2px 0; color: var(--fg-dim); }
   .action-log .ln.cur { color: var(--accent); font-weight: 600; }
-  .action-log .ln.street { color: var(--fg-link); font-weight: 600; border-top: 1px solid var(--bg-3); padding-top: 4px; margin-top: 4px; }
+  .action-log .ln.street { color: var(--fg-dim); font-weight: 600; border-top: 1px solid var(--bg-3); padding-top: 4px; margin-top: 4px; }
   .replay-controls { display: flex; gap: 8px; justify-content: center; align-items: center; padding: 10px; background: var(--bg-3); border-radius: 8px; }
   .replay-controls button { background: #161616; border: 1px solid var(--border); color: var(--fg); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
   .replay-controls button:hover:not(:disabled) { background: var(--bg-3); border-color: var(--accent); }
@@ -815,22 +861,22 @@
   .skeleton-line.short { width: 40%; }
   .skeleton-card { height: 80px; margin-bottom: 12px; }
 
-  /* ===== [VISUAL v2] Pill animations ===== */
+  /* [v6.13 Bloco 8] Pill toggle — sem overshoot spring (era 0.92→1.04→1 com ease-spring).
+     Agora fade suave (scale 0.96 → 1) com ease-out. Feedback de estado sem "bounce" cute. */
   .pills button {
     transition: transform var(--t-fast) var(--ease-out),
                 background-color var(--t-fast) var(--ease-out),
                 border-color var(--t-fast) var(--ease-out),
                 box-shadow var(--t-fast) var(--ease-out);
   }
-  .pills button:active:not(.on) { transform: scale(0.94); }
+  .pills button:active:not(.on) { transform: scale(0.96); }
   .pills button.on {
     box-shadow: 0 0 0 2px rgba(45,212,191,0.18), 0 2px 8px rgba(45,212,191,0.25);
-    animation: pill-pop 220ms var(--ease-spring);
+    animation: pill-pop 160ms var(--ease-out);
   }
   @keyframes pill-pop {
-    0%   { transform: scale(0.92); }
-    60%  { transform: scale(1.04); }
-    100% { transform: scale(1); }
+    from { transform: scale(0.96); }
+    to   { transform: scale(1); }
   }
 
   /* ===== [VISUAL v2] Tournament cards (onda 2) ===== */
@@ -863,7 +909,7 @@
   .t-hero .pill .l { font-size: 10.5px; color: var(--fg-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
   .t-hero .pill.bb-pos .v { color: var(--good); } .t-hero .pill.bb-neg .v { color: var(--bad); }
   .t-hero .chart-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px; position: relative; }
-  .t-hero .chart-wrap h3 { color: var(--fg-link); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px 4px; }
+  .t-hero .chart-wrap h3 { color: var(--fg-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px 4px; }
   /* Highlight cards */
   .highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
   .hl-card { background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-3) 100%); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; position: relative; overflow: hidden; cursor: pointer; transition: transform var(--t-fast) var(--ease-out); }
@@ -881,7 +927,7 @@
   /* Sort buttons */
   .t-sort { display: flex; gap: 6px; align-items: center; margin-left: auto; }
   .t-sort .sort-btn { background: var(--bg-3); border: 1px solid var(--border); color: var(--fg-dim); padding: 6px 10px; border-radius: 5px; cursor: pointer; font-size: 11.5px; transition: all var(--t-fast) var(--ease-out); }
-  .t-sort .sort-btn:hover { border-color: var(--fg-link); color: var(--fg); }
+  .t-sort .sort-btn:hover { border-color: var(--accent); color: var(--fg); }
   .t-sort .sort-btn.on { background: var(--accent); color: #000000; border-color: var(--accent); font-weight: 600; }
   .t-sort .arrow { display: inline-block; margin-left: 3px; font-size: 10px; }
   /* BB curve modal melhorada */
@@ -1056,23 +1102,32 @@
 <header class="top">
   <div class="brand">
     <span class="name">LeakLab</span>
-    <span class="tag">Poker MTTs</span>
   </div>
-  <span class="badge" id="dataset-badge">Sem dados</span>
+  <span class="badge" id="dataset-badge">Sem dados carregados</span>
   <div class="actions">
     <label class="btn" title="Carregar JSON com suas mãos">Carregar mãos
       <input type="file" id="file-hands" accept=".json">
     </label>
-    <label class="btn" title="Importar arquivos JSON de ranges GTO">+ Ranges
+    <label class="btn" title="Importar arquivos JSON de ranges GTO">Ranges
       <input type="file" id="file-ranges" accept=".json" multiple>
     </label>
     <span class="eco-links" aria-label="Ecossistema PokerMTTs">
-      <a href="https://pokermtts.com.br/" target="_blank" rel="noopener" class="eco-link" title="PokerMTTs — site principal" aria-label="Site principal PokerMTTs">🏠</a>
-      <a href="https://duvidas.pokermtts.com.br/dashboard" target="_blank" rel="noopener" class="eco-link" title="App de Dúvidas" aria-label="App de Dúvidas">❓</a>
-      <a href="https://www.instagram.com/poker.mtts" target="_blank" rel="noopener" class="eco-link" title="Instagram @poker.mtts" aria-label="Instagram">📸</a>
+      <a href="https://pokermtts.com.br/" target="_blank" rel="noopener" class="eco-link" title="PokerMTTs — site principal" aria-label="Site principal PokerMTTs">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg>
+      </a>
+      <a href="https://duvidas.pokermtts.com.br/dashboard" target="_blank" rel="noopener" class="eco-link" title="App de Dúvidas" aria-label="App de Dúvidas">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </a>
+      <a href="https://www.instagram.com/poker.mtts" target="_blank" rel="noopener" class="eco-link" title="Instagram @poker.mtts" aria-label="Instagram">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
     </span>
-    <button id="btn-feedback" title="Relatar bug ou sugerir melhoria" aria-label="Relatar bug ou sugerir melhoria">💬</button>
-    <button id="btn-help" title="Ajuda" aria-label="Ajuda">?</button>
+    <button id="btn-feedback" class="icon-only" title="Relatar bug ou sugerir melhoria" aria-label="Relatar bug ou sugerir melhoria">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </button>
+    <button id="btn-help" class="icon-only" title="Ajuda" aria-label="Ajuda">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </button>
   </div>
 </header>
 
@@ -1107,43 +1162,40 @@
 </div>
 
 <nav class="tabs" id="main-tabs" role="tablist" aria-label="Navegação principal">
-  <button data-tab="coach" class="active" role="tab" aria-selected="true" aria-controls="panel-coach" id="tab-coach" aria-label="Coach - Painel">🎯 Coach</button>
-  <button data-tab="hud" role="tab" aria-selected="false" aria-controls="panel-hud" id="tab-hud" aria-label="HUD - Estatísticas detalhadas">📊 HUD</button>
-  <button data-tab="filtros" role="tab" aria-selected="false" aria-controls="panel-filtros" id="tab-filtros" aria-label="Filtros e Mãos">🔍 Filtros & Mãos</button>
-  <button data-tab="search" role="tab" aria-selected="false" aria-controls="panel-search" id="tab-search" aria-label="Buscar">💬 Buscar</button>
-  <button data-tab="tournaments" role="tab" aria-selected="false" aria-controls="panel-tournaments" id="tab-tournaments" aria-label="Torneios">🏆 Torneios</button>
-  <button data-tab="quiz" role="tab" aria-selected="false" aria-controls="panel-quiz" id="tab-quiz" aria-label="Quiz de Ranges">🧠 Quiz</button>
-  <button data-tab="ranges" role="tab" aria-selected="false" aria-controls="panel-ranges" id="tab-ranges" aria-label="Biblioteca de Ranges">📚 Ranges</button>
-  <button data-tab="benchmarks" role="tab" aria-selected="false" aria-controls="panel-benchmarks" id="tab-benchmarks" aria-label="Configurar Padrões">⚙️ Padrões</button>
+  <button data-tab="coach" class="active" role="tab" aria-selected="true" aria-controls="panel-coach" id="tab-coach">Coach</button>
+  <button data-tab="hud" role="tab" aria-selected="false" aria-controls="panel-hud" id="tab-hud">HUD</button>
+  <button data-tab="filtros" role="tab" aria-selected="false" aria-controls="panel-filtros" id="tab-filtros">Filtros &amp; Mãos</button>
+  <button data-tab="search" role="tab" aria-selected="false" aria-controls="panel-search" id="tab-search">Buscar</button>
+  <button data-tab="tournaments" role="tab" aria-selected="false" aria-controls="panel-tournaments" id="tab-tournaments">Torneios</button>
+  <button data-tab="quiz" role="tab" aria-selected="false" aria-controls="panel-quiz" id="tab-quiz">Quiz</button>
+  <button data-tab="ranges" role="tab" aria-selected="false" aria-controls="panel-ranges" id="tab-ranges">Ranges</button>
+  <button data-tab="benchmarks" role="tab" aria-selected="false" aria-controls="panel-benchmarks" id="tab-benchmarks">Padrões</button>
 </nav>
 
 <main>
-  <!-- Welcome -->
+  <!-- [v6.13 Bloco 3] Welcome — só aparece no Coach tab quando HANDS.length === 0.
+       switchMainTab() controla visibilidade (esconde em todas as outras tabs). -->
   <div class="welcome" id="welcome">
-    <h2 style="color:var(--accent);font-size:32px;margin-bottom:8px">🎯 LeakLab</h2>
-    <p style="font-size:15px;color:var(--fg-dim);margin-bottom:8px">Análise individual de pôquer MTT — Coach, HUD e Quiz GTO.</p>
-    <p style="font-size:12px;color:var(--fg-link);margin-bottom:30px">100% privado — suas mãos ficam só no seu navegador, nada é enviado pra servidor.</p>
-    <button class="cta primary-cta" onclick="document.getElementById('welcome').style.display='none';switchMainTab('quiz');" style="margin:8px auto;display:block">
-      <div style="font-size:22px;margin-bottom:4px">▶ Começar Quiz</div>
-      <div style="font-size:13px;opacity:0.9">Mesa visual, EVs, repetição espaçada</div>
-    </button>
-    <div style="display:flex;align-items:center;gap:14px;max-width:400px;margin:24px auto 16px;color:var(--fg-dim)">
-      <div style="flex:1;height:1px;background:var(--border)"></div>
-      <span style="font-size:11px;text-transform:uppercase;letter-spacing:1px">ou análise pessoal</span>
-      <div style="flex:1;height:1px;background:var(--border)"></div>
+    <h1><span class="accent">LeakLab</span> — análise de pôquer MTT</h1>
+    <p class="subtitle">Coach, HUD com 82 stats e Quiz GTO interativo.</p>
+    <p class="privacy-note">100% no seu navegador. Sem login, sem servidor de dados.</p>
+    <div class="welcome-ctas">
+      <button type="button" class="welcome-cta primary" onclick="document.getElementById('welcome').style.display='none';switchMainTab('quiz');">
+        <span class="cta-title">Começar Quiz</span>
+        <span class="cta-desc">Mesa visual, EVs e repetição espaçada</span>
+      </button>
+      <label class="welcome-cta secondary">
+        <span class="cta-title">Carregar minhas mãos</span>
+        <span class="cta-desc">JSON gerado pelo parser · só você vê</span>
+        <input type="file" id="cta-hands" accept=".json" style="display:none">
+      </label>
     </div>
-    <label class="cta secondary-cta" style="margin:0 auto;display:block;min-width:280px">
-      <div style="font-size:15px">📊 Carregar minhas mãos</div>
-      <div style="font-size:11px;opacity:0.7;margin-top:2px">JSON gerado pelo parser · só você vê</div>
-      <input type="file" id="cta-hands" accept=".json" style="display:none">
-    </label>
-    <p style="font-size: 13px; color:var(--fg-dim); margin-top:30px">
-      <a href="#" onclick="showOnboarding();return false;" style="color:var(--accent);text-decoration:underline">📖 Como funciona o LeakLab?</a>
-      &nbsp;·&nbsp;
-      <a href="#" onclick="showHowToParse();return false;" style="color:var(--accent);text-decoration:underline">🛠 Não tenho hands.json — como gero?</a>
-    </p>
-    <p style="font-size:11px;color:var(--fg-dim);margin-top:18px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.5">
-      🔒 <b>Privacidade:</b> tudo roda no seu navegador. As mãos que você carrega não saem do seu computador — não há login, servidor de dados, nem analytics. Cada usuário vê apenas suas próprias mãos.
+    <div class="aux-links">
+      <a href="#" onclick="showOnboarding();return false;">Como funciona o LeakLab</a>
+      <a href="#" onclick="showHowToParse();return false;">Como gerar o hands.json</a>
+    </div>
+    <p class="privacy-footer">
+      Tudo roda no seu navegador. As mãos que você carrega não saem do seu computador. Não há login, servidor de dados nem analytics.
     </p>
   </div>
 
@@ -1186,7 +1238,7 @@
         Click num botão de filtro rápido OU digite em português o que quer ver.
       </p>
 
-      <h3 style="color:var(--fg-link);margin:0 0 10px 0;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">⚡ Filtros rápidos</h3>
+      <h3 style="color:var(--fg-dim);margin:0 0 10px 0;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">⚡ Filtros rápidos</h3>
       <div class="quick-filters" id="quick-filters"></div>
 
       <div class="search-input-wrap">
@@ -1196,13 +1248,13 @@
       </div>
       <div class="search-feedback" id="search-feedback" role="status" aria-live="polite" aria-atomic="false"></div>
 
-      <h3 style="color:var(--fg-link);margin:24px 0 10px 0;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">📖 Palavras reconhecidas</h3>
+      <h3 style="color:var(--fg-dim);margin:24px 0 10px 0;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">📖 Palavras reconhecidas</h3>
       <p style="color:var(--fg-dim);font-size:12px;margin-bottom:14px">
         Use qualquer combinação dessas palavras na busca. Misture livre — ex: <code>"BTN unopened folds 25 a 35bb"</code>.
       </p>
       <div class="keyword-grid" id="keyword-grid"></div>
 
-      <h3 style="color:var(--fg-link);margin:24px 0 10px 0;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">💡 Exemplos prontos</h3>
+      <h3 style="color:var(--fg-dim);margin:24px 0 10px 0;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">💡 Exemplos prontos</h3>
       <div class="search-examples" id="search-examples"></div>
     </div>
   </div>
@@ -1307,7 +1359,7 @@
       <label class="btn" style="background: var(--bg-3); border: 1px solid var(--border); padding: 6px 14px; border-radius: 6px; cursor: pointer;">Importar JSON
         <input type="file" id="file-import-benchmarks" accept=".json" style="display:none">
       </label>
-      <span style="color: var(--fg-dim); font-size: 12px; margin-left: auto;">Editar valores afeta as cores na HUD ao vivo</span>
+      <span style="color: var(--fg-mute); font-size: var(--ts-xs); margin-left: auto;">Editar valores afeta as cores da HUD ao vivo</span>
     </div>
     <div id="benchmarks-content"></div>
   </div>
@@ -1644,6 +1696,12 @@ function switchMainTab(name) {
   document.querySelectorAll(".panel").forEach(p => {
     p.classList.toggle("active", p.id === `panel-${name}`);
   });
+  // [v6.13 Bloco 3] Welcome só aparece no Coach quando ainda não há dados.
+  // Antes, o welcome ficava visível em TODAS as tabs sem dados — bug crítico de UX.
+  const welcome = document.getElementById("welcome");
+  if (welcome) {
+    welcome.style.display = (name === "coach" && HANDS.length === 0) ? "" : "none";
+  }
   if (name === "coach") renderCoach();
   if (name === "hud") renderHud();
   if (name === "tournaments") renderTournaments();
@@ -3007,7 +3065,7 @@ function openTournamentView(tcode) {
   document.getElementById("modal-content").innerHTML = `
     <h2>${escHtml(t.name)}</h2>
     <div class="sub">${escHtml(t.hero)} · ${escHtml(t.buyin || "")} · ${escHtml((t.startdate || "").slice(0, 16))} · ${hands.length} mãos · ${cumBb >= 0 ? "+" : ""}${cumBb.toFixed(1)} BB total</div>
-    <h3 style="color:var(--fg-link);font-size:12px;margin:14px 0 6px">Curva de BB ao longo do torneio</h3>
+    <h3 style="color:var(--fg-dim);font-size:12px;margin:14px 0 6px">Curva de BB ao longo do torneio</h3>
     <div class="bb-chart">
       <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
         <g class="grid">${gridLines}</g>
@@ -3021,7 +3079,7 @@ function openTournamentView(tcode) {
       </svg>
       <div class="tip" id="bb-tip"></div>
     </div>
-    <h3 style="color:var(--fg-link);font-size:12px;margin:14px 0 6px">Mãos do torneio</h3>
+    <h3 style="color:var(--fg-dim);font-size:12px;margin:14px 0 6px">Mãos do torneio</h3>
     <table class="hands-table" style="font-size:11.5px">
       <thead><tr><th>Time</th><th>Pos</th><th>Faced</th><th>Action</th><th>Cards</th><th>BB</th><th>Won</th></tr></thead>
       <tbody>${rows}</tbody>
@@ -3781,7 +3839,7 @@ function renderQuiz() {
         <h2 style="color:var(--accent);font-size:20px;margin:0">Quiz GTO</h2>
         <div style="color:var(--fg-dim);font-size:12px">${eligibleRanges.length} range(s) disponível(is) · stack ${QUIZ.selectedStack === 'all' ? 'todos' : QUIZ.selectedStack + 'bb'}</div>
       </div>
-      <div class="score">Acertos <b>${QUIZ.score}</b> / ${QUIZ.total}${QUIZ.wrongQueue.length > 0 ? ` <span style="margin-left:10px;color:var(--bad);font-size:11px">🔁 ${QUIZ.wrongQueue.length} pra revisar</span>` : ""}</div>
+      <div class="score">Acertos <b>${QUIZ.score}</b> / ${QUIZ.total}${QUIZ.wrongQueue.length > 0 ? ` <span style="margin-left:10px;color:var(--bad);font-size:11px">${QUIZ.wrongQueue.length} pra revisar</span>` : ""}</div>
     </div>
     <div class="quiz-config">
       <span>Stack:</span>
@@ -3800,13 +3858,13 @@ function renderQuiz() {
       </label>
       <label style="display:flex;align-items:center;gap:6px;cursor:pointer" title="Bip leve em acerto/erro">
         <input type="checkbox" id="quiz-sound" ${localStorage.getItem('leaklab_quiz_sound') !== '0' ? "checked" : ""}>
-        <span>🔊 Som</span>
+        <span>Som</span>
       </label>
       <button id="quiz-reset">Resetar score</button>
-      <button id="quiz-focused" title="Sessão de 10 perguntas focada no range atual">🎯 Estudo focado (10)</button>
-      <button id="quiz-drill" title="Drill express: máximo de perguntas em 30 segundos" style="background:#3a1a3a;color:#ffa0d0;border:1px solid #5a2858">⚡ Drill 30s</button>
-      <button id="quiz-export" title="Exporta histórico de respostas (CSV ou JSON)">💾 Exportar</button>
-      <button id="quiz-share" title="Copia URL com config atual pra compartilhar">🔗 Compartilhar</button>
+      <button id="quiz-focused" title="Sessão de 10 perguntas focada no range atual">Estudo focado (10)</button>
+      <button id="quiz-drill" title="Drill express: máximo de perguntas em 30 segundos">Drill 30s</button>
+      <button id="quiz-export" title="Exporta histórico de respostas (CSV ou JSON)">Exportar</button>
+      <button id="quiz-share" title="Copia URL com config atual pra compartilhar">Compartilhar</button>
     </div>
     <div id="quiz-content"></div>
     <div id="quiz-focused-progress" style="display:none;margin:12px 0;padding:10px 14px;background:#1a2a3a;border:1px solid #2a4068;border-radius:6px;font-size:13px;color:#a0d0ff"></div>
@@ -3850,7 +3908,7 @@ function renderQuiz() {
     const url = getShareableQuizUrl();
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url).then(() => {
-        showQuizToast('🔗 URL copiada! Cola onde quiser.');
+        showQuizToast('URL copiada! Cola onde quiser.');
       }).catch(() => prompt('Copie esta URL:', url));
     } else {
       prompt('Copie esta URL:', url);
@@ -3912,7 +3970,7 @@ function startDrillSession() {
     alert("Termine a sessão de Estudo Focado antes de começar um Drill.");
     return;
   }
-  if (!confirm(`⚡ DRILL EXPRESS — 30 segundos pra responder o máximo de perguntas possível.\n\n• Acerto: +1 ponto\n• Erro: -1 ponto (cuidado!)\n• Pular: 0\n\nUsa atalhos do teclado (R/F) pra ser mais rápido. Bora?`)) return;
+  if (!confirm(`Drill Express — 30 segundos pra responder o máximo de perguntas possível.\n\n• Acerto: +1 ponto\n• Erro: -1 ponto (cuidado!)\n• Pular: 0\n\nUsa atalhos do teclado (R/F) pra ser mais rápido. Bora?`)) return;
 
   QUIZ.drillSession = {
     active: true,
@@ -3951,7 +4009,7 @@ function updateDrillTimer() {
   const pctTime = ds.timeLeft / ds.duration;
   const color = pctTime > 0.5 ? '#5dd684' : pctTime > 0.25 ? '#f5c14a' : '#ed6a6a';
   overlay.innerHTML = `
-    <div style="font-size:11px;letter-spacing:1px;opacity:0.8">⚡ DRILL</div>
+    <div style="font-size:11px;letter-spacing:1px;opacity:0.8">DRILL</div>
     <div style="font-size:32px;font-weight:700;color:${color};line-height:1">${ds.timeLeft.toFixed(1)}s</div>
     <div style="font-size:13px;margin-top:4px">Pontos: <b>${ds.points}</b></div>
     <div style="font-size:11px;opacity:0.7">${ds.correct}/${ds.answered} ok</div>
@@ -3974,9 +4032,9 @@ function endDrillSession() {
   // Verdict baseado em pontos (acertos - erros)
   let verdict, badge;
   if (ds.points >= 20) { verdict = '🔥 ELITE!'; badge = '#5dd684'; }
-  else if (ds.points >= 12) { verdict = '🎯 Excelente!'; badge = '#5dd684'; }
-  else if (ds.points >= 6) { verdict = '👍 Bom ritmo'; badge = '#f5c14a'; }
-  else if (ds.points >= 0) { verdict = '⚠ Devagar — pratique mais'; badge = '#f5c14a'; }
+  else if (ds.points >= 12) { verdict = 'Excelente!'; badge = '#5dd684'; }
+  else if (ds.points >= 6) { verdict = 'Bom ritmo'; badge = '#f5c14a'; }
+  else if (ds.points >= 0) { verdict = 'Devagar — pratique mais'; badge = '#f5c14a'; }
   else { verdict = '💀 Negative — mais erros que acertos'; badge = '#ed6a6a'; }
 
   let wrongHtml = '';
@@ -3988,7 +4046,7 @@ function endDrillSession() {
   }
 
   document.getElementById('modal-content').innerHTML = `
-    <h2>⚡ Drill Express terminou</h2>
+    <h2>Drill Express terminou</h2>
     <div style="text-align:center;margin:18px 0">
       <div style="font-size:48px;font-weight:700;color:${badge};line-height:1">${ds.points} pts</div>
       <div style="font-size:14px;color:var(--fg-dim);margin-top:6px">${ds.answered} perguntas · ${ds.correct} ok · ${accuracy}% acerto</div>
@@ -3997,7 +4055,7 @@ function endDrillSession() {
     ${wrongHtml}
     <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap">
       <button onclick="document.getElementById('modal').classList.remove('show'); QUIZ.drillSession=null; renderQuiz();" style="padding:10px 20px;background:var(--bg-3);color:var(--fg);border:1px solid var(--border);border-radius:6px;cursor:pointer">Voltar</button>
-      <button onclick="document.getElementById('modal').classList.remove('show'); QUIZ.drillSession=null; startDrillSession();" style="padding:10px 20px;background:#3a1a3a;color:#ffa0d0;border:1px solid #5a2858;border-radius:6px;cursor:pointer;font-weight:600">⚡ Outra rodada</button>
+      <button onclick="document.getElementById('modal').classList.remove('show'); QUIZ.drillSession=null; startDrillSession();" style="padding:10px 20px;background:var(--accent);color:#000;border:none;border-radius:var(--r-sm);cursor:pointer;font-weight:600">Outra rodada</button>
     </div>
   `;
   document.getElementById('modal').classList.add('show');
@@ -4050,7 +4108,7 @@ function updateFocusedProgress() {
   if (!fs || !fs.active) { el.style.display = 'none'; return; }
   el.style.display = 'block';
   const pct = fs.answered > 0 ? (100 * fs.correct / fs.answered).toFixed(0) : 0;
-  el.innerHTML = `🎯 <b>Sessão focada</b> — ${fs.startScope} · pergunta ${fs.answered + 1} de ${fs.target} · acertos ${fs.correct}/${fs.answered} (${pct}%)`;
+  el.innerHTML = `<b>Sessão focada</b> — ${fs.startScope} · pergunta ${fs.answered + 1} de ${fs.target} · acertos ${fs.correct}/${fs.answered} (${pct}%)`;
 }
 
 function endFocusedSession() {
@@ -4071,7 +4129,7 @@ function endFocusedSession() {
         </div>`).join('')}
       </div>`;
   }
-  const verdict = finalPct >= 80 ? '🎉 Excelente!' : finalPct >= 60 ? '👍 Bom!' : '⚠ Precisa estudar mais';
+  const verdict = finalPct >= 80 ? 'Excelente!' : finalPct >= 60 ? 'Bom!' : 'Precisa estudar mais';
 
   document.getElementById('modal-content').innerHTML = `
     <h2>Sessão focada concluída</h2>
@@ -4421,7 +4479,7 @@ function renderQuizTable(container, range, hand) {
     const miniCards = st.hasCards && !st.hero
       ? '<div class="qt-mini-cards"><div class="qt-mini-card"></div><div class="qt-mini-card"></div></div>'
       : '';
-    const posLabel = st.hero ? `${pos} · você` : pos;
+    const posLabel = pos;
     seatsHtml += `<div class="${classes.join(' ')}" data-pos="${pos}" style="left:${leftPct.toFixed(2)}%;top:${topPct.toFixed(2)}%;">
       <div class="qt-dot"></div>
       <div class="qt-pos">${posLabel}</div>
@@ -4443,18 +4501,19 @@ function renderQuizTable(container, range, hand) {
     heroCardsHtml += '</div>';
   }
 
-  // Cenário + contexto
+  // Cenário + contexto. "Sua vez" removido — a pergunta abaixo já indica decisão.
   const scenarioMap = {
-    'open': 'RFI · Sua vez',
-    'unopened': 'RFI · Sua vez',
-    '3bet': '3BET · Sua vez',
-    '4bet': '4BET · Sua vez',
+    'open': 'RFI',
+    'unopened': 'RFI',
+    '3bet': '3-bet',
+    '4bet': '4-bet',
     'iso': 'ISO · vilão limpou',
   };
   const scKey = ((range.scenario || 'open') + '').toLowerCase();
   const scenarioLabel = scenarioMap[scKey] || `${range.scenario || 'Open'} · ${heroPos}`;
   const rangePct = range.extracted_pct ?? range.gto_target_pct ?? null;
-  const pctStr = rangePct !== null ? `<span class="qt-sep">·</span><span>abre <b>${escHtml(String(rangePct))}%</b></span>` : '';
+  const rangePctRounded = rangePct !== null ? Math.round(Number(rangePct)) : null;
+  const pctStr = rangePctRounded !== null ? `<span class="qt-sep">·</span><span>abre <b>${rangePctRounded}%</b></span>` : '';
 
   container.innerHTML = `
     <div class="qt-stage">
@@ -4489,7 +4548,7 @@ function nextQuizQuestion() {
     const fb = document.getElementById("quiz-feedback");
     if (fb) {
       fb.style.display = "block";
-      fb.innerHTML = `<div class="verdict" style="color:var(--good)">🎉 Sem erros pra revisar!</div>
+      fb.innerHTML = `<div class="verdict" style="color:var(--good)">Sem erros pra revisar.</div>
         <div style="margin-top:8px;color:var(--fg-dim);font-size:13px">Mude o modo pra "Bordas" ou "Aleatório" pra continuar treinando.</div>`;
     }
     document.querySelectorAll(".quiz-actions button").forEach(b => b.disabled = true);
@@ -4523,9 +4582,9 @@ function nextQuizQuestion() {
     <div class="quiz-card">
       <div id="quiz-table-dom" style="margin:0 auto 8px;"></div>
       <div class="quiz-actions">
-        <button class="raise" onclick="answerQuiz('raise')" title="Atalho: R">▲ Open / Raise <kbd>R</kbd></button>
-        <button class="fold" onclick="answerQuiz('fold')" title="Atalho: F">✗ Fold <kbd>F</kbd></button>
-        <button class="skip" onclick="nextQuizQuestion()" title="Atalho: N ou Espaço">Pular → <kbd>N</kbd></button>
+        <button class="raise" onclick="answerQuiz('raise')" title="Atalho: R">Open / Raise <kbd>R</kbd></button>
+        <button class="fold" onclick="answerQuiz('fold')" title="Atalho: F">Fold <kbd>F</kbd></button>
+        <button class="skip" onclick="nextQuizQuestion()" title="Atalho: N ou Espaço">Pular <kbd>N</kbd></button>
       </div>
       <div class="quiz-feedback" id="quiz-feedback" role="status" aria-live="polite" style="display:none"></div>
     </div>
@@ -6876,21 +6935,15 @@ function renderCoach() {
   // [VISUAL v2 2026-04-26] Hero hierárquico: 2 KPIs grandes + 5 pills compactas
   let html = `
     <div class="coach-hero">
-      <h2>📊 Resumo do seu jogo${periodo}${dsActive}</h2>
+      <h2>Resumo do seu jogo${periodo}${dsActive}</h2>
       <div class="stats-grid">
         <div class="coach-kpi ${bbCls}">
-          <div class="icon">${totalBb >= 0 ? "📈" : "📉"}</div>
-          <div>
-            <div class="v">${totalBb >= 0 ? "+" : ""}${totalBb.toFixed(0)}</div>
-            <div class="l">BB total no período</div>
-          </div>
+          <div class="v">${totalBb >= 0 ? "+" : ""}${totalBb.toFixed(0)}</div>
+          <div class="l">BB total no período</div>
         </div>
         <div class="coach-kpi ${bb100Cls}" title="BB ganho a cada 100 mãos — métrica de winrate">
-          <div class="icon">🎯</div>
-          <div>
-            <div class="v">${bb100Str}</div>
-            <div class="l">BB / 100 mãos · winrate</div>
-          </div>
+          <div class="v">${bb100Str}</div>
+          <div class="l">BB / 100 mãos · winrate</div>
         </div>
         <div class="coach-pills-mini">
           <div class="pill"><div class="v">${hands.length.toLocaleString("pt-BR")}</div><div class="l">Mãos</div></div>
@@ -6906,7 +6959,7 @@ function renderCoach() {
   // [FIX 2026-04-25]: leak compostos com destaque accent (gradient envolvente)
   if (compounds.length > 0) {
     html += `<div class="coach-patterns-wrap">
-      <div class="coach-section-title">🔍 Padrões detectados no seu jogo</div>
+      <div class="coach-section-title">Padrões detectados no seu jogo</div>
       <div class="coach-cards">`;
     for (const cp of compounds) {
       html += `<div class="coach-card compound" style="cursor:default">
@@ -6915,22 +6968,10 @@ function renderCoach() {
         <div class="desc">${cp.desc}</div>
       </div>`;
     }
-    html += `</div></div>`;  // fecha .coach-cards e .coach-patterns-wrap
+    html += `</div></div>`;
   }
 
-  // [VISUAL v2] Mapa de ícones por categoria de stat (visual no card)
-  const COACH_ICONS = {
-    rfi_BTN: "🎯", rfi_CO: "🎯", rfi_HJ: "🎯", rfi_MP: "🎯", rfi_EP: "🎯", rfi_SB: "🎯", rfi_BB: "🎯",
-    bb_xf: "🛡", bb_xc: "🛡", bb_xr: "🛡", bb_fold_vs_stab: "🛡", bb_f2_steal: "🛡", bb_f2_sb_steal: "🛡",
-    cbet_oop: "💥", cbet_ip_vs_bb: "💥", bet_turn_oop: "💥", bet_turn_ip: "💥", bet_river_oop: "💥", bet_river_ip: "💥",
-    river_bet: "🌊", call_river: "🌊",
-    "3bet_tot": "⚡", f3bet_tot: "⚡", "4bet_tot": "⚡", squeeze_tot: "⚡", bb_3bet_bw: "⚡",
-    agg_flop: "🔥", agg_turn: "🔥", agg_river: "🔥", af: "🔥",
-    vpip: "📊", pfr: "📊", saw_flop: "📊", wwsf: "📊", wtsd: "🏆", won_sd: "🏆",
-    steal_total: "🎯", limp: "🤐", iso_raise: "⚡", check_raise: "🥊", prob_turn: "🌊",
-    sb_cbet_flop: "💥", default: "📌"
-  };
-  const ic = (k) => COACH_ICONS[k] || COACH_ICONS.default;
+  // [v6.13 Bloco 6] COACH_ICONS e helper ic() removidos — leak-icon emoji saiu dos cards.
 
   // Helper pra renderizar barra "você vs ideal"
   const barFor = (c) => {
@@ -6950,12 +6991,11 @@ function renderCoach() {
   };
 
   if (leaks.length > 0) {
-    html += `<div class="coach-section-title">⚠️ Top ${Math.min(3, leaks.length)} leaks (corrija isso primeiro)</div><div class="coach-cards">`;
+    html += `<div class="coach-section-title">Top ${Math.min(3, leaks.length)} leaks (corrija isso primeiro)</div><div class="coach-cards">`;
     for (const c of leaks.slice(0, 3)) {
       const arrow = c.value > c.ideal ? "↑" : "↓";
       const sevHigh = c.rawSeverity >= 10 ? " severity-high" : "";
       html += `<div class="coach-card leak${sevHigh}" data-stat="${c.statKey}" tabindex="0" role="button" aria-label="Leak: ${c.friendly.name}, drill-down">
-        <div class="leak-icon">${ic(c.statKey)}</div>
         <span class="severity">${arrow} ${c.rawSeverity.toFixed(1)}pt fora</span>
         <div class="h">${c.friendly.name}</div>
         ${barFor(c)}
@@ -6968,11 +7008,10 @@ function renderCoach() {
   }
 
   if (warns.length > 0) {
-    html += `<div class="coach-section-title">⚙️ Pontos de atenção</div><div class="coach-cards">`;
+    html += `<div class="coach-section-title">Pontos de atenção</div><div class="coach-cards">`;
     for (const c of warns.slice(0, 3)) {
       const arrow = c.value > c.ideal ? "↑" : "↓";
       html += `<div class="coach-card warn" data-stat="${c.statKey}" tabindex="0" role="button" aria-label="Atenção: ${c.friendly.name}, drill-down">
-        <div class="leak-icon">${ic(c.statKey)}</div>
         <span class="severity">${arrow} ${c.deviation.toFixed(1)}pt do ideal</span>
         <div class="h">${c.friendly.name}</div>
         ${barFor(c)}
@@ -6985,10 +7024,9 @@ function renderCoach() {
   }
 
   if (strengths.length > 0) {
-    html += `<div class="coach-section-title">✅ Seus pontos fortes</div><div class="coach-cards">`;
+    html += `<div class="coach-section-title">Seus pontos fortes</div><div class="coach-cards">`;
     for (const c of strengths.slice(0, 3)) {
       html += `<div class="coach-card strength" data-stat="${c.statKey}" tabindex="0" role="button" aria-label="Ponto forte: ${c.friendly.name}, drill-down">
-        <div class="leak-icon">${ic(c.statKey)}</div>
         <span class="severity">✓ ${c.deviation.toFixed(1)}pt do ideal</span>
         <div class="h">${c.friendly.name}</div>
         ${barFor(c)}
@@ -7007,10 +7045,9 @@ function renderCoach() {
   }
   // Celebrate quando só strengths (sólido)
   if (leaks.length === 0 && warns.length === 0 && strengths.length >= 3) {
-    html = html.replace(/<div class="coach-section-title">✅[^<]*<\/div>/, "") +
+    html = html.replace(/<div class="coach-section-title">Seus pontos fortes<\/div>/, "") +
       `<div class="coach-celebrate">
-        <div class="big-icon">🏆</div>
-        <h3>Jogo sólido — sem leaks no período!</h3>
+        <h3>Jogo sólido — sem leaks no período</h3>
         <p>Suas ${strengths.length} stats analisadas estão dentro do ideal GTO. Continue rodando volume e revisite essa aba semanalmente pra detectar desvios cedo.</p>
       </div>`;
   }
@@ -7121,7 +7158,7 @@ function updateCoachSummary() {
 
 function renderHud() {
   if (!BENCHMARKS || HANDS.length === 0) {
-    document.getElementById("hud-grid").innerHTML = '<div style="color:var(--fg-dim);padding:30px;text-align:center">Carregue mãos primeiro.</div>';
+    document.getElementById("hud-grid").innerHTML = '<div class="coach-empty"><h3>Carregue suas mãos pra ver o HUD</h3><p>82 stats em 14 seções com cores baseadas em benchmarks editáveis.</p></div>';
     return;
   }
   bindHudToolbar();
@@ -7271,7 +7308,7 @@ function showStatBanner(statKey) {
         <span style="color:var(--accent); font-weight:700; font-size:14px">${escHtml(bench?.label || statKey)}</span>
         <span style="background:var(--accent-2); color:#000; padding:2px 10px; border-radius:10px; font-weight:700; font-size:13px">${valStr}</span>
         <span style="color:var(--fg-dim); font-size:12px">Ideal: ${idealStr}</span>
-        <span style="color:var(--fg-link); font-size:12px">${CURRENT.length} mãos</span>
+        <span style="color:var(--fg-dim); font-size:12px">${CURRENT.length} mãos</span>
         <button onclick="hideStatBanner()" style="margin-left:auto; background:transparent; border:1px solid var(--border); color:var(--fg-dim); padding:3px 10px; border-radius:4px; cursor:pointer; font-size:11px">✕ fechar</button>
       </div>
       ${drill?.explanation ? `<div style="margin-top:8px; color:var(--fg-dim); font-size:12px; line-height:1.5">${escHtml(drill.explanation)}</div>` : ""}
@@ -7532,14 +7569,14 @@ function openDrillDown(statKey) {
     <h2>${escHtml(bench?.label || statKey)}: ${value}${escHtml(bench?.unit || "")}</h2>
     <div class="sub">Ideal: ${ideal} · n=${drill.allHands.length} · ${verdict}</div>
     <p style="font-size:13px;color:var(--fg);margin-bottom:14px">${escHtml(drill.explanation || "")}</p>
-    <h3 style="color:var(--fg-link);font-size:12px;text-transform:uppercase;margin:14px 0 8px">Matriz de mãos relacionadas</h3>
+    <h3 style="color:var(--fg-dim);font-size:12px;text-transform:uppercase;margin:14px 0 8px">Matriz de mãos relacionadas</h3>
     <div id="drill-matrix" class="grid-large"></div>
     <div style="display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--fg-dim)">
       <span><b style="color:var(--bad)">■</b> Mãos onde você cometeu o leak</span>
       <span><b style="color:var(--good)">■</b> Mãos OK</span>
       <span><b>▦</b> Vazias mas GTO joga (em laranja)</span>
     </div>
-    <h3 style="color:var(--fg-link);font-size:12px;text-transform:uppercase;margin:18px 0 8px">Lista de mãos</h3>
+    <h3 style="color:var(--fg-dim);font-size:12px;text-transform:uppercase;margin:18px 0 8px">Lista de mãos</h3>
     <div id="drill-hands"></div>
   `;
   renderDrillMatrix(drill);
@@ -8279,7 +8316,13 @@ function renderBenchmarks() {
       </div>`;
     }
     html += `<div class="bench-section">
-      <h4>${escHtml(sec.title || secKey)} <span style="color:var(--fg-dim);font-size:10px;font-weight:400;text-transform:none">— Min / Ideal / Max</span></h4>
+      <h4>${escHtml(sec.title || secKey)}</h4>
+      <div class="bench-head" aria-hidden="true">
+        <span>Stat</span>
+        <span class="col-head">Min</span>
+        <span class="col-head ideal">Ideal</span>
+        <span class="col-head">Max</span>
+      </div>
       ${rows}
     </div>`;
   }
@@ -8335,32 +8378,44 @@ function renderRanges() {
     list.innerHTML = '<div style="color:var(--fg-dim);padding:30px;text-align:center;grid-column:1/-1">Nenhum range salvo. Use o botão acima para adicionar.</div>';
     return;
   }
-  // Helpers de classificação visual do range
+  // [v6.13 Bloco 5] Badges só quando diferenciam.
+  // - 8max é default — não mostra (todos os 13 ranges padrão são 8max). Outros formats sim.
+  // - "manual" é default (transcrito por humano) — não mostra. Vision e External sim.
   const formatBadge = (r) => {
-    const fmt = r.format || "";
-    if (fmt.includes("8max")) return `<span class="badge mtt">MTT 8-max</span>`;
+    const fmt = (r.format || "").toLowerCase();
     if (fmt.includes("9max")) return `<span class="badge mtt">MTT 9-max</span>`;
     if (fmt.includes("6max")) return `<span class="badge cash">Cash 6-max</span>`;
-    if (fmt.toLowerCase().includes("hu")) return `<span class="badge mtt">HU</span>`;
-    return `<span class="badge unknown">${escHtml(fmt || "?")}</span>`;
+    if (fmt.includes("hu")) return `<span class="badge mtt">HU</span>`;
+    if (fmt && !fmt.includes("8max")) return `<span class="badge unknown">${escHtml(fmt)}</span>`;
+    return "";
   };
   const sourceBadge = (r) => {
     if (r.extraction_method === "claude_vision") return `<span class="badge vision" title="Extraído por vision (binário)">vision</span>`;
-    if (r.transcribed_from_screenshot) return `<span class="badge manual" title="Transcrito manualmente">manual</span>`;
     if (r.license && r.license.includes("MIT")) return `<span class="badge external" title="Fonte externa MIT">external</span>`;
     return "";
+  };
+  // Label humano: "open_BTN_30bb_chipev_8max" → "BTN open · 30bb"
+  // ID técnico só aparece no aria-label e title pra debug.
+  const humanLabel = (r) => {
+    const pos = escHtml(r.hero_pos || "?");
+    const scenario = escHtml(r.scenario || "open");
+    const stack = escHtml(String(r.stack_bb || "?"));
+    return `${pos} ${scenario} · ${stack}bb`;
+  };
+  const metaLabel = (r) => {
+    const icm = escHtml(r.icm || "chipev");
+    const fmt = escHtml((r.format || "8max").replace(/^_/, ""));
+    return `${icm} · ${fmt}`;
   };
 
   list.innerHTML = ids.map(id => {
     const r = RANGES[id];
-    return `<div class="range-card" data-id="${escHtml(id)}" tabindex="0" role="button" aria-label="Range ${escHtml(id)}, ${escHtml(r.hero_pos || "?")} ${escHtml(r.scenario || "open")}">
-      <div class="badges">${formatBadge(r)}${sourceBadge(r)}</div>
-      <div class="id">${escHtml(id)}</div>
-      <div class="meta">
-        ${escHtml(r.hero_pos || "?")} · ${escHtml(r.scenario || "open")} · ${escHtml(String(r.stack_bb || "?"))}bb · ${escHtml(r.icm || "chipev")}
-      </div>
+    const badges = formatBadge(r) + sourceBadge(r);
+    return `<div class="range-card" data-id="${escHtml(id)}" tabindex="0" role="button" title="${escHtml(id)}" aria-label="Range ${escHtml(id)}, ${escHtml(r.hero_pos || "?")} ${escHtml(r.scenario || "open")}">
+      ${badges ? `<div class="badges">${badges}</div>` : ""}
+      <div class="id">${humanLabel(r)}</div>
+      <div class="meta">${metaLabel(r)}</div>
       <div class="actions">
-        <button class="view">Ver</button>
         <button class="del">Excluir</button>
       </div>
     </div>`;
@@ -8587,14 +8642,14 @@ function showHowToParse() {
     <p style="color:var(--fg-dim);margin-bottom:16px">
       O LeakLab analisa suas mãos a partir de um arquivo <code>hands.json</code> gerado pelo parser que vem junto com o app.
     </p>
-    <h3 style="color:var(--fg-link);font-size:13px;margin:14px 0 6px">📍 Passo 1: Salvar mão histórias</h3>
+    <h3 style="color:var(--fg-dim);font-size:13px;margin:14px 0 6px">📍 Passo 1: Salvar mão histórias</h3>
     <p style="font-size:13px;line-height:1.6">
       • <b>iPoker (Bet365, Titan, etc):</b> Settings → Save hand histories → Marca a opção e escolhe pasta.<br>
       • <b>PokerStars:</b> Options → Game History → Hand History → ON.<br>
       • <b>GGPoker:</b> Settings → Save Hand History.<br>
       • <b>888 (BigHit DB):</b> Settings → My Account → Game Log → Download.
     </p>
-    <h3 style="color:var(--fg-link);font-size:13px;margin:14px 0 6px">⚙️ Passo 2: Rodar o parser</h3>
+    <h3 style="color:var(--fg-dim);font-size:13px;margin:14px 0 6px">⚙️ Passo 2: Rodar o parser</h3>
     <p style="font-size:13px;line-height:1.6">Você precisa do Python instalado. Abra o terminal e rode:</p>
     <pre style="background:var(--bg);padding:10px;border-radius:6px;font-size:12px;overflow-x:auto"><code># iPoker / Bet365
 python src/parser.py /caminho/sua/pasta -o hands.json
@@ -8607,7 +8662,7 @@ python src/parser_ggpoker.py /caminho/sua/pasta -o hands.json
 
 # 888
 python src/parser_888.py arquivo.txt -o hands.json --slim</code></pre>
-    <h3 style="color:var(--fg-link);font-size:13px;margin:14px 0 6px">📂 Passo 3: Carregar no LeakLab</h3>
+    <h3 style="color:var(--fg-dim);font-size:13px;margin:14px 0 6px">📂 Passo 3: Carregar no LeakLab</h3>
     <p style="font-size:13px;line-height:1.6">
       Click no botão <b>📊 Carregar suas mãos</b> e selecione o <code>hands.json</code> gerado. Pronto — Coach detecta os top 3 leaks automaticamente.
     </p>
@@ -8954,7 +9009,7 @@ loadBenchmarks().then(async () => {
         }
       }
     }
-    badge.textContent = "Sem dados — use 'Carregar mãos' no topo";
+    badge.textContent = "Sem dados carregados";
   }
 });
 </script>
