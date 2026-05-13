@@ -526,12 +526,14 @@
   .ranges-toolbar button, .ranges-toolbar label.btn { background: var(--bg-3); border: 1px solid var(--border); color: var(--fg); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; }
   .ranges-toolbar button:hover, .ranges-toolbar label.btn:hover { border-color: var(--accent); }
   .ranges-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
-  .range-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; cursor: pointer; transition: border-color 0.1s; }
-  .range-card:hover { border-color: var(--accent); }
-  .range-card .id { color: var(--accent-2); font-weight: 600; font-size: 13px; }
-  .range-card .meta { color: var(--fg-dim); font-size: 11px; margin-top: 4px; }
-  .range-card .actions { display: flex; gap: 6px; margin-top: 8px; }
-  .range-card .actions button { background: var(--bg-3); border: 1px solid var(--border); color: var(--fg-dim); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+  /* [v6.13 Bloco 5] Range card mais espaçoso, todo clicável, hover refinado.
+     Label humano em destaque (era ID técnico). Botão "Ver" removido (todo card já clica). */
+  .range-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px; cursor: pointer; transition: transform var(--t-fast) var(--ease-std), border-color var(--t-fast) var(--ease-std), box-shadow var(--t-fast) var(--ease-std); }
+  .range-card:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.35); }
+  .range-card .id { color: var(--fg); font-weight: 600; font-size: var(--ts-md); letter-spacing: -0.005em; }
+  .range-card .meta { color: var(--fg-dim); font-size: var(--ts-xs); margin-top: 4px; }
+  .range-card .actions { display: flex; gap: 6px; margin-top: 12px; }
+  .range-card .actions button { background: var(--bg-3); border: 1px solid var(--border); color: var(--fg-dim); padding: 4px 10px; border-radius: var(--r-sm); cursor: pointer; font-size: var(--ts-xs); }
   .range-card .actions button.del { color: var(--bad); display: none; }
   body.range-mgmt-mode .range-card .actions button.del { display: inline-block; }
   .range-card .actions button:hover { border-color: var(--accent); color: var(--fg); }
@@ -8398,32 +8400,44 @@ function renderRanges() {
     list.innerHTML = '<div style="color:var(--fg-dim);padding:30px;text-align:center;grid-column:1/-1">Nenhum range salvo. Use o botão acima para adicionar.</div>';
     return;
   }
-  // Helpers de classificação visual do range
+  // [v6.13 Bloco 5] Badges só quando diferenciam.
+  // - 8max é default — não mostra (todos os 13 ranges padrão são 8max). Outros formats sim.
+  // - "manual" é default (transcrito por humano) — não mostra. Vision e External sim.
   const formatBadge = (r) => {
-    const fmt = r.format || "";
-    if (fmt.includes("8max")) return `<span class="badge mtt">MTT 8-max</span>`;
+    const fmt = (r.format || "").toLowerCase();
     if (fmt.includes("9max")) return `<span class="badge mtt">MTT 9-max</span>`;
     if (fmt.includes("6max")) return `<span class="badge cash">Cash 6-max</span>`;
-    if (fmt.toLowerCase().includes("hu")) return `<span class="badge mtt">HU</span>`;
-    return `<span class="badge unknown">${escHtml(fmt || "?")}</span>`;
+    if (fmt.includes("hu")) return `<span class="badge mtt">HU</span>`;
+    if (fmt && !fmt.includes("8max")) return `<span class="badge unknown">${escHtml(fmt)}</span>`;
+    return "";
   };
   const sourceBadge = (r) => {
     if (r.extraction_method === "claude_vision") return `<span class="badge vision" title="Extraído por vision (binário)">vision</span>`;
-    if (r.transcribed_from_screenshot) return `<span class="badge manual" title="Transcrito manualmente">manual</span>`;
     if (r.license && r.license.includes("MIT")) return `<span class="badge external" title="Fonte externa MIT">external</span>`;
     return "";
+  };
+  // Label humano: "open_BTN_30bb_chipev_8max" → "BTN open · 30bb"
+  // ID técnico só aparece no aria-label e title pra debug.
+  const humanLabel = (r) => {
+    const pos = escHtml(r.hero_pos || "?");
+    const scenario = escHtml(r.scenario || "open");
+    const stack = escHtml(String(r.stack_bb || "?"));
+    return `${pos} ${scenario} · ${stack}bb`;
+  };
+  const metaLabel = (r) => {
+    const icm = escHtml(r.icm || "chipev");
+    const fmt = escHtml((r.format || "8max").replace(/^_/, ""));
+    return `${icm} · ${fmt}`;
   };
 
   list.innerHTML = ids.map(id => {
     const r = RANGES[id];
-    return `<div class="range-card" data-id="${escHtml(id)}" tabindex="0" role="button" aria-label="Range ${escHtml(id)}, ${escHtml(r.hero_pos || "?")} ${escHtml(r.scenario || "open")}">
-      <div class="badges">${formatBadge(r)}${sourceBadge(r)}</div>
-      <div class="id">${escHtml(id)}</div>
-      <div class="meta">
-        ${escHtml(r.hero_pos || "?")} · ${escHtml(r.scenario || "open")} · ${escHtml(String(r.stack_bb || "?"))}bb · ${escHtml(r.icm || "chipev")}
-      </div>
+    const badges = formatBadge(r) + sourceBadge(r);
+    return `<div class="range-card" data-id="${escHtml(id)}" tabindex="0" role="button" title="${escHtml(id)}" aria-label="Range ${escHtml(id)}, ${escHtml(r.hero_pos || "?")} ${escHtml(r.scenario || "open")}">
+      ${badges ? `<div class="badges">${badges}</div>` : ""}
+      <div class="id">${humanLabel(r)}</div>
+      <div class="meta">${metaLabel(r)}</div>
       <div class="actions">
-        <button class="view">Ver</button>
         <button class="del">Excluir</button>
       </div>
     </div>`;
