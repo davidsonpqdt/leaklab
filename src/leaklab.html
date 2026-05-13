@@ -401,43 +401,37 @@
   .coach-hero h2 { color: var(--accent); margin: 0 0 6px 0; font-size: 20px; }
   /* Hero hierárquico: 2 KPI grandes + 5 pills compactas */
   .coach-hero .stats-grid { display: grid; grid-template-columns: minmax(220px, 1.2fr) minmax(220px, 1.2fr) 2fr; gap: 14px; margin-top: 16px; align-items: stretch; }
-  .coach-kpi { background: linear-gradient(135deg, rgba(45,212,191,0.08), rgba(45,212,191,0.02)); border: 1px solid rgba(45,212,191,0.18); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
-  .coach-kpi::before { content: ""; position: absolute; right: -20px; top: -20px; width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, rgba(45,212,191,0.12), transparent 70%); }
-  .coach-kpi .icon { font-size: 22px; opacity: 0.85; margin-bottom: 6px; }
-  .coach-kpi .v { font-size: 36px; font-weight: 800; line-height: 1; letter-spacing: -0.5px; color: var(--accent); font-variant-numeric: tabular-nums; }
-  .coach-kpi .l { font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--fg-dim); margin-top: 8px; font-weight: 600; }
+  /* [v6.13 Bloco 6] Coach KPI — sem ::before radial decorativo. Cor + tamanho já chamam. */
+  .coach-kpi { background: linear-gradient(135deg, rgba(45,212,191,0.08), rgba(45,212,191,0.02)); border: 1px solid rgba(45,212,191,0.18); border-radius: var(--r-lg); padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; }
+  .coach-kpi .v { font-size: 36px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .coach-kpi .l { font-size: var(--ts-xs); text-transform: uppercase; letter-spacing: var(--ls-wide); color: var(--fg-dim); margin-top: 10px; font-weight: 600; }
   .coach-kpi.bb-pos { border-color: rgba(93,214,132,0.25); }
   .coach-kpi.bb-pos .v { color: var(--good); }
-  .coach-kpi.bb-pos::before { background: radial-gradient(circle, rgba(93,214,132,0.15), transparent 70%); }
   .coach-kpi.bb-neg { border-color: rgba(237,106,106,0.25); }
   .coach-kpi.bb-neg .v { color: var(--bad); }
-  .coach-kpi.bb-neg::before { background: radial-gradient(circle, rgba(237,106,106,0.15), transparent 70%); }
   .coach-pills-mini { display: grid; grid-template-columns: repeat(auto-fit, minmax(78px, 1fr)); gap: 8px; }
   .coach-pills-mini .pill { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; text-align: center; }
   .coach-pills-mini .pill .v { color: var(--fg); font-size: 16px; font-weight: 700; line-height: 1; }
   .coach-pills-mini .pill .l { color: var(--fg-dim); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
   /* Section titles */
-  .coach-section-title { color: var(--fg-dim); font-size: 13px; text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; margin: 22px 0 10px; }
+  .coach-section-title { color: var(--fg-dim); font-size: var(--ts-base); text-transform: uppercase; letter-spacing: var(--ls-wide); font-weight: 700; margin: 22px 0 10px; }
   .coach-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; }
-  /* Cards de leak — com ícone e barra comparativa */
-  .coach-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px 14px 64px; cursor: pointer; transition: transform .16s, border-color .16s, box-shadow .16s; position: relative; }
+  /* [v6.13 Bloco 6] Coach card — sem leak-icon emoji (era 5 sinais de "isto é importante").
+     Mantém: border-left colorido, severity badge, coach-bar. */
+  .coach-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px; cursor: pointer; transition: transform var(--t-fast) var(--ease-std), border-color var(--t-fast) var(--ease-std), box-shadow var(--t-fast) var(--ease-std); position: relative; }
   .coach-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.35); border-color: var(--accent); }
   .coach-card.leak { border-left: 4px solid var(--bad); }
   .coach-card.warn { border-left: 4px solid var(--warn); }
   .coach-card.strength { border-left: 4px solid var(--good); }
-  .coach-card .leak-icon { position: absolute; left: 14px; top: 14px; width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; background: rgba(45,212,191,0.08); border: 1px solid var(--border); }
-  .coach-card.leak .leak-icon { background: rgba(237,106,106,0.10); border-color: rgba(237,106,106,0.30); }
-  .coach-card.warn .leak-icon { background: rgba(245,193,74,0.10); border-color: rgba(245,193,74,0.30); }
-  .coach-card.strength .leak-icon { background: rgba(93,214,132,0.10); border-color: rgba(93,214,132,0.30); }
-  .coach-card .severity { position: absolute; top: 14px; right: 14px; font-size: 11px; padding: 3px 9px; border-radius: 12px; font-weight: 700; }
+  .coach-card .severity { position: absolute; top: 14px; right: 14px; font-size: var(--ts-xs); padding: 3px 9px; border-radius: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .coach-card.leak .severity { background: rgba(237,106,106,0.15); color: var(--bad); }
   .coach-card.warn .severity { background: rgba(245,193,74,0.15); color: var(--warn); }
   .coach-card.strength .severity { background: rgba(93,214,132,0.15); color: var(--good); }
-  .coach-card .h { color: var(--fg); font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-  .coach-card .stat-line { color: var(--fg-dim); font-size: 12.5px; margin-bottom: 8px; }
+  .coach-card .h { color: var(--fg); font-size: var(--ts-md); font-weight: 600; margin-bottom: 6px; padding-right: 90px; }
+  .coach-card .stat-line { color: var(--fg-dim); font-size: var(--ts-sm); margin-bottom: 8px; }
   .coach-card .stat-line b { color: var(--fg); }
-  .coach-card .desc { color: var(--fg-dim); font-size: 13px; line-height: 1.5; }
-  .coach-card .action { color: var(--accent); font-size: 11px; margin-top: 10px; font-weight: 600; }
+  .coach-card .desc { color: var(--fg-dim); font-size: var(--ts-base); line-height: 1.5; }
+  .coach-card .action { color: var(--accent); font-size: var(--ts-xs); margin-top: 10px; font-weight: 600; }
   /* Barra comparativa "você vs ideal" */
   .coach-bar { position: relative; height: 8px; background: var(--bg-3); border-radius: 4px; margin: 10px 0 6px; overflow: visible; }
   .coach-bar .ideal-zone { position: absolute; top: 0; bottom: 0; background: rgba(93,214,132,0.18); border-left: 1px solid rgba(93,214,132,0.5); border-right: 1px solid rgba(93,214,132,0.5); border-radius: 2px; }
@@ -446,28 +440,22 @@
   .coach-card.strength .coach-bar .you-marker { background: var(--good); box-shadow: 0 0 8px rgba(93,214,132,0.6); }
   .coach-bar .ideal-tick { position: absolute; top: -2px; width: 2px; height: 12px; background: var(--accent); opacity: 0.7; }
   .coach-bar-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--fg-dim); margin-top: 2px; }
-  /* Severity high — pulse animation */
+  /* [v6.13 Bloco 6] Severity high — só border-left mais grosso + box-shadow sutil.
+     Removidos: ::before pulse animation infinita + emoji 🚨. Severity badge sólido já basta. */
   .coach-card.leak.severity-high { border-left-width: 5px; box-shadow: 0 0 0 1px rgba(237,106,106,0.25); }
-  .coach-card.leak.severity-high::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--bad), transparent); animation: severity-pulse 2s ease-in-out infinite; }
   .coach-card.leak.severity-high .severity { background: var(--bad); color: #1a0a0a; font-weight: 800; }
-  .coach-card.leak.severity-high .severity::before { content: "🚨 "; }
-  @keyframes severity-pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-  /* Padrões compostos — destaque accent gradient */
-  .coach-patterns-wrap { background: linear-gradient(135deg, rgba(45,212,191,0.05), rgba(125,211,192,0.02)); border: 1px solid rgba(45,212,191,0.18); border-radius: 14px; padding: 14px 16px 18px; margin: 18px 0; }
+  /* Padrões compostos — destaque accent. Sem 💡, sem ::after inset shadow. */
+  .coach-patterns-wrap { background: linear-gradient(135deg, rgba(45,212,191,0.05), rgba(125,211,192,0.02)); border: 1px solid rgba(45,212,191,0.18); border-radius: var(--r-lg); padding: 14px 16px 18px; margin: 18px 0; }
   .coach-patterns-wrap .coach-section-title { margin-top: 0; color: var(--accent); }
-  .coach-card.compound { background: rgba(13,13,15,0.5); border: 1px solid rgba(45,212,191,0.25); border-left: 4px solid var(--accent); padding-left: 16px; }
-  .coach-card.compound .leak-icon { display: none; }
-  .coach-card.compound::after { content: ""; position: absolute; inset: 0; border-radius: 10px; pointer-events: none; box-shadow: inset 0 0 30px rgba(45,212,191,0.05); }
+  .coach-card.compound { background: rgba(13,13,15,0.5); border: 1px solid rgba(45,212,191,0.25); border-left: 4px solid var(--accent); }
   .coach-card.compound .severity { background: rgba(45,212,191,0.15); color: var(--accent); border: 1px solid rgba(45,212,191,0.3); }
-  .coach-card.compound .h::before { content: "💡 "; }
-  /* Empty states */
+  /* [v6.13 Bloco 6] Empty + celebrate — sem big-icon emoji nem celebrate-pop animation. */
   .coach-empty { text-align: center; color: var(--fg-dim); padding: 60px 30px; }
-  .coach-empty h3 { color: var(--accent); margin-bottom: 8px; }
-  .coach-celebrate { text-align: center; padding: 50px 30px; background: linear-gradient(135deg, rgba(93,214,132,0.08), rgba(45,212,191,0.04)); border: 1px solid rgba(93,214,132,0.25); border-radius: 14px; margin: 18px 0; }
-  .coach-celebrate .big-icon { font-size: 56px; margin-bottom: 12px; animation: celebrate-pop .6s ease-out; }
-  .coach-celebrate h3 { color: var(--good); font-size: 20px; margin: 0 0 8px; }
-  .coach-celebrate p { color: var(--fg-dim); font-size: 13px; max-width: 480px; margin: 0 auto; line-height: 1.6; }
-  @keyframes celebrate-pop { 0% { transform: scale(0.5); opacity: 0; } 60% { transform: scale(1.15); opacity: 1; } 100% { transform: scale(1); } }
+  .coach-empty h3 { color: var(--accent); margin-bottom: 8px; font-size: var(--ts-xl); font-weight: 600; }
+  .coach-empty p { font-size: var(--ts-base); }
+  .coach-celebrate { text-align: center; padding: 48px 30px; background: linear-gradient(135deg, rgba(93,214,132,0.08), rgba(45,212,191,0.04)); border: 1px solid rgba(93,214,132,0.25); border-radius: var(--r-lg); margin: 18px 0; }
+  .coach-celebrate h3 { color: var(--good); font-size: var(--ts-xl); margin: 0 0 8px; font-weight: 600; }
+  .coach-celebrate p { color: var(--fg-dim); font-size: var(--ts-base); max-width: 480px; margin: 0 auto; line-height: 1.6; }
   /* Skeleton loading */
   .coach-skel { animation: skel-fade-in .2s ease-out; }
   .coach-skel-block { background: linear-gradient(90deg, var(--bg-2) 0%, var(--bg-3) 50%, var(--bg-2) 100%); background-size: 200% 100%; animation: skel-shimmer 1.4s ease-in-out infinite; border-radius: 8px; }
@@ -493,14 +481,15 @@
   .hud-tb-pills button.on { background: #1a3a3a; border-color: var(--accent); color: var(--accent); font-weight: 600; }
   .hud-tb-summary { color: var(--fg-dim); font-size: 12px; }
   .hud-tb-summary strong { color: var(--accent); }
+  /* [v6.13 Bloco 6] HUD card — tokens consistentes pra h4, stat row, val. */
   .hud-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 14px; }
-  .hud-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
-  .hud-card h4 { color: var(--accent); font-size: 12px; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 0.6px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-  .hud-stat { display: grid; grid-template-columns: 1fr auto auto auto; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid #222227; cursor: pointer; transition: background 0.1s; }
+  .hud-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px; }
+  .hud-card h4 { color: var(--accent); font-size: var(--ts-sm); margin: 0 0 10px; text-transform: uppercase; letter-spacing: var(--ls-wide); padding-bottom: 8px; border-bottom: 1px solid var(--border); font-weight: 700; }
+  .hud-stat { display: grid; grid-template-columns: 1fr auto auto auto; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid #222227; cursor: pointer; transition: background var(--t-fast) var(--ease-std); }
   .hud-stat:hover { background: #1f1f25; }
   .hud-stat:last-child { border-bottom: none; }
-  .hud-stat .name { font-size: 12.5px; color: var(--fg); }
-  .hud-stat .val { font-size: 13px; font-weight: 700; min-width: 60px; text-align: right; }
+  .hud-stat .name { font-size: var(--ts-sm); color: var(--fg); }
+  .hud-stat .val { font-size: var(--ts-base); font-weight: 700; min-width: 60px; text-align: right; font-variant-numeric: tabular-nums; }
   .hud-stat .val.good { color: var(--good); }
   .hud-stat .val.warn { color: var(--warn); }
   .hud-stat .val.bad { color: var(--bad); }
@@ -6946,21 +6935,15 @@ function renderCoach() {
   // [VISUAL v2 2026-04-26] Hero hierárquico: 2 KPIs grandes + 5 pills compactas
   let html = `
     <div class="coach-hero">
-      <h2>📊 Resumo do seu jogo${periodo}${dsActive}</h2>
+      <h2>Resumo do seu jogo${periodo}${dsActive}</h2>
       <div class="stats-grid">
         <div class="coach-kpi ${bbCls}">
-          <div class="icon">${totalBb >= 0 ? "📈" : "📉"}</div>
-          <div>
-            <div class="v">${totalBb >= 0 ? "+" : ""}${totalBb.toFixed(0)}</div>
-            <div class="l">BB total no período</div>
-          </div>
+          <div class="v">${totalBb >= 0 ? "+" : ""}${totalBb.toFixed(0)}</div>
+          <div class="l">BB total no período</div>
         </div>
         <div class="coach-kpi ${bb100Cls}" title="BB ganho a cada 100 mãos — métrica de winrate">
-          <div class="icon">🎯</div>
-          <div>
-            <div class="v">${bb100Str}</div>
-            <div class="l">BB / 100 mãos · winrate</div>
-          </div>
+          <div class="v">${bb100Str}</div>
+          <div class="l">BB / 100 mãos · winrate</div>
         </div>
         <div class="coach-pills-mini">
           <div class="pill"><div class="v">${hands.length.toLocaleString("pt-BR")}</div><div class="l">Mãos</div></div>
@@ -6976,7 +6959,7 @@ function renderCoach() {
   // [FIX 2026-04-25]: leak compostos com destaque accent (gradient envolvente)
   if (compounds.length > 0) {
     html += `<div class="coach-patterns-wrap">
-      <div class="coach-section-title">🔍 Padrões detectados no seu jogo</div>
+      <div class="coach-section-title">Padrões detectados no seu jogo</div>
       <div class="coach-cards">`;
     for (const cp of compounds) {
       html += `<div class="coach-card compound" style="cursor:default">
@@ -6985,22 +6968,10 @@ function renderCoach() {
         <div class="desc">${cp.desc}</div>
       </div>`;
     }
-    html += `</div></div>`;  // fecha .coach-cards e .coach-patterns-wrap
+    html += `</div></div>`;
   }
 
-  // [VISUAL v2] Mapa de ícones por categoria de stat (visual no card)
-  const COACH_ICONS = {
-    rfi_BTN: "🎯", rfi_CO: "🎯", rfi_HJ: "🎯", rfi_MP: "🎯", rfi_EP: "🎯", rfi_SB: "🎯", rfi_BB: "🎯",
-    bb_xf: "🛡", bb_xc: "🛡", bb_xr: "🛡", bb_fold_vs_stab: "🛡", bb_f2_steal: "🛡", bb_f2_sb_steal: "🛡",
-    cbet_oop: "💥", cbet_ip_vs_bb: "💥", bet_turn_oop: "💥", bet_turn_ip: "💥", bet_river_oop: "💥", bet_river_ip: "💥",
-    river_bet: "🌊", call_river: "🌊",
-    "3bet_tot": "⚡", f3bet_tot: "⚡", "4bet_tot": "⚡", squeeze_tot: "⚡", bb_3bet_bw: "⚡",
-    agg_flop: "🔥", agg_turn: "🔥", agg_river: "🔥", af: "🔥",
-    vpip: "📊", pfr: "📊", saw_flop: "📊", wwsf: "📊", wtsd: "🏆", won_sd: "🏆",
-    steal_total: "🎯", limp: "🤐", iso_raise: "⚡", check_raise: "🥊", prob_turn: "🌊",
-    sb_cbet_flop: "💥", default: "📌"
-  };
-  const ic = (k) => COACH_ICONS[k] || COACH_ICONS.default;
+  // [v6.13 Bloco 6] COACH_ICONS e helper ic() removidos — leak-icon emoji saiu dos cards.
 
   // Helper pra renderizar barra "você vs ideal"
   const barFor = (c) => {
@@ -7020,12 +6991,11 @@ function renderCoach() {
   };
 
   if (leaks.length > 0) {
-    html += `<div class="coach-section-title">⚠️ Top ${Math.min(3, leaks.length)} leaks (corrija isso primeiro)</div><div class="coach-cards">`;
+    html += `<div class="coach-section-title">Top ${Math.min(3, leaks.length)} leaks (corrija isso primeiro)</div><div class="coach-cards">`;
     for (const c of leaks.slice(0, 3)) {
       const arrow = c.value > c.ideal ? "↑" : "↓";
       const sevHigh = c.rawSeverity >= 10 ? " severity-high" : "";
       html += `<div class="coach-card leak${sevHigh}" data-stat="${c.statKey}" tabindex="0" role="button" aria-label="Leak: ${c.friendly.name}, drill-down">
-        <div class="leak-icon">${ic(c.statKey)}</div>
         <span class="severity">${arrow} ${c.rawSeverity.toFixed(1)}pt fora</span>
         <div class="h">${c.friendly.name}</div>
         ${barFor(c)}
@@ -7038,11 +7008,10 @@ function renderCoach() {
   }
 
   if (warns.length > 0) {
-    html += `<div class="coach-section-title">⚙️ Pontos de atenção</div><div class="coach-cards">`;
+    html += `<div class="coach-section-title">Pontos de atenção</div><div class="coach-cards">`;
     for (const c of warns.slice(0, 3)) {
       const arrow = c.value > c.ideal ? "↑" : "↓";
       html += `<div class="coach-card warn" data-stat="${c.statKey}" tabindex="0" role="button" aria-label="Atenção: ${c.friendly.name}, drill-down">
-        <div class="leak-icon">${ic(c.statKey)}</div>
         <span class="severity">${arrow} ${c.deviation.toFixed(1)}pt do ideal</span>
         <div class="h">${c.friendly.name}</div>
         ${barFor(c)}
@@ -7055,10 +7024,9 @@ function renderCoach() {
   }
 
   if (strengths.length > 0) {
-    html += `<div class="coach-section-title">✅ Seus pontos fortes</div><div class="coach-cards">`;
+    html += `<div class="coach-section-title">Seus pontos fortes</div><div class="coach-cards">`;
     for (const c of strengths.slice(0, 3)) {
       html += `<div class="coach-card strength" data-stat="${c.statKey}" tabindex="0" role="button" aria-label="Ponto forte: ${c.friendly.name}, drill-down">
-        <div class="leak-icon">${ic(c.statKey)}</div>
         <span class="severity">✓ ${c.deviation.toFixed(1)}pt do ideal</span>
         <div class="h">${c.friendly.name}</div>
         ${barFor(c)}
@@ -7077,10 +7045,9 @@ function renderCoach() {
   }
   // Celebrate quando só strengths (sólido)
   if (leaks.length === 0 && warns.length === 0 && strengths.length >= 3) {
-    html = html.replace(/<div class="coach-section-title">✅[^<]*<\/div>/, "") +
+    html = html.replace(/<div class="coach-section-title">Seus pontos fortes<\/div>/, "") +
       `<div class="coach-celebrate">
-        <div class="big-icon">🏆</div>
-        <h3>Jogo sólido — sem leaks no período!</h3>
+        <h3>Jogo sólido — sem leaks no período</h3>
         <p>Suas ${strengths.length} stats analisadas estão dentro do ideal GTO. Continue rodando volume e revisite essa aba semanalmente pra detectar desvios cedo.</p>
       </div>`;
   }
