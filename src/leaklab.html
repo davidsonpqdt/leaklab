@@ -513,12 +513,17 @@
   .bench-toolbar button { background: var(--bg-3); border: 1px solid var(--border); color: var(--fg); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; }
   .bench-toolbar button:hover { border-color: var(--accent); }
   .bench-toolbar button.primary { background: var(--accent); color: #000000; border-color: var(--accent); font-weight: 600; }
-  .bench-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
-  .bench-section h4 { color: var(--accent); font-size: 12px; margin: 0 0 10px 0; text-transform: uppercase; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-  .bench-row { display: grid; grid-template-columns: 1fr 80px 80px 80px; gap: 8px; align-items: center; padding: 5px 0; border-bottom: 1px solid #222227; font-size: 12px; }
+  /* [v6.13 Bloco 7] Padrões — header de coluna explícito + tipografia consistente. */
+  .bench-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 18px; margin-bottom: 12px; }
+  .bench-section h4 { color: var(--accent); font-size: var(--ts-sm); margin: 0 0 12px; letter-spacing: var(--ls-wide); text-transform: uppercase; font-weight: 700; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .bench-head { display: grid; grid-template-columns: 1fr 80px 80px 80px; gap: 8px; align-items: center; padding: 4px 0 8px; font-size: var(--ts-xs); color: var(--fg-mute); text-transform: uppercase; letter-spacing: var(--ls-wide); font-weight: 600; }
+  .bench-head .col-head { text-align: center; }
+  .bench-head .col-head.ideal { color: var(--good); }
+  .bench-row { display: grid; grid-template-columns: 1fr 80px 80px 80px; gap: 8px; align-items: center; padding: 5px 0; border-bottom: 1px solid #222227; font-size: var(--ts-sm); }
   .bench-row:last-child { border-bottom: none; }
   .bench-row .name { color: var(--fg); }
-  .bench-row input { background: var(--bg); border: 1px solid var(--border); color: var(--fg); padding: 4px 8px; border-radius: 4px; font-size: 12px; width: 100%; text-align: center; }
+  .bench-row input { background: var(--bg); border: 1px solid var(--border); color: var(--fg); padding: 5px 8px; border-radius: var(--r-sm); font-size: var(--ts-sm); width: 100%; text-align: center; font-variant-numeric: tabular-nums; }
+  .bench-row input:focus { outline: none; border-color: var(--accent); }
   .bench-row input.ideal { color: var(--good); font-weight: 600; }
 
   /* Ranges tab */
@@ -1365,7 +1370,7 @@
       <label class="btn" style="background: var(--bg-3); border: 1px solid var(--border); padding: 6px 14px; border-radius: 6px; cursor: pointer;">Importar JSON
         <input type="file" id="file-import-benchmarks" accept=".json" style="display:none">
       </label>
-      <span style="color: var(--fg-dim); font-size: 12px; margin-left: auto;">Editar valores afeta as cores na HUD ao vivo</span>
+      <span style="color: var(--fg-mute); font-size: var(--ts-xs); margin-left: auto;">Editar valores afeta as cores da HUD ao vivo</span>
     </div>
     <div id="benchmarks-content"></div>
   </div>
@@ -8344,7 +8349,13 @@ function renderBenchmarks() {
       </div>`;
     }
     html += `<div class="bench-section">
-      <h4>${escHtml(sec.title || secKey)} <span style="color:var(--fg-dim);font-size:10px;font-weight:400;text-transform:none">— Min / Ideal / Max</span></h4>
+      <h4>${escHtml(sec.title || secKey)}</h4>
+      <div class="bench-head" aria-hidden="true">
+        <span>Stat</span>
+        <span class="col-head">Min</span>
+        <span class="col-head ideal">Ideal</span>
+        <span class="col-head">Max</span>
+      </div>
       ${rows}
     </div>`;
   }
