@@ -736,13 +736,15 @@
   .qt-context-bar b { color: var(--fg); font-weight: 600; }
   .qt-context-bar .qt-sep { opacity: 0.4; }
   /* Header do cenário */
+  /* [v6.13 Bloco 4] Hierarquia da pergunta — label discreto + pergunta firme.
+     Era amarelo uppercase chamativo, agora cinza dim. Foco vai pra "O que GTO faz com...". */
   .qt-question { text-align: center; margin: 18px 0 16px 0; }
   .qt-question .qt-scenario {
-    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--accent-2); font-weight: 600; margin-bottom: 4px;
+    font-size: var(--ts-xs); letter-spacing: var(--ls-wide); text-transform: uppercase;
+    color: var(--fg-dim); font-weight: 600; margin-bottom: 6px;
   }
-  .qt-question .qt-ask { font-size: 16px; color: var(--fg); }
-  .qt-question .qt-ask b { color: var(--accent); font-family: 'Inter', sans-serif; }
+  .qt-question .qt-ask { font-size: var(--ts-lg); color: var(--fg); font-weight: 500; }
+  .qt-question .qt-ask b { color: var(--accent); font-weight: 700; }
   /* Mobile */
   @media (max-width: 600px) {
     .qt-stage { aspect-ratio: 16/11; }
@@ -3841,7 +3843,7 @@ function renderQuiz() {
         <h2 style="color:var(--accent);font-size:20px;margin:0">Quiz GTO</h2>
         <div style="color:var(--fg-dim);font-size:12px">${eligibleRanges.length} range(s) disponível(is) · stack ${QUIZ.selectedStack === 'all' ? 'todos' : QUIZ.selectedStack + 'bb'}</div>
       </div>
-      <div class="score">Acertos <b>${QUIZ.score}</b> / ${QUIZ.total}${QUIZ.wrongQueue.length > 0 ? ` <span style="margin-left:10px;color:var(--bad);font-size:11px">🔁 ${QUIZ.wrongQueue.length} pra revisar</span>` : ""}</div>
+      <div class="score">Acertos <b>${QUIZ.score}</b> / ${QUIZ.total}${QUIZ.wrongQueue.length > 0 ? ` <span style="margin-left:10px;color:var(--bad);font-size:11px">${QUIZ.wrongQueue.length} pra revisar</span>` : ""}</div>
     </div>
     <div class="quiz-config">
       <span>Stack:</span>
@@ -3860,13 +3862,13 @@ function renderQuiz() {
       </label>
       <label style="display:flex;align-items:center;gap:6px;cursor:pointer" title="Bip leve em acerto/erro">
         <input type="checkbox" id="quiz-sound" ${localStorage.getItem('leaklab_quiz_sound') !== '0' ? "checked" : ""}>
-        <span>🔊 Som</span>
+        <span>Som</span>
       </label>
       <button id="quiz-reset">Resetar score</button>
-      <button id="quiz-focused" title="Sessão de 10 perguntas focada no range atual">🎯 Estudo focado (10)</button>
-      <button id="quiz-drill" title="Drill express: máximo de perguntas em 30 segundos" style="background:#3a1a3a;color:#ffa0d0;border:1px solid #5a2858">⚡ Drill 30s</button>
-      <button id="quiz-export" title="Exporta histórico de respostas (CSV ou JSON)">💾 Exportar</button>
-      <button id="quiz-share" title="Copia URL com config atual pra compartilhar">🔗 Compartilhar</button>
+      <button id="quiz-focused" title="Sessão de 10 perguntas focada no range atual">Estudo focado (10)</button>
+      <button id="quiz-drill" title="Drill express: máximo de perguntas em 30 segundos">Drill 30s</button>
+      <button id="quiz-export" title="Exporta histórico de respostas (CSV ou JSON)">Exportar</button>
+      <button id="quiz-share" title="Copia URL com config atual pra compartilhar">Compartilhar</button>
     </div>
     <div id="quiz-content"></div>
     <div id="quiz-focused-progress" style="display:none;margin:12px 0;padding:10px 14px;background:#1a2a3a;border:1px solid #2a4068;border-radius:6px;font-size:13px;color:#a0d0ff"></div>
@@ -3910,7 +3912,7 @@ function renderQuiz() {
     const url = getShareableQuizUrl();
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url).then(() => {
-        showQuizToast('🔗 URL copiada! Cola onde quiser.');
+        showQuizToast('URL copiada! Cola onde quiser.');
       }).catch(() => prompt('Copie esta URL:', url));
     } else {
       prompt('Copie esta URL:', url);
@@ -3972,7 +3974,7 @@ function startDrillSession() {
     alert("Termine a sessão de Estudo Focado antes de começar um Drill.");
     return;
   }
-  if (!confirm(`⚡ DRILL EXPRESS — 30 segundos pra responder o máximo de perguntas possível.\n\n• Acerto: +1 ponto\n• Erro: -1 ponto (cuidado!)\n• Pular: 0\n\nUsa atalhos do teclado (R/F) pra ser mais rápido. Bora?`)) return;
+  if (!confirm(`Drill Express — 30 segundos pra responder o máximo de perguntas possível.\n\n• Acerto: +1 ponto\n• Erro: -1 ponto (cuidado!)\n• Pular: 0\n\nUsa atalhos do teclado (R/F) pra ser mais rápido. Bora?`)) return;
 
   QUIZ.drillSession = {
     active: true,
@@ -4011,7 +4013,7 @@ function updateDrillTimer() {
   const pctTime = ds.timeLeft / ds.duration;
   const color = pctTime > 0.5 ? '#5dd684' : pctTime > 0.25 ? '#f5c14a' : '#ed6a6a';
   overlay.innerHTML = `
-    <div style="font-size:11px;letter-spacing:1px;opacity:0.8">⚡ DRILL</div>
+    <div style="font-size:11px;letter-spacing:1px;opacity:0.8">DRILL</div>
     <div style="font-size:32px;font-weight:700;color:${color};line-height:1">${ds.timeLeft.toFixed(1)}s</div>
     <div style="font-size:13px;margin-top:4px">Pontos: <b>${ds.points}</b></div>
     <div style="font-size:11px;opacity:0.7">${ds.correct}/${ds.answered} ok</div>
@@ -4034,9 +4036,9 @@ function endDrillSession() {
   // Verdict baseado em pontos (acertos - erros)
   let verdict, badge;
   if (ds.points >= 20) { verdict = '🔥 ELITE!'; badge = '#5dd684'; }
-  else if (ds.points >= 12) { verdict = '🎯 Excelente!'; badge = '#5dd684'; }
-  else if (ds.points >= 6) { verdict = '👍 Bom ritmo'; badge = '#f5c14a'; }
-  else if (ds.points >= 0) { verdict = '⚠ Devagar — pratique mais'; badge = '#f5c14a'; }
+  else if (ds.points >= 12) { verdict = 'Excelente!'; badge = '#5dd684'; }
+  else if (ds.points >= 6) { verdict = 'Bom ritmo'; badge = '#f5c14a'; }
+  else if (ds.points >= 0) { verdict = 'Devagar — pratique mais'; badge = '#f5c14a'; }
   else { verdict = '💀 Negative — mais erros que acertos'; badge = '#ed6a6a'; }
 
   let wrongHtml = '';
@@ -4048,7 +4050,7 @@ function endDrillSession() {
   }
 
   document.getElementById('modal-content').innerHTML = `
-    <h2>⚡ Drill Express terminou</h2>
+    <h2>Drill Express terminou</h2>
     <div style="text-align:center;margin:18px 0">
       <div style="font-size:48px;font-weight:700;color:${badge};line-height:1">${ds.points} pts</div>
       <div style="font-size:14px;color:var(--fg-dim);margin-top:6px">${ds.answered} perguntas · ${ds.correct} ok · ${accuracy}% acerto</div>
@@ -4057,7 +4059,7 @@ function endDrillSession() {
     ${wrongHtml}
     <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap">
       <button onclick="document.getElementById('modal').classList.remove('show'); QUIZ.drillSession=null; renderQuiz();" style="padding:10px 20px;background:var(--bg-3);color:var(--fg);border:1px solid var(--border);border-radius:6px;cursor:pointer">Voltar</button>
-      <button onclick="document.getElementById('modal').classList.remove('show'); QUIZ.drillSession=null; startDrillSession();" style="padding:10px 20px;background:#3a1a3a;color:#ffa0d0;border:1px solid #5a2858;border-radius:6px;cursor:pointer;font-weight:600">⚡ Outra rodada</button>
+      <button onclick="document.getElementById('modal').classList.remove('show'); QUIZ.drillSession=null; startDrillSession();" style="padding:10px 20px;background:var(--accent);color:#000;border:none;border-radius:var(--r-sm);cursor:pointer;font-weight:600">Outra rodada</button>
     </div>
   `;
   document.getElementById('modal').classList.add('show');
@@ -4110,7 +4112,7 @@ function updateFocusedProgress() {
   if (!fs || !fs.active) { el.style.display = 'none'; return; }
   el.style.display = 'block';
   const pct = fs.answered > 0 ? (100 * fs.correct / fs.answered).toFixed(0) : 0;
-  el.innerHTML = `🎯 <b>Sessão focada</b> — ${fs.startScope} · pergunta ${fs.answered + 1} de ${fs.target} · acertos ${fs.correct}/${fs.answered} (${pct}%)`;
+  el.innerHTML = `<b>Sessão focada</b> — ${fs.startScope} · pergunta ${fs.answered + 1} de ${fs.target} · acertos ${fs.correct}/${fs.answered} (${pct}%)`;
 }
 
 function endFocusedSession() {
@@ -4131,7 +4133,7 @@ function endFocusedSession() {
         </div>`).join('')}
       </div>`;
   }
-  const verdict = finalPct >= 80 ? '🎉 Excelente!' : finalPct >= 60 ? '👍 Bom!' : '⚠ Precisa estudar mais';
+  const verdict = finalPct >= 80 ? 'Excelente!' : finalPct >= 60 ? 'Bom!' : 'Precisa estudar mais';
 
   document.getElementById('modal-content').innerHTML = `
     <h2>Sessão focada concluída</h2>
@@ -4481,7 +4483,7 @@ function renderQuizTable(container, range, hand) {
     const miniCards = st.hasCards && !st.hero
       ? '<div class="qt-mini-cards"><div class="qt-mini-card"></div><div class="qt-mini-card"></div></div>'
       : '';
-    const posLabel = st.hero ? `${pos} · você` : pos;
+    const posLabel = pos;
     seatsHtml += `<div class="${classes.join(' ')}" data-pos="${pos}" style="left:${leftPct.toFixed(2)}%;top:${topPct.toFixed(2)}%;">
       <div class="qt-dot"></div>
       <div class="qt-pos">${posLabel}</div>
@@ -4503,12 +4505,12 @@ function renderQuizTable(container, range, hand) {
     heroCardsHtml += '</div>';
   }
 
-  // Cenário + contexto
+  // Cenário + contexto. "Sua vez" removido — a pergunta abaixo já indica decisão.
   const scenarioMap = {
-    'open': 'RFI · Sua vez',
-    'unopened': 'RFI · Sua vez',
-    '3bet': '3BET · Sua vez',
-    '4bet': '4BET · Sua vez',
+    'open': 'RFI',
+    'unopened': 'RFI',
+    '3bet': '3-bet',
+    '4bet': '4-bet',
     'iso': 'ISO · vilão limpou',
   };
   const scKey = ((range.scenario || 'open') + '').toLowerCase();
@@ -4550,7 +4552,7 @@ function nextQuizQuestion() {
     const fb = document.getElementById("quiz-feedback");
     if (fb) {
       fb.style.display = "block";
-      fb.innerHTML = `<div class="verdict" style="color:var(--good)">🎉 Sem erros pra revisar!</div>
+      fb.innerHTML = `<div class="verdict" style="color:var(--good)">Sem erros pra revisar.</div>
         <div style="margin-top:8px;color:var(--fg-dim);font-size:13px">Mude o modo pra "Bordas" ou "Aleatório" pra continuar treinando.</div>`;
     }
     document.querySelectorAll(".quiz-actions button").forEach(b => b.disabled = true);
@@ -4584,9 +4586,9 @@ function nextQuizQuestion() {
     <div class="quiz-card">
       <div id="quiz-table-dom" style="margin:0 auto 8px;"></div>
       <div class="quiz-actions">
-        <button class="raise" onclick="answerQuiz('raise')" title="Atalho: R">▲ Open / Raise <kbd>R</kbd></button>
-        <button class="fold" onclick="answerQuiz('fold')" title="Atalho: F">✗ Fold <kbd>F</kbd></button>
-        <button class="skip" onclick="nextQuizQuestion()" title="Atalho: N ou Espaço">Pular → <kbd>N</kbd></button>
+        <button class="raise" onclick="answerQuiz('raise')" title="Atalho: R">Open / Raise <kbd>R</kbd></button>
+        <button class="fold" onclick="answerQuiz('fold')" title="Atalho: F">Fold <kbd>F</kbd></button>
+        <button class="skip" onclick="nextQuizQuestion()" title="Atalho: N ou Espaço">Pular <kbd>N</kbd></button>
       </div>
       <div class="quiz-feedback" id="quiz-feedback" role="status" aria-live="polite" style="display:none"></div>
     </div>
