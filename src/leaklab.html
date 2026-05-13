@@ -99,17 +99,26 @@
   /* [v6.13 Bloco 1] tabular-nums universal — todos os numéricos alinham. */
   body { background: var(--bg); color: var(--fg); font-family: 'Inter', -apple-system, 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; line-height: 1.4; font-variant-numeric: tabular-nums; }
 
+  /* [v6.13 Bloco 2] Icon helper — usa currentColor pra herdar do parent. */
+  .icon { width: 16px; height: 16px; flex-shrink: 0; vertical-align: middle; stroke-width: 2; }
+  .icon-sm { width: 14px; height: 14px; }
+  .icon-lg { width: 20px; height: 20px; }
+
   /* Header */
   header.top { background: var(--bg-2); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; gap: 14px; }
   header.top .brand { display: flex; align-items: baseline; gap: 8px; }
-  header.top .brand .name { color: var(--accent); font-size: 20px; font-weight: 800; letter-spacing: 0.5px; }
-  header.top .brand .tag { color: var(--fg-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  header.top .brand .name { color: var(--accent); font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
   header.top .badge { background: var(--bg-3); color: var(--fg-dim); font-size: 11px; padding: 3px 10px; border-radius: 12px; }
-  header.top .actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  header.top .actions { margin-left: auto; display: flex; gap: 6px; align-items: center; }
   header.top button, header.top label.btn {
     background: var(--bg-3); border: 1px solid var(--border); color: var(--fg);
-    padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500;
+    padding: 6px 12px; border-radius: var(--r-sm); cursor: pointer; font-size: 12px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 6px;
   }
+  header.top button.icon-only {
+    padding: 6px; width: 32px; height: 32px; justify-content: center; color: var(--fg-dim);
+  }
+  header.top button.icon-only:hover { color: var(--fg); }
   header.top button:hover, header.top label.btn:hover { border-color: var(--accent); }
   header.top input[type=file] { display: none; }
   /* [v6.10] Feedback modal */
@@ -203,16 +212,16 @@
     .fb-btn { min-width: 0; }
   }
 
-  /* [v6.5] Ecosystem links — discrete icons before help button */
-  header.top .eco-links { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; margin: 0 4px; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+  /* [v6.13 Bloco 2] Ecosystem links — SVG icons, sem bordas verticais decorativas. */
+  header.top .eco-links { display: inline-flex; align-items: center; gap: 2px; margin: 0 4px; }
   header.top .eco-link {
     display: inline-flex; align-items: center; justify-content: center;
-    width: 28px; height: 28px; border-radius: 6px;
-    text-decoration: none; font-size: 14px; line-height: 1;
-    color: var(--fg-dim); opacity: 0.7;
-    transition: opacity var(--t-fast) var(--ease-std), background var(--t-fast) var(--ease-std);
+    width: 32px; height: 32px; border-radius: var(--r-sm);
+    text-decoration: none;
+    color: var(--fg-dim);
+    transition: color var(--t-fast) var(--ease-std), background var(--t-fast) var(--ease-std);
   }
-  header.top .eco-link:hover { opacity: 1; background: var(--bg-3); }
+  header.top .eco-link:hover { color: var(--fg); background: var(--bg-3); }
   header.top .eco-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   @media (max-width: 768px) {
     header.top .eco-links { display: none; }
@@ -222,15 +231,12 @@
   nav.tabs { background: var(--bg-2); border-bottom: 1px solid var(--border); padding: 0 20px; display: flex; gap: 0; }
   nav.tabs button {
     background: transparent; border: none; color: var(--fg-dim);
-    padding: 12px 20px; cursor: pointer; font-size: 13px; font-weight: 500;
-    border-bottom: 2px solid transparent; transition: all 0.15s;
+    padding: 12px 16px; cursor: pointer; font-size: 13px; font-weight: 500;
+    border-bottom: 2px solid transparent; transition: color var(--t-fast) var(--ease-std), border-color var(--t-fast) var(--ease-std);
+    letter-spacing: var(--ls-normal);
   }
   nav.tabs button:hover { color: var(--fg); }
   nav.tabs button.active { color: var(--accent); border-bottom-color: var(--accent); }
-  /* Destaca tabs primárias (Quiz + Library) */
-  nav.tabs button[data-tab="quiz"], nav.tabs button[data-tab="ranges"] { font-weight: 600; }
-  nav.tabs button[data-tab="quiz"]:not(.active) { color: var(--good); opacity: 0.8; }
-  nav.tabs button[data-tab="quiz"]:not(.active):hover { opacity: 1; }
   nav.tabs button .filter-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-2); margin-left: 4px; vertical-align: middle; }
 
   main { padding: 16px 20px; }
@@ -1075,23 +1081,32 @@
 <header class="top">
   <div class="brand">
     <span class="name">LeakLab</span>
-    <span class="tag">Poker MTTs</span>
   </div>
-  <span class="badge" id="dataset-badge">Sem dados</span>
+  <span class="badge" id="dataset-badge">Sem dados carregados</span>
   <div class="actions">
     <label class="btn" title="Carregar JSON com suas mãos">Carregar mãos
       <input type="file" id="file-hands" accept=".json">
     </label>
-    <label class="btn" title="Importar arquivos JSON de ranges GTO">+ Ranges
+    <label class="btn" title="Importar arquivos JSON de ranges GTO">Ranges
       <input type="file" id="file-ranges" accept=".json" multiple>
     </label>
     <span class="eco-links" aria-label="Ecossistema PokerMTTs">
-      <a href="https://pokermtts.com.br/" target="_blank" rel="noopener" class="eco-link" title="PokerMTTs — site principal" aria-label="Site principal PokerMTTs">🏠</a>
-      <a href="https://duvidas.pokermtts.com.br/dashboard" target="_blank" rel="noopener" class="eco-link" title="App de Dúvidas" aria-label="App de Dúvidas">❓</a>
-      <a href="https://www.instagram.com/poker.mtts" target="_blank" rel="noopener" class="eco-link" title="Instagram @poker.mtts" aria-label="Instagram">📸</a>
+      <a href="https://pokermtts.com.br/" target="_blank" rel="noopener" class="eco-link" title="PokerMTTs — site principal" aria-label="Site principal PokerMTTs">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg>
+      </a>
+      <a href="https://duvidas.pokermtts.com.br/dashboard" target="_blank" rel="noopener" class="eco-link" title="App de Dúvidas" aria-label="App de Dúvidas">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </a>
+      <a href="https://www.instagram.com/poker.mtts" target="_blank" rel="noopener" class="eco-link" title="Instagram @poker.mtts" aria-label="Instagram">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
     </span>
-    <button id="btn-feedback" title="Relatar bug ou sugerir melhoria" aria-label="Relatar bug ou sugerir melhoria">💬</button>
-    <button id="btn-help" title="Ajuda" aria-label="Ajuda">?</button>
+    <button id="btn-feedback" class="icon-only" title="Relatar bug ou sugerir melhoria" aria-label="Relatar bug ou sugerir melhoria">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </button>
+    <button id="btn-help" class="icon-only" title="Ajuda" aria-label="Ajuda">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </button>
   </div>
 </header>
 
@@ -1126,14 +1141,14 @@
 </div>
 
 <nav class="tabs" id="main-tabs" role="tablist" aria-label="Navegação principal">
-  <button data-tab="coach" class="active" role="tab" aria-selected="true" aria-controls="panel-coach" id="tab-coach" aria-label="Coach - Painel">🎯 Coach</button>
-  <button data-tab="hud" role="tab" aria-selected="false" aria-controls="panel-hud" id="tab-hud" aria-label="HUD - Estatísticas detalhadas">📊 HUD</button>
-  <button data-tab="filtros" role="tab" aria-selected="false" aria-controls="panel-filtros" id="tab-filtros" aria-label="Filtros e Mãos">🔍 Filtros & Mãos</button>
-  <button data-tab="search" role="tab" aria-selected="false" aria-controls="panel-search" id="tab-search" aria-label="Buscar">💬 Buscar</button>
-  <button data-tab="tournaments" role="tab" aria-selected="false" aria-controls="panel-tournaments" id="tab-tournaments" aria-label="Torneios">🏆 Torneios</button>
-  <button data-tab="quiz" role="tab" aria-selected="false" aria-controls="panel-quiz" id="tab-quiz" aria-label="Quiz de Ranges">🧠 Quiz</button>
-  <button data-tab="ranges" role="tab" aria-selected="false" aria-controls="panel-ranges" id="tab-ranges" aria-label="Biblioteca de Ranges">📚 Ranges</button>
-  <button data-tab="benchmarks" role="tab" aria-selected="false" aria-controls="panel-benchmarks" id="tab-benchmarks" aria-label="Configurar Padrões">⚙️ Padrões</button>
+  <button data-tab="coach" class="active" role="tab" aria-selected="true" aria-controls="panel-coach" id="tab-coach">Coach</button>
+  <button data-tab="hud" role="tab" aria-selected="false" aria-controls="panel-hud" id="tab-hud">HUD</button>
+  <button data-tab="filtros" role="tab" aria-selected="false" aria-controls="panel-filtros" id="tab-filtros">Filtros &amp; Mãos</button>
+  <button data-tab="search" role="tab" aria-selected="false" aria-controls="panel-search" id="tab-search">Buscar</button>
+  <button data-tab="tournaments" role="tab" aria-selected="false" aria-controls="panel-tournaments" id="tab-tournaments">Torneios</button>
+  <button data-tab="quiz" role="tab" aria-selected="false" aria-controls="panel-quiz" id="tab-quiz">Quiz</button>
+  <button data-tab="ranges" role="tab" aria-selected="false" aria-controls="panel-ranges" id="tab-ranges">Ranges</button>
+  <button data-tab="benchmarks" role="tab" aria-selected="false" aria-controls="panel-benchmarks" id="tab-benchmarks">Padrões</button>
 </nav>
 
 <main>
@@ -8974,7 +8989,7 @@ loadBenchmarks().then(async () => {
         }
       }
     }
-    badge.textContent = "Sem dados — use 'Carregar mãos' no topo";
+    badge.textContent = "Sem dados carregados";
   }
 });
 </script>
