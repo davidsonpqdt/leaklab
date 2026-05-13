@@ -260,14 +260,37 @@
     .chips-clear { padding: 10px 14px; }
   }
 
-  /* Welcome */
-  .welcome { text-align: center; padding: 80px 20px; }
-  .welcome h2 { color: var(--accent); font-size: 28px; margin-bottom: 8px; }
-  .welcome p { color: var(--fg-dim); font-size: 14px; margin: 8px 0; }
-  .welcome .cta { display: inline-block; padding: 18px 28px; border-radius: 10px; font-weight: 600; margin: 8px 4px; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; border: none; text-align:center; min-width:200px; }
-  .welcome .cta:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
-  .welcome .cta.primary-cta { background: var(--accent); color: #000000; }
-  .welcome .cta.secondary-cta { background: var(--bg-3); color: var(--fg); border: 1px solid var(--border); }
+  /* [v6.13 Bloco 3] Welcome — redesign editorial.
+     Hierarquia: H1 → subtitle → 2 cards CTA lado a lado → links auxiliares → privacy. */
+  .welcome { text-align: center; padding: 72px 20px 40px; max-width: 720px; margin: 0 auto; }
+  .welcome h1 { color: var(--fg); font-size: var(--ts-3xl); font-weight: 700; letter-spacing: -0.02em; margin: 0 0 12px; line-height: 1.1; }
+  .welcome h1 .accent { color: var(--accent); }
+  .welcome .subtitle { color: var(--fg-dim); font-size: var(--ts-lg); margin: 0 0 8px; line-height: 1.5; }
+  .welcome .privacy-note { color: var(--fg-mute); font-size: var(--ts-sm); margin: 0 0 36px; }
+  .welcome-ctas { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 auto 24px; max-width: 560px; }
+  .welcome-cta {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 20px 22px; border-radius: var(--r-md);
+    cursor: pointer; text-align: left;
+    transition: transform var(--t-fast) var(--ease-std), border-color var(--t-fast) var(--ease-std), box-shadow var(--t-fast) var(--ease-std);
+    border: 1px solid var(--border);
+  }
+  .welcome-cta:hover { transform: translateY(-1px); border-color: var(--accent); box-shadow: 0 4px 16px rgba(0,0,0,0.35); }
+  .welcome-cta .cta-title { font-size: var(--ts-md); font-weight: 600; }
+  .welcome-cta .cta-desc { font-size: var(--ts-sm); }
+  .welcome-cta.primary { background: var(--accent); color: #000; border-color: var(--accent); }
+  .welcome-cta.primary .cta-desc { color: rgba(0,0,0,0.7); }
+  .welcome-cta.secondary { background: var(--bg-card); color: var(--fg); }
+  .welcome-cta.secondary .cta-desc { color: var(--fg-dim); }
+  .welcome .aux-links { font-size: var(--ts-base); color: var(--fg-dim); margin: 20px 0 32px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .welcome .aux-links a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); padding-bottom: 1px; }
+  .welcome .aux-links a:hover { border-bottom-style: solid; }
+  .welcome .privacy-footer { color: var(--fg-mute); font-size: var(--ts-xs); margin: 0 auto; max-width: 480px; line-height: 1.6; }
+  @media (max-width: 560px) {
+    .welcome { padding: 48px 16px 24px; }
+    .welcome h1 { font-size: 26px; }
+    .welcome-ctas { grid-template-columns: 1fr; }
+  }
 
   /* Filtros tab */
   .filters-layout { display: grid; grid-template-columns: 320px 1fr; gap: 16px; }
@@ -1152,32 +1175,29 @@
 </nav>
 
 <main>
-  <!-- Welcome -->
+  <!-- [v6.13 Bloco 3] Welcome — só aparece no Coach tab quando HANDS.length === 0.
+       switchMainTab() controla visibilidade (esconde em todas as outras tabs). -->
   <div class="welcome" id="welcome">
-    <h2 style="color:var(--accent);font-size:32px;margin-bottom:8px">🎯 LeakLab</h2>
-    <p style="font-size:15px;color:var(--fg-dim);margin-bottom:8px">Análise individual de pôquer MTT — Coach, HUD e Quiz GTO.</p>
-    <p style="font-size:12px;color:var(--fg-dim);margin-bottom:30px">100% privado — suas mãos ficam só no seu navegador, nada é enviado pra servidor.</p>
-    <button class="cta primary-cta" onclick="document.getElementById('welcome').style.display='none';switchMainTab('quiz');" style="margin:8px auto;display:block">
-      <div style="font-size:22px;margin-bottom:4px">▶ Começar Quiz</div>
-      <div style="font-size:13px;opacity:0.9">Mesa visual, EVs, repetição espaçada</div>
-    </button>
-    <div style="display:flex;align-items:center;gap:14px;max-width:400px;margin:24px auto 16px;color:var(--fg-dim)">
-      <div style="flex:1;height:1px;background:var(--border)"></div>
-      <span style="font-size:11px;text-transform:uppercase;letter-spacing:1px">ou análise pessoal</span>
-      <div style="flex:1;height:1px;background:var(--border)"></div>
+    <h1><span class="accent">LeakLab</span> — análise de pôquer MTT</h1>
+    <p class="subtitle">Coach, HUD com 82 stats e Quiz GTO interativo.</p>
+    <p class="privacy-note">100% no seu navegador. Sem login, sem servidor de dados.</p>
+    <div class="welcome-ctas">
+      <button type="button" class="welcome-cta primary" onclick="document.getElementById('welcome').style.display='none';switchMainTab('quiz');">
+        <span class="cta-title">Começar Quiz</span>
+        <span class="cta-desc">Mesa visual, EVs e repetição espaçada</span>
+      </button>
+      <label class="welcome-cta secondary">
+        <span class="cta-title">Carregar minhas mãos</span>
+        <span class="cta-desc">JSON gerado pelo parser · só você vê</span>
+        <input type="file" id="cta-hands" accept=".json" style="display:none">
+      </label>
     </div>
-    <label class="cta secondary-cta" style="margin:0 auto;display:block;min-width:280px">
-      <div style="font-size:15px">📊 Carregar minhas mãos</div>
-      <div style="font-size:11px;opacity:0.7;margin-top:2px">JSON gerado pelo parser · só você vê</div>
-      <input type="file" id="cta-hands" accept=".json" style="display:none">
-    </label>
-    <p style="font-size: 13px; color:var(--fg-dim); margin-top:30px">
-      <a href="#" onclick="showOnboarding();return false;" style="color:var(--accent);text-decoration:underline">📖 Como funciona o LeakLab?</a>
-      &nbsp;·&nbsp;
-      <a href="#" onclick="showHowToParse();return false;" style="color:var(--accent);text-decoration:underline">🛠 Não tenho hands.json — como gero?</a>
-    </p>
-    <p style="font-size:11px;color:var(--fg-dim);margin-top:18px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.5">
-      🔒 <b>Privacidade:</b> tudo roda no seu navegador. As mãos que você carrega não saem do seu computador — não há login, servidor de dados, nem analytics. Cada usuário vê apenas suas próprias mãos.
+    <div class="aux-links">
+      <a href="#" onclick="showOnboarding();return false;">Como funciona o LeakLab</a>
+      <a href="#" onclick="showHowToParse();return false;">Como gerar o hands.json</a>
+    </div>
+    <p class="privacy-footer">
+      Tudo roda no seu navegador. As mãos que você carrega não saem do seu computador. Não há login, servidor de dados nem analytics.
     </p>
   </div>
 
@@ -1678,6 +1698,12 @@ function switchMainTab(name) {
   document.querySelectorAll(".panel").forEach(p => {
     p.classList.toggle("active", p.id === `panel-${name}`);
   });
+  // [v6.13 Bloco 3] Welcome só aparece no Coach quando ainda não há dados.
+  // Antes, o welcome ficava visível em TODAS as tabs sem dados — bug crítico de UX.
+  const welcome = document.getElementById("welcome");
+  if (welcome) {
+    welcome.style.display = (name === "coach" && HANDS.length === 0) ? "" : "none";
+  }
   if (name === "coach") renderCoach();
   if (name === "hud") renderHud();
   if (name === "tournaments") renderTournaments();
@@ -7156,7 +7182,7 @@ function updateCoachSummary() {
 
 function renderHud() {
   if (!BENCHMARKS || HANDS.length === 0) {
-    document.getElementById("hud-grid").innerHTML = '<div style="color:var(--fg-dim);padding:30px;text-align:center">Carregue mãos primeiro.</div>';
+    document.getElementById("hud-grid").innerHTML = '<div class="coach-empty"><h3>Carregue suas mãos pra ver o HUD</h3><p>82 stats em 14 seções com cores baseadas em benchmarks editáveis.</p></div>';
     return;
   }
   bindHudToolbar();
