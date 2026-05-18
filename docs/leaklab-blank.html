@@ -128,12 +128,14 @@
     z-index: 1000;
     align-items: center; justify-content: center;
     padding: 20px;
+    overflow-y: auto;
   }
   #feedback-overlay[style*="display: flex"], #feedback-overlay[style*="display:flex"] { display: flex !important; }
   .fb-card {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: 14px; padding: 28px;
     width: 100%; max-width: 540px;
+    max-height: calc(100vh - 40px); overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     position: relative;
     animation: fb-in var(--t-base) var(--ease-out);
@@ -210,6 +212,7 @@
   @media (max-width: 500px) {
     .fb-actions { flex-direction: column; }
     .fb-btn { min-width: 0; }
+    .fb-card { padding: 18px; }
   }
 
   /* [v6.13 Bloco 2] Ecosystem links — SVG icons, sem bordas verticais decorativas. */
@@ -845,6 +848,45 @@
     .toast { background: rgba(20,20,28,1); }
   }
 
+  /* ===== [v6.14] Confirm dialog (substitui confirm() nativo) ===== */
+  .cdlg-bg {
+    position: fixed; inset: 0; z-index: 10000;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+    background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
+    overflow-y: auto;
+    opacity: 0; transition: opacity var(--t-fast) var(--ease-out);
+  }
+  .cdlg-bg.show { opacity: 1; }
+  .cdlg {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--r-lg); width: 100%; max-width: 440px;
+    max-height: calc(100vh - 40px); overflow-y: auto;
+    padding: 22px 22px 18px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.55);
+    transform: translateY(8px) scale(0.98);
+    transition: transform var(--t-base) var(--ease-out);
+  }
+  .cdlg-bg.show .cdlg { transform: none; }
+  .cdlg-title { font-size: var(--ts-lg); font-weight: 600; color: var(--fg); margin: 0 0 8px; }
+  .cdlg-msg { font-size: var(--ts-base); color: var(--fg-dim); margin: 0 0 20px; line-height: 1.5; white-space: pre-line; }
+  .cdlg-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .cdlg-btn {
+    padding: 9px 18px; border-radius: var(--r-sm); font-size: var(--ts-base);
+    font-family: inherit; font-weight: 500; cursor: pointer;
+    border: 1px solid var(--border); background: var(--bg-3); color: var(--fg);
+    transition: background var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out);
+  }
+  .cdlg-btn:hover { border-color: var(--fg-mute); }
+  .cdlg-btn.confirm { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
+  .cdlg-btn.confirm:hover { filter: brightness(1.08); }
+  .cdlg-btn.confirm.danger { background: var(--bad); border-color: var(--bad); color: #fff; }
+  .cdlg-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (max-width: 500px) {
+    .cdlg { max-width: 100%; }
+    .cdlg-actions { flex-direction: column-reverse; }
+    .cdlg-btn { width: 100%; }
+  }
+
   /* ===== [VISUAL v2] Skeleton loader ===== */
   .skeleton {
     background: linear-gradient(90deg, var(--bg-2) 0%, var(--bg-3) 50%, var(--bg-2) 100%);
@@ -923,7 +965,6 @@
   .hl-card.loss .value { color: var(--bad); }
   .hl-card.run .value  { color: var(--accent-2); }
   .hl-card .name { color: var(--fg); font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .hl-card .emoji { position: absolute; right: 10px; top: 8px; font-size: 22px; opacity: 0.35; }
   /* Sort buttons */
   .t-sort { display: flex; gap: 6px; align-items: center; margin-left: auto; }
   .t-sort .sort-btn { background: var(--bg-3); border: 1px solid var(--border); color: var(--fg-dim); padding: 6px 10px; border-radius: 5px; cursor: pointer; font-size: 11.5px; transition: all var(--t-fast) var(--ease-out); }
@@ -954,7 +995,6 @@
   .hands-table tr.hand-row.win  td:first-child { border-left: 2px solid var(--good); }
   .hands-table tr.hand-row.loss td:first-child { border-left: 2px solid var(--bad); }
   .hands-table tr.hand-row.flat td:first-child { border-left: 2px solid var(--border); }
-  .hands-table .strength-icon { display:inline-block; width:14px; text-align:center; margin-right:4px; opacity:0.85; }
   .hands-table .cards-cell { font-family: 'Courier New', monospace; font-weight: 700; letter-spacing: 0.5px; }
   .hands-table td.bb-cell { font-weight: 700; font-variant-numeric: tabular-nums; }
   .hands-table td.bb-cell.gain { color: var(--good); }
@@ -1056,8 +1096,8 @@
     .hud-section { grid-template-columns: 1fr 1fr; }
     /* Welcome mobile */
     .welcome { padding: 30px 16px; }
-    .welcome h2 { font-size: 24px !important; }
-    .welcome .cta { min-width: unset !important; width: 100%; padding: 14px 20px; }
+    .welcome h1 { font-size: 24px; }
+    .welcome-cta { min-width: unset; width: 100%; }
     /* [VISUAL v2 MOBILE] Modal vira bottom sheet com drag handle.
        BUG FIX: o seletor antes era .modal-content (nao existe), o markup usa .modal */
     .modal-bg { align-items: flex-end !important; padding: 0 !important; }
@@ -1136,24 +1176,24 @@
 <div id="feedback-overlay" role="dialog" aria-modal="true" aria-labelledby="feedback-title" style="display:none">
   <div class="fb-card">
     <button class="fb-close" id="fb-close" aria-label="Fechar">×</button>
-    <h3 id="feedback-title">💬 Relatar bug ou sugerir melhoria</h3>
+    <h3 id="feedback-title">Relatar bug ou sugerir melhoria</h3>
     <p class="fb-pitch">Sua opinião ajuda a melhorar o LeakLab! Você não precisa criar conta — escolha email ou GitHub.</p>
 
     <div class="fb-type-row" role="radiogroup" aria-label="Tipo de feedback">
-      <label class="fb-type"><input type="radio" name="fb-type" value="bug" checked> 🐛 Bug</label>
-      <label class="fb-type"><input type="radio" name="fb-type" value="sugestao"> 💡 Sugestão</label>
-      <label class="fb-type"><input type="radio" name="fb-type" value="pergunta"> ❓ Pergunta</label>
+      <label class="fb-type"><input type="radio" name="fb-type" value="bug" checked> Bug</label>
+      <label class="fb-type"><input type="radio" name="fb-type" value="sugestao"> Sugestão</label>
+      <label class="fb-type"><input type="radio" name="fb-type" value="pergunta"> Pergunta</label>
     </div>
 
     <textarea id="fb-text" rows="6" placeholder="Descreva o que aconteceu (ou o que você gostaria que tivesse).&#10;Quanto mais detalhe, melhor — qual aba? que stack? que range?"></textarea>
 
     <div class="fb-hint">
-      📸 <b>Print ajuda muito!</b> Você pode anexar no email ou colar diretamente no GitHub (suporta arrastar imagem).
+      <b>Print ajuda muito!</b> Você pode anexar no email ou colar diretamente no GitHub (suporta arrastar imagem).
     </div>
 
     <div class="fb-actions">
-      <button class="fb-btn fb-email" id="fb-send-email">📧 Enviar por email</button>
-      <button class="fb-btn fb-github" id="fb-send-github">🐙 Abrir no GitHub</button>
+      <button class="fb-btn fb-email" id="fb-send-email"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Enviar por email</button>
+      <button class="fb-btn fb-github" id="fb-send-github"><svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6 0-.3 0-1 0-2-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.9 1.2 1.9 1.2 3.2 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.3 0 1.6 0 2.9 0 3.3 0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>Abrir no GitHub</button>
     </div>
     <div class="fb-footnote">
       Email: <code>poker.mtts@gmail.com</code> · GitHub: <code>davidsonpqdt/leaklab</code>
@@ -1233,12 +1273,12 @@
   <!-- Buscar (chat) -->
   <div class="panel" id="panel-search" role="tabpanel" aria-labelledby="tab-search" tabindex="0">
     <div class="search-wrap">
-      <h2 style="color:var(--accent);margin:0 0 6px 0">💬 Busca rápida</h2>
+      <h2 style="color:var(--accent);margin:0 0 6px 0">Busca rápida</h2>
       <p style="color:var(--fg-dim);font-size:13px;margin:0 0 16px 0">
         Click num botão de filtro rápido OU digite em português o que quer ver.
       </p>
 
-      <h3 style="color:var(--fg-dim);margin:0 0 10px 0;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">⚡ Filtros rápidos</h3>
+      <h3 style="color:var(--fg-dim);margin:0 0 10px 0;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">Filtros rápidos</h3>
       <div class="quick-filters" id="quick-filters"></div>
 
       <div class="search-input-wrap">
@@ -1248,13 +1288,13 @@
       </div>
       <div class="search-feedback" id="search-feedback" role="status" aria-live="polite" aria-atomic="false"></div>
 
-      <h3 style="color:var(--fg-dim);margin:24px 0 10px 0;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">📖 Palavras reconhecidas</h3>
+      <h3 style="color:var(--fg-dim);margin:24px 0 10px 0;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">Palavras reconhecidas</h3>
       <p style="color:var(--fg-dim);font-size:12px;margin-bottom:14px">
         Use qualquer combinação dessas palavras na busca. Misture livre — ex: <code>"BTN unopened folds 25 a 35bb"</code>.
       </p>
       <div class="keyword-grid" id="keyword-grid"></div>
 
-      <h3 style="color:var(--fg-dim);margin:24px 0 10px 0;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">💡 Exemplos prontos</h3>
+      <h3 style="color:var(--fg-dim);margin:24px 0 10px 0;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">Exemplos prontos</h3>
       <div class="search-examples" id="search-examples"></div>
     </div>
   </div>
@@ -1338,13 +1378,13 @@
     <div class="ranges-list" id="ranges-list"></div>
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);text-align:right">
       <details style="display:inline-block;text-align:left">
-        <summary style="cursor:pointer;color:var(--fg-dim);font-size:11px">⚙ Configurações avançadas</summary>
+        <summary style="cursor:pointer;color:var(--fg-dim);font-size:11px">Configurações avançadas</summary>
         <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;align-items:flex-start">
           <label style="display:flex;align-items:center;gap:6px;color:var(--fg-dim);font-size:12px;cursor:pointer">
             <input type="checkbox" id="chk-range-mgmt-mode" style="cursor:pointer">
             Modo gerenciamento (mostra botão Excluir nos ranges)
           </label>
-          <button id="btn-clear-ranges" style="background:#3a1a1a;color:#ffd0d0;border:1px solid #5a2828;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px" title="APAGA todos os ranges salvos do localStorage. Use só se quiser reset total.">🗑 Apagar todos os ranges</button>
+          <button id="btn-clear-ranges" style="background:#3a1a1a;color:#ffd0d0;border:1px solid #5a2828;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px" title="APAGA todos os ranges salvos do localStorage. Use só se quiser reset total.">Apagar todos os ranges</button>
         </div>
       </details>
     </div>
@@ -1390,8 +1430,8 @@ const POSITIONS = ["EP", "MP", "HJ", "CO", "BTN", "SB", "BB"];
 const FACED = ["unopened", "limped", "raised", "3bet", "4bet", "5bet+"];
 const ACTIONS = ["fold", "check", "call", "raise"];
 const RANKS = ["A","K","Q","J","T","9","8","7","6","5","4","3","2"];
-// [v6.12] Versão do app — central, usada em feedback context e elsewhere.
-const APP_VERSION = "v6.12";
+// [v6.14] Versão do app — central, usada em feedback context e elsewhere.
+const APP_VERSION = "v6.14";
 
 // [v6.9] Threshold de amostra mínima pra stat ser considerada confiável (não-dim).
 // Antes hardcoded como `30` em 3+ lugares — agora central pra ajustar fácil.
@@ -1465,14 +1505,14 @@ const MAX_BENCHMARKS_BYTES = 5 * 1024 * 1024;     // 5 MB
 
 async function loadHandsFile(f) {
   if (f.size > MAX_HANDS_FILE_BYTES) {
-    alert(`Arquivo muito grande (${(f.size/1024/1024).toFixed(0)} MB). Limite: 250 MB. Use --slim no parser pra reduzir.`);
+    toast(`Arquivo muito grande (${(f.size/1024/1024).toFixed(0)} MB). Limite: 250 MB. Use --slim no parser pra reduzir.`, 5000);
     return;
   }
   try {
     const text = await f.text();
     HANDS = JSON.parse(text);
     initApp();
-  } catch (err) { alert("Erro ao ler hands.json: " + err.message); }
+  } catch (err) { toast("Erro ao ler hands.json: " + err.message, 5000); }
 }
 
 async function loadRangesFiles(files) {
@@ -1597,13 +1637,18 @@ function loadBenchmarks() {
 function saveBenchmarks() {
   try {
     localStorage.setItem("leaklab_benchmarks", JSON.stringify(BENCHMARKS));
-    alert("Benchmarks salvos!");
+    toast("✓ Benchmarks salvos");
     renderHud();
-  } catch (e) { alert("Erro: " + e.message); }
+  } catch (e) { toast("Erro ao salvar: " + e.message, 5000); }
 }
 
-function resetBenchmarks() {
-  if (!confirm("Restaurar benchmarks padrão? Suas alterações serão perdidas.")) return;
+async function resetBenchmarks() {
+  if (!(await confirmDialog({
+    title: "Restaurar benchmarks padrão?",
+    message: "Suas alterações serão perdidas.",
+    confirmText: "Restaurar",
+    danger: true
+  }))) return;
   localStorage.removeItem("leaklab_benchmarks");
   BENCHMARKS = window.__BAKED_BENCHMARKS__ || null;
   fetch("../data/benchmarks_default.json").then(r => r.json()).then(j => {
@@ -2802,8 +2847,7 @@ function renderTournaments() {
   const sliceEnd = Math.min(list.length, sliceStart + TOURN_PER_PAGE);
   const slice = list.slice(sliceStart, sliceEnd);
 
-  // [VISUAL v2] cards de torneio com border-color por win/loss + sparkline + ícone tipo
-  const datasetIcon = (ds) => ds === "bounty_ko" ? "🎯" : ds === "mystery" ? "💰" : "🏆";
+  // [VISUAL v2] cards de torneio com border-color por win/loss + sparkline
   const sparklineFor = (hands) => {
     if (!hands || hands.length < 2) return "";
     let cum = 0;
@@ -2829,7 +2873,7 @@ function renderTournaments() {
     return `<div class="tourney-card ${cardCls}" data-tcode="${escHtml(t.code)}">
       <div>
         <div class="name">
-          <span class="icon">${datasetIcon(t.__dataset)}</span>${escHtml(t.name)}
+          ${escHtml(t.name)}
           ${t.buyin ? `<span class="buyin-tag">${escHtml(t.buyin)}</span>` : ""}
         </div>
         <div class="meta">${escHtml(t.hero)} · ${t.hands.length} mãos · ${escHtml((t.startdate || "").slice(0, 16))}</div>
@@ -2899,19 +2943,16 @@ function renderTournaments() {
   const highlightsHtml = hl ? `
     <div class="highlights">
       <div class="hl-card win" data-tcode="${escHtml(hl.win.code)}">
-        <div class="emoji">🚀</div>
         <div class="label">Maior win</div>
         <div class="value">+${hl.win.won_bb.toFixed(0)} BB</div>
         <div class="name">${escHtml(hl.win.name)}</div>
       </div>
       <div class="hl-card loss" data-tcode="${escHtml(hl.loss.code)}">
-        <div class="emoji">💀</div>
         <div class="label">Maior loss</div>
         <div class="value">${hl.loss.won_bb.toFixed(0)} BB</div>
         <div class="name">${escHtml(hl.loss.name)}</div>
       </div>
       <div class="hl-card run"${hl.run.ref ? ` data-tcode="${escHtml(hl.run.ref.code)}"` : ""}>
-        <div class="emoji">🔥</div>
         <div class="label">Maior heater</div>
         <div class="value">${hl.run.count} wins</div>
         <div class="name">${hl.run.ref ? "começando " + escHtml((hl.run.ref.startdate||"").slice(0,10)) : "—"}</div>
@@ -2921,7 +2962,7 @@ function renderTournaments() {
   document.getElementById("tournaments-content").innerHTML = `
     <div class="t-hero">
       <div>
-        <h2>🏆 Resumo dos torneios</h2>
+        <h2>Resumo dos torneios</h2>
         <div class="pills-grid">
           <div class="pill"><div class="v">${list.length}</div><div class="l">Torneios</div></div>
           <div class="pill"><div class="v">${totalHands.toLocaleString("pt-BR")}</div><div class="l">Mãos totais</div></div>
@@ -2938,7 +2979,7 @@ function renderTournaments() {
     </div>
     ${highlightsHtml}
     <div class="t-filters" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
-      <input id="t-search" placeholder="🔎 Buscar torneio..." value="${escHtml(TOURN_FILTER.search)}" style="flex:1;min-width:180px;padding:6px 10px;background:var(--bg-2);border:1px solid var(--border);color:var(--fg);border-radius:5px"/>
+      <input id="t-search" placeholder="Buscar torneio..." value="${escHtml(TOURN_FILTER.search)}" style="flex:1;min-width:180px;padding:6px 10px;background:var(--bg-2);border:1px solid var(--border);color:var(--fg);border-radius:5px"/>
       <select id="t-result" style="padding:6px 10px;background:var(--bg-2);border:1px solid var(--border);color:var(--fg);border-radius:5px">
         <option value="">Todos resultados</option>
         <option value="win" ${TOURN_FILTER.result==="win"?"selected":""}>Só wins</option>
@@ -3036,17 +3077,7 @@ function openTournamentView(tcode) {
     return `<circle class="dot ${cls}" data-i="${i}" cx="${xOf(i).toFixed(1)}" cy="${yOf(points[i]).toFixed(1)}" r="3.5"/>`;
   }).join("");
 
-  // Tabela de mãos com strength icon e cores por result
-  const strengthIcon = (h) => {
-    const s = (h.strength_river || h.strength_turn || h.strength_flop || "");
-    if (/quads|full_house/.test(s)) return "👑";
-    if (/flush|straight/.test(s))   return "💎";
-    if (/set|two_pair/.test(s))     return "💪";
-    if (/overpair|tpgk/.test(s))    return "✊";
-    if (/draw/.test(s))             return "🎯";
-    if (/trash|missed/.test(s))     return "💨";
-    return "·";
-  };
+  // Tabela de mãos com cores por result
   const rows = hands.map(h => {
     const w = h.won_bb || 0;
     const rowCls = w > 0 ? "win" : w < 0 ? "loss" : "flat";
@@ -3056,7 +3087,7 @@ function openTournamentView(tcode) {
       <td>${escHtml(h.pos)}</td>
       <td>${escHtml(h.faced || "—")}</td>
       <td>${escHtml(h.hero_action || "—")}</td>
-      <td class="cards-cell"><span class="strength-icon">${strengthIcon(h)}</span>${escHtml(h.hero_cards_label)}</td>
+      <td class="cards-cell">${escHtml(h.hero_cards_label)}</td>
       <td>${(h.stack_bb || 0).toFixed(1)}</td>
       <td class="bb-cell ${bbCls}">${w >= 0 ? "+" : ""}${w.toFixed(2)}</td>
     </tr>`;
@@ -3084,7 +3115,7 @@ function openTournamentView(tcode) {
       <thead><tr><th>Time</th><th>Pos</th><th>Faced</th><th>Action</th><th>Cards</th><th>BB</th><th>Won</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
-    <p style="text-align:center;color:var(--fg-dim);font-size:11px;margin-top:10px">💡 Click num ponto da curva ou linha pra ver replay · Hover no gráfico pra detalhes</p>
+    <p style="text-align:center;color:var(--fg-dim);font-size:11px;margin-top:10px">Click num ponto da curva ou linha pra ver replay · Hover no gráfico pra detalhes</p>
   `;
   document.getElementById("modal").classList.add("show");
   // [v6.12 perf] Event delegation no #modal-content em vez de addEventListener por linha.
@@ -3761,7 +3792,7 @@ function runSearch() {
   const fb = document.getElementById("search-feedback");
   if (result.recognized.length === 0) {
     fb.className = "search-feedback warn";
-    fb.innerHTML = `⚠ Nada reconhecido. Veja o quadro abaixo pra termos válidos.`;
+    fb.innerHTML = `Nada reconhecido. Veja o quadro abaixo pra termos válidos.`;
   } else {
     fb.className = "search-feedback success";
     fb.innerHTML = `✓ <b>${result.applied}</b> hands found. Filters applied: <b>${result.recognized.join(", ")}</b>. <a href="#" onclick="switchMainTab('filtros');return false;" style="color:var(--accent);text-decoration:underline">View results →</a>`;
@@ -3894,8 +3925,13 @@ function renderQuiz() {
   document.getElementById("quiz-sound").addEventListener("change", e => {
     localStorage.setItem("leaklab_quiz_sound", e.target.checked ? "1" : "0");
   });
-  document.getElementById("quiz-reset").addEventListener("click", () => {
-    if (!confirm("Resetar score (incluindo histórico por range)?")) return;
+  document.getElementById("quiz-reset").addEventListener("click", async () => {
+    if (!(await confirmDialog({
+      title: "Resetar score?",
+      message: "Inclui o histórico por range. Não dá pra desfazer.",
+      confirmText: "Resetar",
+      danger: true
+    }))) return;
     QUIZ.score = 0; QUIZ.total = 0; QUIZ.history = []; QUIZ.perRange = {};
     QUIZ.wrongQueue = [];
     saveQuizState();
@@ -3963,14 +3999,18 @@ function exportQuizData() {
 }
 
 // ===== Drill Express (timer 30s) =====
-function startDrillSession() {
-  if (getQuizEligibleRanges().length === 0) { alert("Sem ranges disponíveis."); return; }
+async function startDrillSession() {
+  if (getQuizEligibleRanges().length === 0) { toast("Sem ranges disponíveis."); return; }
   // Guard: não permite drill enquanto focused session ativa
   if (QUIZ.focusedSession?.active) {
-    alert("Termine a sessão de Estudo Focado antes de começar um Drill.");
+    toast("Termine a sessão de Estudo Focado antes de começar um Drill.", 4000);
     return;
   }
-  if (!confirm(`Drill Express — 30 segundos pra responder o máximo de perguntas possível.\n\n• Acerto: +1 ponto\n• Erro: -1 ponto (cuidado!)\n• Pular: 0\n\nUsa atalhos do teclado (R/F) pra ser mais rápido. Bora?`)) return;
+  if (!(await confirmDialog({
+    title: "Drill Express — 30 segundos",
+    message: "Responda o máximo de perguntas que conseguir.\n\n• Acerto: +1 ponto\n• Erro: -1 ponto (cuidado!)\n• Pular: 0\n\nUsa atalhos do teclado (R/F) pra ser mais rápido.",
+    confirmText: "Bora"
+  }))) return;
 
   QUIZ.drillSession = {
     active: true,
@@ -4031,11 +4071,11 @@ function endDrillSession() {
   const accuracy = ds.answered > 0 ? (100 * ds.correct / ds.answered).toFixed(0) : 0;
   // Verdict baseado em pontos (acertos - erros)
   let verdict, badge;
-  if (ds.points >= 20) { verdict = '🔥 ELITE!'; badge = '#5dd684'; }
+  if (ds.points >= 20) { verdict = 'ELITE!'; badge = '#5dd684'; }
   else if (ds.points >= 12) { verdict = 'Excelente!'; badge = '#5dd684'; }
   else if (ds.points >= 6) { verdict = 'Bom ritmo'; badge = '#f5c14a'; }
   else if (ds.points >= 0) { verdict = 'Devagar — pratique mais'; badge = '#f5c14a'; }
-  else { verdict = '💀 Negative — mais erros que acertos'; badge = '#ed6a6a'; }
+  else { verdict = 'Negative — mais erros que acertos'; badge = '#ed6a6a'; }
 
   let wrongHtml = '';
   if (ds.wrong.length > 0 && ds.wrong.length <= 12) {
@@ -4062,13 +4102,13 @@ function endDrillSession() {
 }
 
 // ===== Sessão de estudo focada (10 perguntas no range/stack atual) =====
-function startFocusedSession() {
+async function startFocusedSession() {
   // Determina escopo: range específico se selecionado, senão stack inteiro
   const eligible = getQuizEligibleRanges();
-  if (eligible.length === 0) { alert("Sem ranges disponíveis pro stack selecionado."); return; }
+  if (eligible.length === 0) { toast("Sem ranges disponíveis pro stack selecionado.", 4000); return; }
   // Guard: não permite focused enquanto drill ativo
   if (QUIZ.drillSession?.active) {
-    alert("Termine o Drill Express antes de começar uma sessão de Estudo Focado.");
+    toast("Termine o Drill Express antes de começar uma sessão de Estudo Focado.", 4000);
     return;
   }
 
@@ -4083,7 +4123,11 @@ function startFocusedSession() {
     scope = `Todos os ranges (${eligible.length})`;
   }
 
-  if (!confirm(`Iniciar sessão focada de 10 perguntas em:\n${scope}\n\nNo fim, mostro % de acerto e quais mãos errou.`)) return;
+  if (!(await confirmDialog({
+    title: "Sessão focada — 10 perguntas",
+    message: `Escopo: ${scope}\n\nNo fim, mostro % de acerto e quais mãos você errou.`,
+    confirmText: "Começar"
+  }))) return;
 
   QUIZ.focusedSession = {
     active: true,
@@ -4141,7 +4185,7 @@ function endFocusedSession() {
     ${wrongHtml}
     <div style="margin-top:14px;display:flex;gap:8px">
       <button class="primary" onclick="document.getElementById('modal').classList.remove('show'); QUIZ.focusedSession=null; renderQuiz();">Voltar</button>
-      <button onclick="document.getElementById('modal').classList.remove('show'); QUIZ.focusedSession=null; startFocusedSession();">▶ Outra sessão</button>
+      <button onclick="document.getElementById('modal').classList.remove('show'); QUIZ.focusedSession=null; startFocusedSession();">Outra sessão</button>
     </div>
   `;
   document.getElementById('modal').classList.add('show');
@@ -4748,7 +4792,7 @@ function answerQuiz(action) {
   const scoreEl = document.querySelector(".quiz-header .score");
   if (scoreEl) {
     const queueIndicator = QUIZ.wrongQueue.length > 0
-      ? ` <span style="margin-left:10px;color:var(--bad);font-size:11px">🔁 ${QUIZ.wrongQueue.length} pra revisar</span>`
+      ? ` <span style="margin-left:10px;color:var(--bad);font-size:11px">${QUIZ.wrongQueue.length} pra revisar</span>`
       : "";
     scoreEl.innerHTML = `Acertos <b>${QUIZ.score}</b> / ${QUIZ.total}${queueIndicator}`;
   }
@@ -4789,7 +4833,7 @@ function renderPerformanceChart() {
   const trendColor = trend > 0 ? '#5dd684' : trend < 0 ? '#ed6a6a' : 'var(--fg-dim)';
 
   return `
-    <h4 style="margin-top:18px">📈 Tendência (rolling de 10 perguntas)</h4>
+    <h4 style="margin-top:18px">Tendência (rolling de 10 perguntas)</h4>
     <div style="background:#161618;border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:6px">
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px">
         <span style="color:var(--fg-dim)">% acerto sobre últimas 10</span>
@@ -4847,12 +4891,12 @@ function renderErrorsHeatmap() {
   }
 
   return `
-    <h4 style="margin-top:18px">🔥 Mãos mais erradas</h4>
+    <h4 style="margin-top:18px">Mãos mais erradas</h4>
     <div style="margin-bottom:12px">${topListHtml}</div>
     ${sortedErrors.length > 0 ? `
       <h5 style="font-size:11px;color:var(--fg-dim);margin:10px 0 6px;text-transform:uppercase;letter-spacing:1px">Heatmap completo</h5>
       <div class="grid-large" style="max-width:560px">${cells}</div>
-      <div style="font-size:11px;color:var(--fg-dim);margin-top:6px">🔴 mais escuro = mais erros · 🟢 claro = respondeu sem erro · ⬜ nunca apareceu</div>
+      <div style="font-size:11px;color:var(--fg-dim);margin-top:6px">Mais escuro = mais erros · Claro = respondeu sem erro · Sem cor = nunca apareceu</div>
     ` : ''}
   `;
 }
@@ -4899,19 +4943,19 @@ function renderQuizStats() {
     const pct = (100 * weakPos[1].score / weakPos[1].total).toFixed(0);
     const safeWeakPos = escHtml(weakPos[0]);
     insightHtml += `<div class="quiz-insight bad">
-      💡 Sua maior fraqueza é <b>${safeWeakPos}</b>: ${pct}% (${weakPos[1].score}/${weakPos[1].total}).
+      Sua maior fraqueza é <b>${safeWeakPos}</b>: ${pct}% (${weakPos[1].score}/${weakPos[1].total}).
       Foque em ranges de <b>${safeWeakPos}</b> nas próximas sessões.
     </div>`;
   }
   if (weakScn && (weakScn[1].score / weakScn[1].total) < 0.7 && weakScn[0] !== "open") {
     const pct = (100 * weakScn[1].score / weakScn[1].total).toFixed(0);
     insightHtml += `<div class="quiz-insight bad">
-      💡 Cenário fraco: <b>${escHtml(weakScn[0])}</b> (${pct}%). Estude defensiva/3bet pots.
+      Cenário fraco: <b>${escHtml(weakScn[0])}</b> (${pct}%). Estude defensiva/3bet pots.
     </div>`;
   }
   if (recent.length >= 5 && recentPct >= 80 && parseInt(totalPct) >= 80) {
     insightHtml += `<div class="quiz-insight good">
-      🔥 Bom ritmo — últimas ${recent.length}: ${recentPct}%, all-time: ${totalPct}%.
+      Bom ritmo — últimas ${recent.length}: ${recentPct}%, all-time: ${totalPct}%.
     </div>`;
   }
 
@@ -5404,7 +5448,7 @@ function openReplay(hand) {
       <h2>Hand #${escHtml(hand.gamecode)} — ${escHtml(hand.hero_cards_label)} (${escHtml(hand.pos)})</h2>
       <div class="sub">${escHtml(hand.tournament_name || hand.site || "")} · Stack: <b>${(hand.stack_bb||0).toFixed(1)} BB</b></div>
       <div style="background:#2a1f0a;border:1px solid #6b5418;border-radius:8px;padding:12px;margin:14px 0;color:#f5c14a;font-size:13px">
-        ⚠ Replay completo não disponível pra essa mão (parser slim sem detalhes de ações por street).
+        Replay completo não disponível pra essa mão (parser slim sem detalhes de ações por street).
       </div>
       <div class="verdict-box">
         <div class="box">
@@ -5609,7 +5653,7 @@ function buildReplayScaffold() {
     const pct = (eqResult.equity * 100).toFixed(1);
     const cls = eqResult.equity >= 0.55 ? "good" : eqResult.equity >= 0.45 ? "warn" : "bad";
     const colorVar = cls === "good" ? "var(--good)" : cls === "warn" ? "var(--warn)" : "var(--bad)";
-    equityHtml = `<span id="r-equity" data-street="1" style="margin-left:12px;background:${colorVar}22;color:${colorVar};padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600">⚡ Equity vs random: ${pct}%</span>`;
+    equityHtml = `<span id="r-equity" data-street="1" style="margin-left:12px;background:${colorVar}22;color:${colorVar};padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600">Equity vs random: ${pct}%</span>`;
   }
 
   // verdict GTO opcional
@@ -5697,7 +5741,7 @@ function updateReplayStep() {
       const colorVar = cls === "good" ? "var(--good)" : cls === "warn" ? "var(--warn)" : "var(--bad)";
       eqEl.style.background = colorVar + "22";
       eqEl.style.color = colorVar;
-      eqEl.textContent = `⚡ Equity vs random: ${pct}%`;
+      eqEl.textContent = `Equity vs random: ${pct}%`;
     }
   }
 
@@ -5742,7 +5786,7 @@ function updateReplayStep() {
     return `
       <div class="player-card ${isActive ? "active" : ""} ${folded ? "folded" : ""} ${isHero ? "hero" : ""}"
            style="left:${pos.x}%;top:${pos.y}%">
-        <div class="name">${escHtml(p.name)}${isHero ? " ⭐" : ""}</div>
+        <div class="name">${escHtml(p.name)}</div>
         <div class="pos">${posLabel}</div>
         <div class="stack">${stackBb}<small>bb</small></div>
         ${ps.lastAction ? `<div style="font-size:10px;color:var(--fg-dim);margin-top:2px">${escHtml(ps.lastAction)}</div>` : ""}
@@ -6834,7 +6878,7 @@ function detectCompoundLeaks(stats) {
   // Loose-aggressive (VPIP+PFR ambos altos)
   if (v("vpip") && v("pfr") && v("vpip") > 30 && v("pfr") > 24) {
     c.push({
-      name: "🔥 Loose-aggressive geral",
+      name: "Loose-aggressive geral",
       desc: `VPIP ${v("vpip").toFixed(1)}% + PFR ${v("pfr").toFixed(1)}% — você está pagando muito pre e jogando agressivo postflop sem range pra isso. Aperte abertura de EP/MP.`
     });
   }
@@ -6842,7 +6886,7 @@ function detectCompoundLeaks(stats) {
   // Tight-passive (VPIP baixo + PFR baixo)
   if (v("vpip") && v("pfr") && v("vpip") < 22 && v("pfr") < 16) {
     c.push({
-      name: "🛡 Tight-passive demais",
+      name: "Tight-passive demais",
       desc: `VPIP ${v("vpip").toFixed(1)}% + PFR ${v("pfr").toFixed(1)}% — você está apertando muito. Abra mais de CO/BTN/SB pra não perder chip EV das blinds.`
     });
   }
@@ -6850,7 +6894,7 @@ function detectCompoundLeaks(stats) {
   // Calldown leve (WTSD alto + W$SD baixo)
   if (v("wtsd") && v("won_sd") && v("wtsd") > 28 && v("won_sd") < 50) {
     c.push({
-      name: "📉 Calldown leve crônico",
+      name: "Calldown leve crônico",
       desc: `Vai a ${v("wtsd").toFixed(1)}% de showdowns ganhando só ${v("won_sd").toFixed(1)}% — está pagando turn/river com mão fraca. Mete mais fold em barrels.`
     });
   }
@@ -6858,7 +6902,7 @@ function detectCompoundLeaks(stats) {
   // Over-cbetting OOP (cbet OOP alto + WWSF baixo)
   if (v("cbet_oop") && v("wwsf") && v("cbet_oop") > 55 && v("wwsf") < 45) {
     c.push({
-      name: "🎯 Over-cbetting OOP",
+      name: "Over-cbetting OOP",
       desc: `Cbet OOP ${v("cbet_oop").toFixed(1)}% mas WWSF só ${v("wwsf").toFixed(1)}% — está apostando demais OOP sem ganhar pots. Reduza cbet OOP, especialmente em board ruins.`
     });
   }
@@ -6866,7 +6910,7 @@ function detectCompoundLeaks(stats) {
   // Under-defending BB (BB f2 steal alto)
   if (v("bb_f2_steal") && v("bb_f2_steal") > 35) {
     c.push({
-      name: "🎁 Doando BB pra steals",
+      name: "Doando BB pra steals",
       desc: `Fold ${v("bb_f2_steal").toFixed(1)}% do BB vs steal — vilões estão roubando free. Defenda mais wide com flats e 3bets polarizadas.`
     });
   }
@@ -6874,7 +6918,7 @@ function detectCompoundLeaks(stats) {
   // Spew preflop short stack (3bet AI alto)
   if (v("3bet_tot_ai") && v("3bet_tot_ai") > 6) {
     c.push({
-      name: "💣 Spew com 3bet shoves",
+      name: "Spew com 3bet shoves",
       desc: `${v("3bet_tot_ai").toFixed(1)}% de shoves preflop — está burnando equity em short stack. Seja mais seletivo (suited aces, broadways, pp médios).`
     });
   }
@@ -6882,7 +6926,7 @@ function detectCompoundLeaks(stats) {
   // Limp leak
   if (v("limp") && v("limp") > 4) {
     c.push({
-      name: "🤐 Limp clássico",
+      name: "Limp clássico",
       desc: `${v("limp").toFixed(1)}% de open-limps — leak universal. SEMPRE raise ou fold. Limp só é OK em SB com plano específico.`
     });
   }
@@ -6890,7 +6934,7 @@ function detectCompoundLeaks(stats) {
   // Não 3betando ranges polarizadas (3bet baixo + F3bet alto = passivo)
   if (v("3bet_tot") && v("f3bet_tot") && v("3bet_tot") < 6 && v("f3bet_tot") > 60) {
     c.push({
-      name: "😴 Range preflop mole",
+      name: "Range preflop mole",
       desc: `3bet só ${v("3bet_tot").toFixed(1)}% mas folda ${v("f3bet_tot").toFixed(1)}% a 3bets — vilões te exploram facil. Adicione 3bets polarizadas com bluffs (Ax suited, suited connectors).`
     });
   }
@@ -7552,7 +7596,7 @@ function openDrillDown(statKey) {
   // Abre modal mostrando o que está sendo computado e quais mãos
   const drill = computeDrillDown(statKey);
   if (!drill) {
-    alert("Drill-down ainda não implementado para esta stat: " + statKey);
+    toast("Drill-down ainda não implementado para esta stat: " + statKey, 4000);
     return;
   }
   DRILL = drill;
@@ -7562,7 +7606,7 @@ function openDrillDown(statKey) {
   const ideal = bench ? `${Number(bench.min)||0}/${Number(bench.ideal)||0}/${Number(bench.max)||0}` : "?";
   const verdict = bench && drill.value !== null ?
     (Math.abs(drill.value - bench.ideal) <= 1 ? "✓ Dentro do ideal" :
-     drill.value >= bench.min && drill.value <= bench.max ? "⚠ Fora do ideal mas dentro da faixa" :
+     drill.value >= bench.min && drill.value <= bench.max ? "Fora do ideal mas dentro da faixa" :
      "✗ LEAK — fora da faixa") : "";
 
   document.getElementById("modal-content").innerHTML = `
@@ -8264,6 +8308,83 @@ function toast(msg, ms = 2400) {
 }
 window.toast = toast;
 
+// [v6.14] confirmDialog — substitui confirm() nativo. Promise<boolean>, acessível.
+// Foco inicial no Cancelar; Tab preso entre os 2 botões em capture (sobrepõe o focus-trap do #modal).
+function confirmDialog(opts) {
+  opts = opts || {};
+  const title = opts.title || "Confirmar";
+  const message = opts.message || "";
+  const confirmText = opts.confirmText || "Confirmar";
+  const cancelText = opts.cancelText || "Cancelar";
+  const danger = !!opts.danger;
+  return new Promise((resolve) => {
+    const prevFocus = document.activeElement;
+    const bg = document.createElement("div");
+    bg.className = "cdlg-bg";
+    const box = document.createElement("div");
+    box.className = "cdlg";
+    box.setAttribute("role", "alertdialog");
+    box.setAttribute("aria-modal", "true");
+    const uid = "cdlg-" + Date.now();
+    const titleId = uid + "-t", msgId = uid + "-m";
+    box.setAttribute("aria-labelledby", titleId);
+    if (message) box.setAttribute("aria-describedby", msgId);
+    const h = document.createElement("div");
+    h.className = "cdlg-title"; h.id = titleId; h.textContent = title;
+    box.appendChild(h);
+    if (message) {
+      const p = document.createElement("div");
+      p.className = "cdlg-msg"; p.id = msgId; p.textContent = message;
+      box.appendChild(p);
+    }
+    const actions = document.createElement("div");
+    actions.className = "cdlg-actions";
+    const btnCancel = document.createElement("button");
+    btnCancel.type = "button"; btnCancel.className = "cdlg-btn cancel";
+    btnCancel.textContent = cancelText;
+    const btnOk = document.createElement("button");
+    btnOk.type = "button";
+    btnOk.className = "cdlg-btn confirm" + (danger ? " danger" : "");
+    btnOk.textContent = confirmText;
+    actions.appendChild(btnCancel);
+    actions.appendChild(btnOk);
+    box.appendChild(actions);
+    bg.appendChild(box);
+    document.body.appendChild(bg);
+    requestAnimationFrame(() => bg.classList.add("show"));
+
+    let done = false;
+    function close(result) {
+      if (done) return;
+      done = true;
+      document.removeEventListener("keydown", onKey, true);
+      bg.classList.remove("show");
+      setTimeout(() => bg.remove(), 200);
+      if (prevFocus && typeof prevFocus.focus === "function") {
+        try { prevFocus.focus(); } catch (_) { /* saiu do DOM */ }
+      }
+      resolve(result);
+    }
+    function onKey(e) {
+      if (e.key === "Escape") {
+        e.stopImmediatePropagation(); e.preventDefault(); close(false);
+      } else if (e.key === "Tab") {
+        e.stopImmediatePropagation(); e.preventDefault();
+        const f = [btnCancel, btnOk];
+        const i = f.indexOf(document.activeElement);
+        if (e.shiftKey) f[i <= 0 ? f.length - 1 : i - 1].focus();
+        else f[i === f.length - 1 ? 0 : i + 1].focus();
+      }
+    }
+    document.addEventListener("keydown", onKey, true);
+    bg.addEventListener("click", (e) => { if (e.target === bg) close(false); });
+    btnCancel.addEventListener("click", () => close(false));
+    btnOk.addEventListener("click", () => close(true));
+    setTimeout(() => btnCancel.focus(), 0);
+  });
+}
+window.confirmDialog = confirmDialog;
+
 // [VISUAL v2 onda 3] chips-clear button (limpa todos os filtros)
 document.addEventListener("click", (e) => {
   if (e.target.id === "chips-clear") {
@@ -8353,7 +8474,7 @@ document.getElementById("btn-export-benchmarks").addEventListener("click", () =>
 document.getElementById("file-import-benchmarks").addEventListener("change", async (e) => {
   const f = e.target.files[0]; if (!f) return;
   if (f.size > MAX_BENCHMARKS_BYTES) {
-    alert(`Arquivo de benchmarks muito grande (${(f.size/1024/1024).toFixed(1)} MB). Limite: 5 MB.`);
+    toast(`Arquivo de benchmarks muito grande (${(f.size/1024/1024).toFixed(1)} MB). Limite: 5 MB.`, 5000);
     return;
   }
   try {
@@ -8361,13 +8482,13 @@ document.getElementById("file-import-benchmarks").addEventListener("change", asy
     const parsed = JSON.parse(text);
     // Validação de shape — evita BENCHMARKS quebrado quebrar o HUD
     if (!parsed || typeof parsed !== "object" || !parsed.sections || typeof parsed.sections !== "object") {
-      alert("Arquivo de benchmarks inválido: falta a chave 'sections'.");
+      toast("Arquivo de benchmarks inválido: falta a chave 'sections'.", 5000);
       return;
     }
     BENCHMARKS = parsed;
     saveBenchmarks();
     renderBenchmarks();
-  } catch (err) { alert("Erro: " + err.message); }
+  } catch (err) { toast("Erro ao importar: " + err.message, 5000); }
 });
 
 // ===== Ranges tab =====
@@ -8430,7 +8551,7 @@ function bindRangesListEvents() {
   if (_rangesListEventsBound) return;
   const list = document.getElementById("ranges-list");
   if (!list) return;
-  list.addEventListener("click", (e) => {
+  list.addEventListener("click", async (e) => {
     const card = e.target.closest(".range-card");
     if (!card) return;
     const id = card.dataset.id;
@@ -8439,7 +8560,12 @@ function bindRangesListEvents() {
       viewRange(id);
     } else if (e.target.classList.contains("del")) {
       e.stopPropagation();
-      if (confirm(`Excluir range "${id}"?`)) deleteRange(id);
+      if (await confirmDialog({
+        title: "Excluir range?",
+        message: `"${id}" será removido do localStorage.`,
+        confirmText: "Excluir",
+        danger: true
+      })) deleteRange(id);
     } else {
       // Click no body do card (não em sub-buttons) → abre Ver por default
       viewRange(id);
@@ -8530,16 +8656,21 @@ document.getElementById("btn-export-ranges").addEventListener("click", () => {
   a.href = url; a.download = "leaklab_ranges.json"; a.click();
 });
 
-document.getElementById("btn-clear-ranges").addEventListener("click", () => {
+document.getElementById("btn-clear-ranges").addEventListener("click", async () => {
   const count = Object.keys(RANGES).length;
-  if (count === 0) { alert("Nenhum range pra limpar."); return; }
-  if (!confirm(`Apagar TODOS os ${count} ranges do localStorage?\n\nIsso não apaga os arquivos do servidor — eles vão ser recarregados na próxima vez que abrir o app via http (auto-fetch).`)) return;
+  if (count === 0) { toast("Nenhum range pra limpar."); return; }
+  if (!(await confirmDialog({
+    title: `Apagar TODOS os ${count} ranges?`,
+    message: "Remove do localStorage. Não apaga os arquivos do servidor — eles voltam no próximo auto-fetch via http.",
+    confirmText: "Apagar tudo",
+    danger: true
+  }))) return;
   for (const id of Object.keys(RANGES)) delete RANGES[id];
   try { localStorage.removeItem("leaklab_ranges"); } catch (err) { console.warn("[localStorage] removeItem falhou:", err); }
   updateBadge();
   if (typeof renderRanges === "function") renderRanges();
   if (typeof applyFilters === "function") applyFilters();
-  alert(`✓ ${count} ranges removidos do localStorage. Recarregue (F5) pra refazer auto-fetch do servidor.`);
+  toast(`✓ ${count} ranges removidos. Recarregue (F5) pra refazer o auto-fetch.`, 5000);
 });
 
 // [v6.5] Range mgmt mode toggle — esconde botão Excluir individual por padrão
@@ -8568,13 +8699,13 @@ document.getElementById("btn-reload-ranges").addEventListener("click", async () 
   updateBadge();
   if (typeof renderRanges === "function") renderRanges();
   if (typeof applyFilters === "function") applyFilters();
-  alert(`✓ ${added} ranges recarregados do servidor em ${dt}ms`);
+  toast(`✓ ${added} ranges recarregados do servidor em ${dt}ms`);
 });
 
 // ===== Comparar 2 ranges lado a lado =====
 function openCompareModal() {
   const ids = Object.keys(RANGES).sort();
-  if (ids.length < 2) { alert("Precisa de pelo menos 2 ranges pra comparar."); return; }
+  if (ids.length < 2) { toast("Precisa de pelo menos 2 ranges pra comparar."); return; }
   const optHtml = ids.map(id => `<option value="${escHtml(id)}">${escHtml(id)}</option>`).join("");
   document.getElementById("modal-content").innerHTML = `
     <h2>⇄ Comparar 2 ranges</h2>
@@ -8638,18 +8769,18 @@ document.getElementById("btn-compare-ranges").addEventListener("click", openComp
 // [FIX 2026-04-25]: instrucao de como gerar hands.json sem mostrar comando python pro iniciante
 function showHowToParse() {
   document.getElementById("modal-content").innerHTML = `
-    <h2 style="color:var(--accent)">🛠 Como gerar seu arquivo hands.json</h2>
+    <h2 style="color:var(--accent)">Como gerar seu arquivo hands.json</h2>
     <p style="color:var(--fg-dim);margin-bottom:16px">
       O LeakLab analisa suas mãos a partir de um arquivo <code>hands.json</code> gerado pelo parser que vem junto com o app.
     </p>
-    <h3 style="color:var(--fg-dim);font-size:13px;margin:14px 0 6px">📍 Passo 1: Salvar mão histórias</h3>
+    <h3 style="color:var(--fg-dim);font-size:13px;margin:14px 0 6px">Passo 1: Salvar mão histórias</h3>
     <p style="font-size:13px;line-height:1.6">
       • <b>iPoker (Bet365, Titan, etc):</b> Settings → Save hand histories → Marca a opção e escolhe pasta.<br>
       • <b>PokerStars:</b> Options → Game History → Hand History → ON.<br>
       • <b>GGPoker:</b> Settings → Save Hand History.<br>
       • <b>888 (BigHit DB):</b> Settings → My Account → Game Log → Download.
     </p>
-    <h3 style="color:var(--fg-dim);font-size:13px;margin:14px 0 6px">⚙️ Passo 2: Rodar o parser</h3>
+    <h3 style="color:var(--fg-dim);font-size:13px;margin:14px 0 6px">Passo 2: Rodar o parser</h3>
     <p style="font-size:13px;line-height:1.6">Você precisa do Python instalado. Abra o terminal e rode:</p>
     <pre style="background:var(--bg);padding:10px;border-radius:6px;font-size:12px;overflow-x:auto"><code># iPoker / Bet365
 python src/parser.py /caminho/sua/pasta -o hands.json
@@ -8662,12 +8793,12 @@ python src/parser_ggpoker.py /caminho/sua/pasta -o hands.json
 
 # 888
 python src/parser_888.py arquivo.txt -o hands.json --slim</code></pre>
-    <h3 style="color:var(--fg-dim);font-size:13px;margin:14px 0 6px">📂 Passo 3: Carregar no LeakLab</h3>
+    <h3 style="color:var(--fg-dim);font-size:13px;margin:14px 0 6px">Passo 3: Carregar no LeakLab</h3>
     <p style="font-size:13px;line-height:1.6">
-      Click no botão <b>📊 Carregar suas mãos</b> e selecione o <code>hands.json</code> gerado. Pronto — Coach detecta os top 3 leaks automaticamente.
+      Click no botão <b>Carregar suas mãos</b> e selecione o <code>hands.json</code> gerado. Pronto — Coach detecta os top 3 leaks automaticamente.
     </p>
     <p style="font-size:12px;color:var(--fg-dim);margin-top:18px;border-top:1px solid var(--border);padding-top:14px">
-      💡 <b>Dica:</b> não tem Python? Pede ajuda pro suporte do LeakLab. Roda 1x e gera o JSON.
+      <b>Dica:</b> não tem Python? Pede ajuda pro suporte do LeakLab. Roda 1x e gera o JSON.
     </p>
   `;
   document.getElementById("modal").classList.add("show");
@@ -8675,7 +8806,7 @@ python src/parser_888.py arquivo.txt -o hands.json --slim</code></pre>
 
 function showOnboarding() {
   document.getElementById("modal-content").innerHTML = `
-    <h2 style="color:var(--accent)">🎯 Como funciona o LeakLab</h2>
+    <h2 style="color:var(--accent)">Como funciona o LeakLab</h2>
     <p style="font-size:14px;line-height:1.6;color:var(--fg-dim);margin-bottom:20px">
       Quiz interativo de ranges GTO. Você responde "raise ou fold" em cenários reais e o app te mostra o que GTO faz + EV.
     </p>
@@ -8685,15 +8816,15 @@ function showOnboarding() {
         <div style="font-size:12px;color:var(--fg-dim);line-height:1.5">Vê uma mão (ex: K9s do BTN 80bb) e clica no que GTO faz. Receba EV exato + explicação.</div>
       </div>
       <div style="background:#1a2030;border:1px solid #2a3858;border-radius:8px;padding:14px">
-        <div style="font-size:18px;color:#a0d0ff;margin-bottom:6px">🎯 Modo Bordas</div>
+        <div style="font-size:18px;color:#a0d0ff;margin-bottom:6px">Modo Bordas</div>
         <div style="font-size:12px;color:var(--fg-dim);line-height:1.5">Algoritmo prioriza mãos da fronteira (EV baixo + mistas) — onde você mais aprende.</div>
       </div>
       <div style="background:#2a1a30;border:1px solid #482858;border-radius:8px;padding:14px">
-        <div style="font-size:18px;color:#d0a0ff;margin-bottom:6px">🔁 Repetir Erros</div>
+        <div style="font-size:18px;color:#d0a0ff;margin-bottom:6px">Repetir Erros</div>
         <div style="font-size:12px;color:var(--fg-dim);line-height:1.5">Modo dedicado a revisar mãos que você errou — sai da fila após 2 acertos.</div>
       </div>
       <div style="background:#3a2a1a;border:1px solid #585038;border-radius:8px;padding:14px">
-        <div style="font-size:18px;color:var(--accent);margin-bottom:6px">📚 Estudo Focado</div>
+        <div style="font-size:18px;color:var(--accent);margin-bottom:6px">Estudo Focado</div>
         <div style="font-size:12px;color:var(--fg-dim);line-height:1.5">Sessão de 10 perguntas em 1 posição/stack específica. Termina com relatório.</div>
       </div>
     </div>
@@ -8703,10 +8834,10 @@ function showOnboarding() {
       <span><kbd style="background:#2a2a30;padding:3px 8px;border-radius:3px">F</kbd> Fold</span>
       <span><kbd style="background:#2a2a30;padding:3px 8px;border-radius:3px">N</kbd> ou <kbd style="background:#2a2a30;padding:3px 8px;border-radius:3px">Espaço</kbd> Próxima/Pular</span>
     </div>
-    <h3 style="color:var(--accent-2);font-size:14px;margin-top:8px">🎴 Mesa visual</h3>
+    <h3 style="color:var(--accent-2);font-size:14px;margin-top:8px">Mesa visual</h3>
     <p style="font-size:13px;color:var(--fg-dim);line-height:1.6">A mesa mostra sua posição + ações no contexto. <b>Clique numa posição da mesa</b> pra trocar pra ela rapidamente.</p>
     <div style="margin-top:20px;display:flex;gap:8px">
-      <button class="primary" onclick="document.getElementById('modal').classList.remove('show'); document.getElementById('welcome').style.display='none'; switchMainTab('quiz');" style="padding:10px 20px;background:var(--accent);color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:600">▶ Começar Quiz</button>
+      <button class="primary" onclick="document.getElementById('modal').classList.remove('show'); document.getElementById('welcome').style.display='none'; switchMainTab('quiz');" style="padding:10px 20px;background:var(--accent);color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:600">Começar Quiz</button>
       <button onclick="document.getElementById('modal').classList.remove('show')" style="padding:10px 20px;background:var(--bg-3);color:var(--fg);border:1px solid var(--border);border-radius:6px;cursor:pointer">Fechar</button>
     </div>
   `;
